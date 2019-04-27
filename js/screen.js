@@ -82,11 +82,25 @@ class FightingScreen extends Screen {
     let { player } = state;
     player.sprite.x = WIDTH/10;
     player.sprite.y = HEIGHT/2;
+    this.hearts = _.times(player.healthMax, i => scene.add.sprite(32*(i+1), 32, 'heart'));
+  }
+
+  updateHearts() {
+    let { player } = state;
+    for (let i = 0; i < player.healthMax; i++) {
+      let animation = (i <= player.health) ? 'heart-full' : 'heart-empty';
+      this.hearts[i].anims.play(animation);
+    }
+  }
+
+  destroy() {
+    for (let heart of hearts) heart.destroy();   
   }
 
   update() {
     let { player } = state;
     player.update(this.getInputs());
+    this.updateHearts();
     if (player.isDead()) return new LoseScreen(this.scene);
   }
 }
