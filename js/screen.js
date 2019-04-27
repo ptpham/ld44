@@ -109,6 +109,15 @@ class FightingScreen extends Screen {
     physics.collide(player.sprite, this.enemy.sprite);
 
     if (player.isDead()) return new LoseScreen(this.scene);
+    if (this.enemy.isDead()) {
+      if (state.currentEnemy + 1 < state.enemyData.length) {
+        state.currentEnemy++;
+        return new StagingScreen(this.scene);
+      } else {
+        return new VictoryScreen(this.scene);
+      }
+    }
+
     state.heartManager.update();
   }
 }
@@ -116,7 +125,14 @@ class FightingScreen extends Screen {
 class LoseScreen extends Screen {
   constructor(scene) {
     super(scene);
-    this.lose = scene.add.text(WIDTH/4, HEIGHT/2, 'Your Suffering is Eternal', DEFAULT_FONT);
+    this.text = scene.add.text(WIDTH/4, HEIGHT/2, 'Your suffering is eternal', DEFAULT_FONT);
+  }
+}
+
+class VictoryScreen extends Screen {
+  constructor(scene) {
+    super(scene);
+    this.text = scene.add.text(WIDTH/4, HEIGHT/2, 'You have escaped purgatory', DEFAULT_FONT);
   }
 }
 
