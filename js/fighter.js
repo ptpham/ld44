@@ -169,6 +169,10 @@ class Fighter {
     return _.find(this.items, item) != null;
   }
 
+  isDead() {
+    return this.state instanceof FighterDead;
+  }
+
   update(input) {
     // Input is anobject containing the following:
     // * move: {x, y}

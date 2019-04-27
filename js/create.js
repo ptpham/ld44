@@ -2,7 +2,7 @@
 function create ()
 {
   if (DEBUG) {
-    state.debugText = this.add.text(0, 0, '', { font: "15px monospace", fill: "#ffffff" });
+    state.debugText = this.add.text(0, 0, '', DEFAULT_FONT);
   }
 
   this.anims.create({
