@@ -1,10 +1,6 @@
 
 function create ()
 {
-  if (DEBUG) {
-    state.debugText = this.add.text(0, 0, '', DEFAULT_FONT);
-  }
-
   this.anims.create({
     key: 'left',
     frames: this.anims.generateFrameNumbers('dude', { start: 0, end: 3 }),
@@ -58,6 +54,7 @@ function create ()
 
   state.background = this.add.sprite(WIDTH/2, HEIGHT/2, 'background');
   state.player = new Fighter(this.physics.add.sprite(WIDTH/2, HEIGHT/2, 'dude'));
+  state.player.sprite.setCollideWorldBounds(true);
   state.cursors = this.input.keyboard.createCursorKeys();
   state.screen = new TitleScreen(this);
   state.heartManager = new HeartManager(this);
@@ -69,8 +66,12 @@ function create ()
     fighter.baseDamage = data.baseDamage;
     fighter.sprite.tint = 0xff0000;
 
-    fighter.sprite.setImmovable(true)
+    fighter.sprite.setImmovable(true);
     return fighter;
   });
+
+  if (DEBUG) {
+    state.debugText = this.add.text(0, 0, '', DEFAULT_FONT);
+  }
 }
 
