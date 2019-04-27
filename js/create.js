@@ -5,8 +5,6 @@ function create ()
     state.debugText = this.add.text(0, 0, '', { font: "15px monospace", fill: "#ffffff" });
   }
 
-  state.player = new Fighter(this.physics.add.sprite(WIDTH/2, HEIGHT/2, 'dude'));
-
   this.anims.create({
     key: 'left',
     frames: this.anims.generateFrameNumbers('dude', { start: 0, end: 3 }),
@@ -27,6 +25,8 @@ function create ()
     repeat: -1
   });
 
+  state.player = new Fighter(this.physics.add.sprite(WIDTH/2, HEIGHT/2, 'dude'));
   state.cursors = this.input.keyboard.createCursorKeys();
+  state.screen = new TitleScreen(this);
 }
 
