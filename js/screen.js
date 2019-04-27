@@ -44,6 +44,7 @@ class TitleScreen extends Screen {
 class StagingScreen extends Screen {
   constructor(scene) {
     super(scene);
+    state.background.anims.play('background-staging');
     this.items = _.sampleSize(state.allItems, 3);
     this.sprites = _.map(this.items, (item, i) =>
       scene.physics.add.sprite(i*WIDTH/3 + WIDTH/6, HEIGHT/4, item.spriteName));
@@ -84,6 +85,7 @@ class FightingScreen extends Screen {
     let { player } = state;
     player.sprite.x = WIDTH/10;
     player.sprite.y = HEIGHT/2;
+    state.background.anims.play('background-fighting');
 
     this.enemy = state.enemies[state.currentEnemy];
     this.enemyAI = state.enemyData[state.currentEnemy].getAI();

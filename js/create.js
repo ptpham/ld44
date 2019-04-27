@@ -44,6 +44,19 @@ function create ()
     frameRate: -1
   });
 
+  this.anims.create({
+    key: 'background-staging',
+    frames: [{ key: 'background', frame: 0 }],
+    frameRate: -1
+  });
+
+  this.anims.create({
+    key: 'background-fighting',
+    frames: [{ key: 'background', frame: 1 }],
+    frameRate: -1
+  });
+
+  state.background = this.add.sprite(WIDTH/2, HEIGHT/2, 'background');
   state.player = new Fighter(this.physics.add.sprite(WIDTH/2, HEIGHT/2, 'dude'));
   state.cursors = this.input.keyboard.createCursorKeys();
   state.screen = new TitleScreen(this);
