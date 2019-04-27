@@ -157,6 +157,7 @@ class Fighter {
     this.items = [];
     this.currentItemIndex = 0;
     this.health = 5;
+    this.healthMax = 7;
     this.sprite = sprite;
     this.speed = 160;
     this.state = new FighterStanding(this);
