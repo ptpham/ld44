@@ -104,6 +104,7 @@ class FightingScreen extends Screen {
 
   update() {
     let { player } = state;
+    let { physics } = this.scene;
     let inputs = this.getInputs();
 
     inputs.attacking = state.cursors.space.isDown;
@@ -111,6 +112,8 @@ class FightingScreen extends Screen {
 
     let enemyInputs = this.enemyAI.getInputsForEnemy(this.enemy, player);
     this.enemy.update(enemyInputs);
+
+    physics.collide(player.sprite, this.enemy.sprite);
 
     this.updateHearts();
     if (player.isDead()) return new LoseScreen(this.scene);
