@@ -94,7 +94,7 @@ class FightingScreen extends Screen {
     this.enemy = state.enemies[this.index];
     this.enemyAI = state.enemyData[this.index].getAI();
     this.enemy.sprite.x = WIDTH / 2;
-    this.enemy.sprite.y = HEIGHT / 2;
+    this.enemy.sprite.y = HEIGHT - this.enemy.sprite.height;
     this.enemy.sprite.setCollideWorldBounds(true);
     this.hearts = _.times(player.healthMax, i => scene.add.sprite(32*(i+1), 32, 'heart'));
 
