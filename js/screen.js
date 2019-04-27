@@ -51,9 +51,17 @@ class StagingScreen extends Screen {
     this.arrow = scene.physics.add.sprite(WIDTH/2, HEIGHT - 32, 'arrow');
     this.arrow.anims.play('arrow-bounce');
   }
+
+  createSmoke(itemSprite) {
+    this.smoke = this.scene.add.sprite(itemSprite.x, itemSprite.y, 'smoke');
+    this.smoke.anims.play('smoke-spin');
+    this.smoke.scaleX = 3;
+    this.smoke.scaleY = 3;
+  }
   
   destroy() {
     for (let sprite of this.sprites) sprite.destroy();
+    if (this.smoke) this.smoke.destroy();
     this.arrow.destroy();
   }
 
@@ -66,6 +74,7 @@ class StagingScreen extends Screen {
     for (let i = 0; i < items.length; i++) {
       if (physics.overlap(player.sprite, sprites[i])) {
         player.update({ pickItem: items[i] });
+        this.createSmoke(sprites[i]);
         sprites[i].destroy();
       }
     }
