@@ -112,10 +112,12 @@ class FighterDropItem extends FighterState {
 class Fighter {
   constructor(sprite) {
     this.items = [];
+    this.currentItemIndex = 0;
     this.health = 5;
     this.sprite = sprite;
     this.speed = 160;
     this.state = new FighterStanding(this);
+    this.baseDamage = 1;
   }
 
   update(input) {
@@ -127,6 +129,14 @@ class Fighter {
     // * pickItem: item (item the player is picking up)
     // * dropItem: item (item the player is dropping)
     this.state = this.state.update(input) || this.state;
+  }
+
+  getCurrentItem() {
+    return this.items[this.currentItemIndex];
+  }
+
+  getDamage() {
+    return this.baseDamage;
   }
 }
 
