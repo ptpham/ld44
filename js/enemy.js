@@ -24,13 +24,13 @@ class SimpleEnemyAI extends EnemyAI {
     const inputs = this._makeBaseInputs(enemy, player);
 
     const distance =
-      Math.pow(player.sprite.x - enemy.sprite.x, 2) +
-      Math.pow(player.sprite.y - enemy.sprite.y, 2);
+      Math.pow(player.sprite.getCenter().x - enemy.sprite.getCenter().x, 2) +
+      Math.pow(player.sprite.getCenter().y - enemy.sprite.getCenter().y, 2);
   
     // We'll try to move close to the player
     if (distance > 4000) {
-      inputs.move.x = Math.sign(player.sprite.x - enemy.sprite.x);
-      inputs.move.y = Math.sign(player.sprite.y - enemy.sprite.y);
+      inputs.move.x = Math.sign(player.sprite.getCenter().x - enemy.sprite.getCenter().x);
+      inputs.move.y = Math.sign(player.sprite.getCenter().y - enemy.sprite.getCenter().y);
     } else {
       // If we're close enough, try to perform an attack in the direction of the player
       inputs.attacking = true;

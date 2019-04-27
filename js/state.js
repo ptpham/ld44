@@ -3,6 +3,7 @@ let state = {
   debugText: null,
   player: null,
   cursors: null,
+  arrow: null,
   allItems: [
     {
       name: 'Item 1',
@@ -24,6 +25,15 @@ let state = {
       sprite: 'dude',
       health: 5,
       speed: 200,
+      baseDamage: 2,
+      items: [],
+      getAI: () => new SimpleEnemyAI(),
+    },
+    {
+      name: 'Bad Dude 2',
+      sprite: 'dude',
+      health: 10,
+      speed: 80,
       baseDamage: 2,
       items: [],
       getAI: () => new SimpleEnemyAI(),

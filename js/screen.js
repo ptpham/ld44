@@ -70,7 +70,11 @@ class StagingScreen extends Screen {
       }
     }
     
-    if (player.sprite.y > 250) {
+    if (
+      player.sprite.y > 250 &&
+      player.sprite.x < WIDTH / 2 + 50 &&
+      player.sprite.x > WIDTH / 2 - 50
+    ) {
       this.destroy();
       return new FightingScreen(scene);
     }
@@ -83,16 +87,19 @@ class FightingScreen extends Screen {
   constructor(scene) {
     super(scene);
     let { player } = state;
-    player.sprite.x = WIDTH/10;
-    player.sprite.y = HEIGHT/2;
+    player.sprite.y = 50;
     state.background.anims.play('background-fighting');
 
-    this.enemy = state.enemies[state.currentEnemy];
-    this.enemyAI = state.enemyData[state.currentEnemy].getAI();
+    this.index = state.currentEnemy;
+    this.enemy = state.enemies[this.index];
+    this.enemyAI = state.enemyData[this.index].getAI();
     this.enemy.sprite.x = WIDTH / 2;
     this.enemy.sprite.y = HEIGHT / 2;
     this.enemy.sprite.setCollideWorldBounds(true);
     this.hearts = _.times(player.healthMax, i => scene.add.sprite(32*(i+1), 32, 'heart'));
+
+    this.arrow = scene.physics.add.sprite(-WIDTH, -HEIGHT, 'arrow');
+    this.arrow.anims.play('arrow-bounce');
   }
 
   update() {
@@ -110,15 +117,33 @@ class FightingScreen extends Screen {
 
     if (player.isDead()) return new LoseScreen(this.scene);
     if (this.enemy.isDead()) {
-      if (state.currentEnemy + 1 < state.enemyData.length) {
-        state.currentEnemy++;
-        return new StagingScreen(this.scene);
+      if (this.index < state.enemyData.length - 1) {
+        this.arrow.x = WIDTH/2;
+        this.arrow.y = 32;
+        state.currentEnemy = this.index + 1;
+
+        if (
+          player.sprite.y < 32 &&
+          player.sprite.x < WIDTH / 2 + 50 &&
+          player.sprite.x > WIDTH / 2 - 50
+        ) {
+          this.destroy();
+          player.sprite.y = HEIGHT - 50;
+          return new StagingScreen(this.scene);
+        }
       } else {
         return new VictoryScreen(this.scene);
       }
     }
 
     state.heartManager.update();
+  }
+
+  destroy() {
+    this.arrow.destroy();
+    this.enemy.sprite.setCollideWorldBounds(false);
+    this.enemy.sprite.x = -WIDTH;
+    this.enemy.sprite.y = -HEIGHT;
   }
 }
 
