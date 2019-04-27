@@ -1,6 +1,5 @@
 
-function update ()
-{
+function update () {
   if (DEBUG) {
     state.debugText.text = state.screen;
   }
@@ -29,32 +28,19 @@ function update ()
 }
 
 function move() {
+  let playerX = 0, playerY = 0;
   if (state.cursors.left.isDown) {
-    state.player.setVelocityX(-160);
-    state.player.anims.play('left', true);
-  }
-  else if (state.cursors.right.isDown) {
-    state.player.setVelocityX(160);
-    state.player.anims.play('right', true);
-  } else {
-    state.player.setVelocityX(0);
+    playerX = -1; 
+  } else if (state.cursors.right.isDown) {
+    playerX = 1;
   }
 
   if (state.cursors.up.isDown) {
-    state.player.setVelocityY(-160);
-  }
-  else if (state.cursors.down.isDown) {
-    state.player.setVelocityY(160);
-  }
-  else {
-    state.player.setVelocityY(0);
+    playerY = -1;
+  } else if (state.cursors.down.isDown) {
+    playerY = 1;
   }
 
-  if (
-    state.player.body.velocity.x === 0 &&
-    state.player.body.velocity.y === 0
-  ) {
-    state.player.anims.play('stand', true);
-  }
+  state.player.move(playerX, playerY);
 }
 

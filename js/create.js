@@ -5,7 +5,7 @@ function create ()
     state.debugText = this.add.text(0, 0, '', { font: "15px monospace", fill: "#ffffff" });
   }
 
-  state.player = this.physics.add.sprite(WIDTH/2, HEIGHT/2, 'dude');
+  state.player = new Fighter(this.physics.add.sprite(WIDTH/2, HEIGHT/2, 'dude'));
 
   this.anims.create({
     key: 'left',
