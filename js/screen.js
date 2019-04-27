@@ -40,8 +40,24 @@ class TitleScreen extends Screen {
 }
 
 class StagingScreen extends Screen {
+  constructor(scene) {
+    super(scene);
+    this.items = _.sampleSize(state.allItems, 3);
+    this.sprites = _.map(this.items, (item, i) =>
+      scene.physics.add.sprite(i*WIDTH/3 + WIDTH/6, HEIGHT/4, item.spriteName));
+  }
+
   update() {
     state.player.update(this.getInputs());
+  
+    let { scene, items, sprites } = this;
+    let { physics } = scene;
+    for (let i = 0; i < items.length; i++) {
+      if (physics.overlap(state.player.sprite, sprites[i])) {
+        state.player.update({ pickItem: items[i] });
+      }
+    }
+
   }
 }
 
