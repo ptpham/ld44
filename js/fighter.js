@@ -39,7 +39,7 @@ class FighterMoving extends FighterState {
     let defaultState = this._updateDefault(input);
     if (defaultState) return defaultState;
 
-    if (input.attacking) {
+    if (input.attacking && this.fighter.isReadyToAttack()) {
       return new FighterAttacking(this.fighter, this.fighter.getCurrentItem());
     }
   
@@ -52,6 +52,9 @@ class FighterMoving extends FighterState {
       if (y) sprite.anims.play(y < 0 ? 'up' : 'down', true);
       if (x == 0 && y == 0) {
         return new FighterStanding(this.fighter);
+      } else {
+        // store last direction we were moving in for attack orientation
+        this.fighter.orientation = getOrientationStr(x, y)
       }
     }
     
@@ -70,15 +73,18 @@ class FighterAttacking extends FighterState {
   }
 
   update(input) {
+
     let defaultState = this._updateDefault(input);
     if (defaultState) return defaultState;
     if (this.done) return new FighterStanding(this.fighter);
 
-    // TODO: show attacking animation based on item
-    const sprite = this.fighter.sprite;
-    sprite.anims.play('stand', true);
-    sprite.setVelocityX(0);
-    sprite.setVelocityY(0);
+    this.fighter.sprite.setVelocityX(0)
+    this.fighter.sprite.setVelocityY(0)
+
+    const item = this.fighter.getCurrentItem()
+    const center = this.fighter.sprite.getCenter()
+    this.fighter.attacks.push(item.newAttacks(center.x, center.y, this.fighter.orientation))
+    item.resetCooldown()
   }
 }
 
@@ -90,7 +96,7 @@ class FighterStanding extends FighterState {
 
     let { sprite } = this.fighter;
     sprite.anims.play('stand', true);
-    if (input.attacking) {
+    if (input.attacking && this.fighter.isReadyToAttack()) {
       return new FighterAttacking(this.fighter, this.fighter.getCurrentItem());
     }
 
@@ -170,7 +176,7 @@ class FighterDropItem extends FighterState {
 
 class Fighter {
   constructor(sprite, bulletGroup) {
-    this.items = [];
+    this.items = [new DefaultSword(sprite.scene)];
     this.currentItemIndex = 0;
     this.health = 5;
     this.healthMax = 7;
@@ -181,6 +187,9 @@ class Fighter {
     this.attackSpeed = 500;
     this.stunDuration = 200;
     this._adjustHealthPromise = Promise.resolve();
+    this.scene = this.sprite.scene
+    this.orientation = 'down'
+    this.attacks = []
   }
 
   adjustHealth(amount, duration) {
@@ -206,6 +215,10 @@ class Fighter {
     // * pickItem: item (item the player is picking up)
     // * dropItem: item (item the player is dropping)
     this.state = this.state.update(input) || this.state;
+  }
+
+  isReadyToAttack() {
+    return this.getCurrentItem() && this.getCurrentItem().ready
   }
 
   getCurrentItem() {
