@@ -71,12 +71,12 @@ class StagingScreen extends Screen {
     
     if (player.sprite.y > 250) {
       this.destroy();
-      return new FightingSreen(scene);
+      return new FightingScreen(scene);
     }
   }
 }
 
-class FightingSreen extends Screen {
+class FightingScreen extends Screen {
   constructor(scene) {
     super(scene);
     let { player } = state;
