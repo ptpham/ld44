@@ -47,7 +47,7 @@ function create ()
   state.player = new Fighter(this.physics.add.sprite(WIDTH/2, HEIGHT/2, 'dude'));
   state.cursors = this.input.keyboard.createCursorKeys();
   state.screen = new TitleScreen(this);
-
+  state.heartManager = new HeartManager(this);
   state.enemies = state.enemyData.map((data) => {
     const fighter = new Fighter(this.physics.add.sprite(-WIDTH, -HEIGHT, data.sprite));
     fighter.health = data.health;
