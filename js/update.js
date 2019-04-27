@@ -41,6 +41,6 @@ function move() {
     playerY = 1;
   }
 
-  state.player.move(playerX, playerY);
+  state.player.update({ move: { x: playerX, y: playerY } });
 }
 
