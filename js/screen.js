@@ -23,7 +23,7 @@ class Screen {
       move: { x: playerX, y: playerY },
       damage: 0,
       hitstun: 0,
-      attacking: 0,
+      attacking: false,
       pickItem: null,
       dropItem: null,
     };
@@ -99,7 +99,11 @@ class FightingScreen extends Screen {
 
   update() {
     let { player } = state;
-    player.update(this.getInputs());
+    let inputs = this.getInputs();
+
+    inputs.attacking = state.cursors.space.isDown;
+    player.update(inputs);
+
     this.updateHearts();
     if (player.isDead()) return new LoseScreen(this.scene);
   }

@@ -64,9 +64,13 @@ class FighterAttacking extends FighterState {
   update(input) {
     let defaultState = this._updateDefault(input);
     if (defaultState) return defaultState;
+    if (this.done) return new FighterStanding(this.fighter);
 
     // TODO: show attacking animation based on item
+    const sprite = this.fighter.sprite;
     sprite.anims.play('stand', true);
+    sprite.setVelocityX(0);
+    sprite.setVelocityY(0);
   }
 }
 
@@ -158,7 +162,7 @@ class Fighter {
     this.speed = 160;
     this.state = new FighterStanding(this);
     this.baseDamage = 1;
-    this.attackSpeed = 1000;
+    this.attackSpeed = 500;
     this.stunDuration = 200;
   }
 
