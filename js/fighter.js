@@ -1,4 +1,3 @@
-
 class FighterState {
   constructor(fighter) {
     this.fighter = fighter;
@@ -32,27 +31,37 @@ class FighterMoving extends FighterState {
     let defaultState = this._updateDefault(input);
     if (defaultState) return defaultState;
 
-    let { x, y } = input.move || {};
-    let { sprite, speed } = this.fighter;
-    sprite.setVelocityX(x*speed);
-    sprite.setVelocityY(y*speed);
-    if (x) sprite.anims.play(x < 0 ? 'left' : 'right', true);
-    if (y) sprite.anims.play(y < 0 ? 'up' : 'down', true);
-    if (x == 0 && y == 0) {
-      return new FighterStanding(this.fighter);
+    if (input.move) {
+      let { x, y } = input.move;
+      let { sprite, speed } = this.fighter;
+      sprite.setVelocityX(x*speed);
+      sprite.setVelocityY(y*speed);
+      if (x) sprite.anims.play(x < 0 ? 'left' : 'right', true);
+      if (y) sprite.anims.play(y < 0 ? 'up' : 'down', true);
+      if (x == 0 && y == 0) {
+        return new FighterStanding(this.fighter);
+      }
     }
+    
+    return this;
   }
 }
 
 class FighterStanding extends FighterState {
   update(input) {
+    let { fighter } = this;
     let defaultState = this._updateDefault(input);
     if (defaultState) return defaultState;
 
     let { sprite } = this.fighter;
     sprite.anims.play('stand', true);
-    if (input.move) {
-      return new FighterMoving(this.fighter);
+    if (input.move && (input.move.x || input.move.y)) {
+      return new FighterMoving(fighter);
+    }
+
+    let { pickItem } = input;
+    if (pickItem && !fighter.hasItem(pickItem)) {
+      return new FighterPickItem(fighter, pickItem); 
     }
     return this;
   }
@@ -79,12 +88,15 @@ class FighterHitstun extends FighterState {
   }
 }
 
-class FighterGetItem extends FighterState {
+class FighterPickItem extends FighterState {
   constructor(fighter, item) {
     super(fighter);
-    _.push(figher.items, item);
-    this.done = false;
-    setTimeout(() => { this.done = true; }, Math.max(item.cost, 1) * 1000);
+    this.done = true;
+    if (!fighter.hasItem(item)) {
+      fighter.items.push(item);
+      this.done = false;
+      setTimeout(() => { this.done = true; }, Math.max(item.cost || 0, 1) * 100);
+    }
   }
 
   update(input) {
@@ -116,6 +128,10 @@ class Fighter {
     this.sprite = sprite;
     this.speed = 160;
     this.state = new FighterStanding(this);
+  }
+
+  hasItem(item) {
+    return _.find(this.items, item) != null;
   }
 
   update(input) {
