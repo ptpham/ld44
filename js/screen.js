@@ -45,10 +45,13 @@ class StagingScreen extends Screen {
     this.items = _.sampleSize(state.allItems, 3);
     this.sprites = _.map(this.items, (item, i) =>
       scene.physics.add.sprite(i*WIDTH/3 + WIDTH/6, HEIGHT/4, item.spriteName));
+    this.arrow = scene.physics.add.sprite(WIDTH/2, HEIGHT - 32, 'arrow');
+    this.arrow.anims.play('arrow-bounce');
   }
   
   destroy() {
     for (let sprite of this.sprites) sprite.destroy();
+    this.arrow.destroy();
   }
 
   update() {

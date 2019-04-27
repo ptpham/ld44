@@ -25,6 +25,13 @@ function create ()
     repeat: -1
   });
 
+  this.anims.create({
+    key: 'arrow-bounce',
+    frames: this.anims.generateFrameNumbers('arrow', { start: 0, end: 2 }),
+    frameRate: 2,
+    repeat: -1
+  });
+
   state.player = new Fighter(this.physics.add.sprite(WIDTH/2, HEIGHT/2, 'dude'));
   state.cursors = this.input.keyboard.createCursorKeys();
   state.screen = new TitleScreen(this);
