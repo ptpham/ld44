@@ -11,7 +11,7 @@ class EnemyAI {
       move: { x: 0, y: 0 },
       damage: 0,
       hitstun: 0,
-      attacking: 0,
+      attacking: false,
       pickItem: null,
     };
   }
@@ -33,7 +33,7 @@ class SimpleEnemyAI extends EnemyAI {
       Math.pow(player.sprite.y - enemy.sprite.y, 2);
     
     if (distance < 10) {
-      inputs.attacking = 500;
+      inputs.attacking = true;
     }
 
     return inputs;

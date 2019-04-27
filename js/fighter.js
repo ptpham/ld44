@@ -67,8 +67,6 @@ class FighterAttacking extends FighterState {
 
     // TODO: show attacking animation based on item
     sprite.anims.play('stand', true);
-  
-    // TODO: 
   }
 }
 
@@ -172,7 +170,7 @@ class Fighter {
     // * move: {x, y}
     // * damage: number (amount of health taken)
     // * hitstun: number (duration of the stun)
-    // * attacking: number (duration of the attack)
+    // * attacking: boolean
     // * pickItem: item (item the player is picking up)
     // * dropItem: item (item the player is dropping)
     this.state = this.state.update(input) || this.state;
@@ -186,5 +184,3 @@ class Fighter {
     return this.baseDamage;
   }
 }
-
-
