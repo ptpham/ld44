@@ -95,7 +95,7 @@ class FighterStanding extends FighterState {
     if (defaultState) return defaultState;
 
     let { sprite } = this.fighter;
-    sprite.anims.play('stand', true);
+    sprite.anims.play(`stand_${this.fighter.orientation}`, true);
     if (input.attacking && this.fighter.isReadyToAttack()) {
       return new FighterAttacking(this.fighter, this.fighter.getCurrentItem());
     }
@@ -111,7 +111,7 @@ class FighterStanding extends FighterState {
 class FighterDead extends FighterState {
   constructor(fighter) {
     super(fighter);
-    fighter.sprite.anims.play('stand', true);
+    fighter.sprite.anims.play('stand_down', true);
   }
 }
 
@@ -175,7 +175,7 @@ class FighterDropItem extends FighterState {
 }
 
 class Fighter {
-  constructor(sprite, bulletGroup) {
+  constructor(sprite) {
     this.items = [new DefaultSword(sprite.scene)];
     this.currentItemIndex = 0;
     this.health = 5;
@@ -190,6 +190,8 @@ class Fighter {
     this.scene = this.sprite.scene
     this.orientation = 'down'
     this.attacks = []
+
+    this.lastStateChange = 0;
   }
 
   adjustHealth(amount, duration) {
@@ -214,7 +216,12 @@ class Fighter {
     // * attacking: boolean
     // * pickItem: item (item the player is picking up)
     // * dropItem: item (item the player is dropping)
+    const oldState = this.state;
     this.state = this.state.update(input) || this.state;
+
+    if (oldState.constructor.name !== this.state.constructor.name) {
+      this.lastStateChange = this.sprite.scene.time.now;
+    }
   }
 
   isReadyToAttack() {

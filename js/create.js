@@ -15,6 +15,30 @@ function create ()
   });
 
   this.anims.create({
+    key: 'stand_down',
+    frames: [{ key: 'dude', frame: 4 }],
+    frameRate: 20
+  });
+
+  this.anims.create({
+    key: 'stand_up',
+    frames: [{ key: 'dude', frame: 4 }],
+    frameRate: 20
+  });
+
+  this.anims.create({
+    key: 'stand_left',
+    frames: [{ key: 'dude', frame: 0 }],
+    frameRate: 20
+  });
+
+  this.anims.create({
+    key: 'stand_right',
+    frames: [{ key: 'dude', frame: 5 }],
+    frameRate: 20
+  });
+
+  this.anims.create({
     key: 'right',
     frames: this.anims.generateFrameNumbers('dude', { start: 5, end: 8 }),
     frameRate: 10,
