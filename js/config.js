@@ -5,9 +5,9 @@ let config = {
       zoom: 2,
       width: WIDTH,
       height: HEIGHT,
-      expandParent: true,
-      mode: Phaser.Scale.ScaleModes.ENVELOP
+      mode: Phaser.Scale.ScaleModes.FIT
     },
+    canvasStyle: 'width: 100%; height: 100%;',
     render: {
       pixelArt: true
     },
