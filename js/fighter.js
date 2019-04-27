@@ -31,6 +31,10 @@ class FighterMoving extends FighterState {
     let defaultState = this._updateDefault(input);
     if (defaultState) return defaultState;
 
+    if (input.attacking) {
+      return new FighterAttacking(this.fighter, this.fighter.getCurrentItem());
+    }
+  
     if (input.move) {
       let { x, y } = input.move;
       let { sprite, speed } = this.fighter;
@@ -47,6 +51,27 @@ class FighterMoving extends FighterState {
   }
 }
 
+class FighterAttacking extends FighterState {
+  constructor(fighter, item) {
+    super(fighter);
+    this.item = item;
+
+    const duration = this.fighter.attackSpeed;
+    this.done = false;
+    setTimeout(() => { this.done = true; }, duration);
+  }
+
+  update(input) {
+    let defaultState = this._updateDefault(input);
+    if (defaultState) return defaultState;
+
+    // TODO: show attacking animation based on item
+    sprite.anims.play('stand', true);
+  
+    // TODO: 
+  }
+}
+
 class FighterStanding extends FighterState {
   update(input) {
     let { fighter } = this;
@@ -55,6 +80,10 @@ class FighterStanding extends FighterState {
 
     let { sprite } = this.fighter;
     sprite.anims.play('stand', true);
+    if (input.attacking) {
+      return new FighterAttacking(this.fighter, this.fighter.getCurrentItem());
+    }
+
     if (input.move && (input.move.x || input.move.y)) {
       return new FighterMoving(fighter);
     }
@@ -122,7 +151,7 @@ class FighterDropItem extends FighterState {
 }
 
 class Fighter {
-  constructor(sprite) {
+  constructor(sprite, bulletGroup) {
     this.items = [];
     this.currentItemIndex = 0;
     this.health = 5;
@@ -130,6 +159,8 @@ class Fighter {
     this.speed = 160;
     this.state = new FighterStanding(this);
     this.baseDamage = 1;
+    this.attackSpeed = 1000;
+    this.stunDuration = 200;
   }
 
   hasItem(item) {
