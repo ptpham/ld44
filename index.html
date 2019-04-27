@@ -54,16 +54,14 @@ const GAME_OVER = 'game_over';
 const WIN = 'win';
 const CREDITS = 'credits';
 
-// Game state object
-let state = {
-  screen: TITLE,
-};
-
 let game = new Phaser.Game(config);
 
-let debugText;
-let player;
-let cursors;
+let state = {
+  screen: TITLE,
+  debugText: null,
+  player: null,
+  cursors: null,
+};
 
 function preload ()
 {
@@ -73,10 +71,10 @@ function preload ()
 function create ()
 {
   if (DEBUG) {
-    debugText = this.add.text(0, 0, '', { font: "15px monospace", fill: "#ffffff" });
+    state.debugText = this.add.text(0, 0, '', { font: "15px monospace", fill: "#ffffff" });
   }
 
-  player = this.physics.add.sprite(WIDTH/2, HEIGHT/2, 'dude');
+  state.player = this.physics.add.sprite(WIDTH/2, HEIGHT/2, 'dude');
 
   this.anims.create({
     key: 'left',
@@ -98,22 +96,22 @@ function create ()
     repeat: -1
   });
 
-  cursors = this.input.keyboard.createCursorKeys();
+  state.cursors = this.input.keyboard.createCursorKeys();
 }
 
 function update ()
 {
   if (DEBUG) {
-    debugText.text = state.screen;
+    state.debugText.text = state.screen;
   }
 
   const updaters = {
     [TITLE]: function() {
       if (
-        cursors.left.isDown ||
-        cursors.right.isDown ||
-        cursors.up.isDown ||
-        cursors.down.isDown
+        state.cursors.left.isDown ||
+        state.cursors.right.isDown ||
+        state.cursors.up.isDown ||
+        state.cursors.down.isDown
       ) {
         state.screen = STAGING;
       }
@@ -131,32 +129,32 @@ function update ()
 }
 
 function move() {
-  if (cursors.left.isDown) {
-    player.setVelocityX(-160);
-    player.anims.play('left', true);
+  if (state.cursors.left.isDown) {
+    state.player.setVelocityX(-160);
+    state.player.anims.play('left', true);
   }
-  else if (cursors.right.isDown) {
-    player.setVelocityX(160);
-    player.anims.play('right', true);
+  else if (state.cursors.right.isDown) {
+    state.player.setVelocityX(160);
+    state.player.anims.play('right', true);
   } else {
-    player.setVelocityX(0);
+    state.player.setVelocityX(0);
   }
 
-  if (cursors.up.isDown) {
-    player.setVelocityY(-160);
+  if (state.cursors.up.isDown) {
+    state.player.setVelocityY(-160);
   }
-  else if (cursors.down.isDown) {
-    player.setVelocityY(160);
+  else if (state.cursors.down.isDown) {
+    state.player.setVelocityY(160);
   }
   else {
-    player.setVelocityY(0);
+    state.player.setVelocityY(0);
   }
 
   if (
-    player.body.velocity.x === 0 &&
-    player.body.velocity.y === 0
+    state.player.body.velocity.x === 0 &&
+    state.player.body.velocity.y === 0
   ) {
-    player.anims.play('stand', true);
+    state.player.anims.play('stand', true);
   }
 }
 
