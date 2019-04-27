@@ -45,23 +45,48 @@ class StagingScreen extends Screen {
     this.items = _.sampleSize(state.allItems, 3);
     this.sprites = _.map(this.items, (item, i) =>
       scene.physics.add.sprite(i*WIDTH/3 + WIDTH/6, HEIGHT/4, item.spriteName));
+    this.arrow = scene.physics.add.sprite(WIDTH/2, HEIGHT - 32, 'arrow');
+    this.arrow.anims.play('arrow-bounce');
+  }
+  
+  destroy() {
+    for (let sprite of this.sprites) sprite.destroy();
+    this.arrow.destroy();
   }
 
   update() {
-    state.player.update(this.getInputs());
+    let { player } = state;
+    player.update(this.getInputs());
   
     let { scene, items, sprites } = this;
     let { physics } = scene;
     for (let i = 0; i < items.length; i++) {
-      if (physics.overlap(state.player.sprite, sprites[i])) {
-        state.player.update({ pickItem: items[i] });
+      if (physics.overlap(player.sprite, sprites[i])) {
+        player.update({ pickItem: items[i] });
+        sprites[i].destroy();
       }
     }
-
+    
+    if (player.sprite.y > 250) {
+      this.destroy();
+      return new FightingSreen(scene);
+    }
   }
 }
 
 class FightingSreen extends Screen {
+  constructor(scene) {
+    super(scene);
+    let { player } = state;
+    player.sprite.x = WIDTH/10;
+    player.sprite.y = HEIGHT/2;
+  }
+
+  update() {
+    let { player } = state;
+    player.update(this.getInputs());
+  }
 }
+
 
 
