@@ -19,7 +19,14 @@ class Screen {
       playerY = 1;
     }
 
-    return { move: { x: playerX, y: playerY } };
+    return {
+      move: { x: playerX, y: playerY },
+      damage: 0,
+      hitstun: 0,
+      attacking: 0,
+      pickItem: null,
+      dropItem: null,
+    };
   }
 }
 
