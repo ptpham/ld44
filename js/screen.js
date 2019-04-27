@@ -28,6 +28,8 @@ class Screen {
       dropItem: null,
     };
   }
+
+  update() { }
 }
 
 class TitleScreen extends Screen {
@@ -85,8 +87,14 @@ class FightingSreen extends Screen {
   update() {
     let { player } = state;
     player.update(this.getInputs());
+    if (player.isDead()) return new LoseScreen(this.scene);
   }
 }
 
-
+class LoseScreen extends Screen {
+  constructor(scene) {
+    super(scene);
+    this.lose = scene.add.text(WIDTH/4, HEIGHT/2, 'Your Suffering is Eternal', DEFAULT_FONT);
+  }
+}
 
