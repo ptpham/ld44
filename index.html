@@ -1,0 +1,54 @@
+
+<html>
+<head>
+  <script src="https://cdn.jsdelivr.net/npm/phaser@3.16.2/dist/phaser.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/lodash@4.17.11/lodash.min.js"></script>
+
+  <style>
+  body { margin: 0px; display: flex; }
+  canvas { margin: 0 auto; }
+  </style>
+</head>
+
+<body>
+
+</body>
+
+<script>
+let config = {
+    type: Phaser.AUTO,
+    scale: {
+      zoom: 2,
+      width: 400,
+      height: 300,
+      expandParent: true,
+      mode: Phaser.Scale.ScaleModes.ENVELOP
+    },
+    render: {
+      pixelArt: true
+    },
+    scene: {
+        preload: preload,
+        create: create,
+        update: update
+    }
+};
+
+let game = new Phaser.Game(config);
+
+function preload ()
+{
+}
+
+function create ()
+{
+}
+
+function update ()
+{
+}
+
+</script>
+
+</html>
+
