@@ -1,6 +1,6 @@
 
 class Fighter {
-  constructor(scene, sprite) {
+  constructor(sprite) {
     this.items = [];
     this.health = 5;
     this.sprite = sprite;
@@ -8,26 +8,49 @@ class Fighter {
     this.state = FIGHTER_STANDING;
   }
 
+  _preventWalkingWithState(state, time) {
+    clearInterval(this._timeoutState);
+    this.stop();
+    this.state = state;
+    if (time >= 0) {
+      this._timeoutState = setTimeout(() => {
+        this.state = FIGHTER_STANDING;
+      }, time);
+    }
+  }
+
+  getItem(item) {
+    let { cost = 0 } = item;
+    this._preventWalkingWithState(FIGHTER_GET_ITEM, Math.max(cost, 1)*1000);
+    this.items.push(item);
+  }
+
+  dropItem(item) {
+    let { cost = 0 } = item;
+    this._preventWalkingWithState(FIGHTER_DROP_ITEM, Math.max(cost, 1)*1000);
+    _.pull(this.items, item);
+  }
+
   damage(amount) {
     if (this.state == FIGHTER_HITSTUN) return;
     this.health -= amount;
+    if (this.health <= 0) {
+      this._preventWalkingWithState(FIGHTER_DEAD, -1);
+      let { sprite } = this;
+      sprite.anims.play('die', true);
+    }
   }
 
   hitstun(time) {
-    this.move(0, 0);
-    this.state = FIGHTER_HITSTUN;
-    setTimeout(() => {
-      this.state = FIGHTER_STANDING;
-    }, time);
+    this._preventWalkingWithState(FIGHTER_HITSTUN, time);
   }
 
-  move(x, y) {
-    let { sprite, speed } = this;
-    if (this.state.FIGHTER_HITSTUN) {
-      x = 0;
-      y = 0;
-    }
+  canMove() {
+    return this.state == FIGHTER_WALKING || this.state == FIGHTER_STANDING;
+  }
 
+  _move(x, y) {
+    let { sprite, speed } = this;
     sprite.setVelocityX(x*speed);
     sprite.setVelocityY(y*speed);
     if (x) sprite.anims.play(x < 0 ? 'left' : 'right', true);
@@ -37,6 +60,16 @@ class Fighter {
       this.state = FIGHTER_STANDING;
     } else {
       this.state = FIGHTER_WALKING;
+    }
+  }
+
+  stop() {
+    this._move(0, 0);
+  }
+
+  move(x, y) {
+    if (this.canMove()) {
+      this._move(x, y);
     }
   }
 }
