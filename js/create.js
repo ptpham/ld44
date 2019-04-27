@@ -68,6 +68,8 @@ function create ()
     fighter.items = data.items;
     fighter.baseDamage = data.baseDamage;
     fighter.sprite.tint = 0xff0000;
+
+    fighter.sprite.setImmovable(true)
     return fighter;
   });
 }
