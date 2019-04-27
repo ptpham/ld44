@@ -3,6 +3,14 @@ class FighterState {
     this.fighter = fighter;
   }
 
+  _updateItem(input) {
+    let { fighter } = this;
+    let { pickItem } = input;
+    if (pickItem && !fighter.hasItem(pickItem)) {
+      return new FighterPickItem(fighter, pickItem); 
+    }
+  }
+
   _updateHealth(input) {
     let { fighter } = this;
     if (input.damage) {
@@ -47,7 +55,7 @@ class FighterMoving extends FighterState {
       }
     }
     
-    return this;
+    return this._updateItem(input);
   }
 }
 
@@ -90,11 +98,7 @@ class FighterStanding extends FighterState {
       return new FighterMoving(fighter);
     }
 
-    let { pickItem } = input;
-    if (pickItem && !fighter.hasItem(pickItem)) {
-      return new FighterPickItem(fighter, pickItem); 
-    }
-    return this;
+    return this._updateItem(input);
   }
 }
 
@@ -126,7 +130,14 @@ class FighterPickItem extends FighterState {
     if (!fighter.hasItem(item)) {
       fighter.items.push(item);
       this.done = false;
-      setTimeout(() => { this.done = true; }, Math.max(item.cost || 0, 1) * 100);
+
+      let promise;
+      let duration = 100;
+      let cost = Math.max(item.cost || 0, 1);
+      for (let i = 0; i < cost; i++) {
+        promise = fighter.adjustHealth(-1, duration);
+      }
+      promise.then(() => this.done = true);
     }
   }
 
@@ -134,6 +145,11 @@ class FighterPickItem extends FighterState {
     let defaultState = this._updateDefault(input);
     if (defaultState) return defaultState;
     if (this.done) return new FighterStanding(this.fighter);
+
+    const sprite = this.fighter.sprite;
+    sprite.anims.play('stand', true);
+    sprite.setVelocityX(0);
+    sprite.setVelocityY(0);
   }
 }
 
@@ -164,6 +180,13 @@ class Fighter {
     this.baseDamage = 1;
     this.attackSpeed = 500;
     this.stunDuration = 200;
+    this._adjustHealthPromise = Promise.resolve();
+  }
+
+  adjustHealth(amount, duration) {
+    this._adjustHealthPromise = this._adjustHealthPromise
+      .delay(duration).then(() => { this.health += amount; });
+    return this._adjustHealthPromise;
   }
 
   hasItem(item) {
