@@ -1,0 +1,22 @@
+{
+  "name": "ld44",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "http-server ."
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ptpham/ld44.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/ptpham/ld44/issues"
+  },
+  "homepage": "https://github.com/ptpham/ld44#readme",
+  "dependencies": {
+    "http-server": "^0.11.1"
+  }
+}
