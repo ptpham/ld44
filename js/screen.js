@@ -82,6 +82,11 @@ class FightingScreen extends Screen {
     let { player } = state;
     player.sprite.x = WIDTH/10;
     player.sprite.y = HEIGHT/2;
+
+    this.enemy = state.enemies[state.currentEnemy];
+    this.enemyAI = state.enemyData[state.currentEnemy].getAI();
+    this.enemy.sprite.x = WIDTH / 2;
+    this.enemy.sprite.y = HEIGHT / 2;
   }
 
   update() {
@@ -90,6 +95,9 @@ class FightingScreen extends Screen {
 
     inputs.attacking = state.cursors.space.isDown;
     player.update(inputs);
+
+    let enemyInputs = this.enemyAI.getInputsForEnemy(this.enemy, player);
+    this.enemy.update(enemyInputs);
 
     if (player.isDead()) return new LoseScreen(this.scene);
   }

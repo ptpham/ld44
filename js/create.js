@@ -35,5 +35,15 @@ function create ()
   state.player = new Fighter(this.physics.add.sprite(WIDTH/2, HEIGHT/2, 'dude'));
   state.cursors = this.input.keyboard.createCursorKeys();
   state.screen = new TitleScreen(this);
+
+  state.enemies = state.enemyData.map((data) => {
+    const fighter = new Fighter(this.physics.add.sprite(-WIDTH, -HEIGHT, data.sprite));
+    fighter.health = data.health;
+    fighter.speed = data.speed;
+    fighter.items = data.items;
+    fighter.baseDamage = data.baseDamage;
+    fighter.sprite.tint = 0xff0000;
+    return fighter;
+  });
 }
 

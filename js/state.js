@@ -18,5 +18,17 @@ let state = {
       cost: 1,
     }
   ],
+  enemyData: [
+    {
+      name: 'Bad Dude',
+      sprite: 'dude',
+      health: 5,
+      speed: 200,
+      baseDamage: 2,
+      items: [],
+      getAI: () => new SimpleEnemyAI(),
+    },
+  ],
+  currentEnemy: 0,
 };
 
