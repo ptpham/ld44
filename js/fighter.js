@@ -157,6 +157,8 @@ class FighterDead extends FighterState {
     super(fighter);
     fighter.sprite.scene.sound.play(`${fighter.spriteKey}_dying`);
     fighter.sprite.anims.play(`${fighter.spriteKey}_dead`, true);
+    fighter.sprite.setVelocityX(0)
+    fighter.sprite.setVelocityY(0)
   }
 }
 
