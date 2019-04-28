@@ -433,6 +433,45 @@ function createAnimsForBoss() {
   });
 }
 
+function createAnimsForFinalBoss() {
+  let label = 'finalboss';
+  let down_general = [3,4];
+  let up_general = [11,12];
+  let left_general = [4,5];
+  let right_general = [2,3];
+
+  let config = {
+    stand_down: down_general,
+    stand_up: up_general,
+    stand_left: left_general,
+    stand_right: right_general,
+    hitstun: [0,0], 
+    dead: [16,22],
+    pick: [1,1],
+    move_left: left_general,
+    move_right: right_general,
+    move_down: down_general,
+    move_up: up_general, 
+    move_down_left: left_general,
+    move_down_right: right_general,
+    move_up_left: [12,13], 
+    move_up_right: [10,11],
+    attack_left: [5,6],
+    attack_right: [1,2],
+    attack_down: [5,6],
+    attack_up: [9,10]
+  };
+
+  for (let key in config) {
+    let [start, end] = config[key];
+    this.anims.create({
+      key: `${label}_${key}`,
+      frames: this.anims.generateFrameNumbers(label, { start, end }),
+      frameRate: 20
+    });
+  }
+}
+
 function createTexturesAndAnimationsForPlayerItems() {
 
   const modes = ['attack', 'hit']
