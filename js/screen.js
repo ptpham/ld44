@@ -111,11 +111,20 @@ class FightingScreen extends Screen {
     let { player } = state;
     let { physics } = this.scene;
     let inputs = this.getInputs();
+    let enemyInputs = this.enemyAI.getInputsForEnemy(this.enemy, player);
 
     inputs.attacking = state.cursors.space.isDown;
-    player.update(inputs);
 
-    let enemyInputs = this.enemyAI.getInputsForEnemy(this.enemy, player);
+    // resolve attacks
+    physics.overlap(player.attackGroup, this.enemy.sprite, (enemy, attack) => {
+      // enemy and attack are flipped for some reason??
+      console.log("hit", attack, enemy)
+      player.attackGroup.remove(attack, true, true)
+      this.enemy.health -= attack.damage;
+      enemyInputs.hitstun = attack.hitstun || 0;
+    })
+
+    player.update(inputs);
     this.enemy.update(enemyInputs);
 
     physics.collide(player.sprite, this.enemy.sprite);
@@ -136,13 +145,6 @@ class FightingScreen extends Screen {
         return new VictoryScreen(this.scene);
       }
     }
-
-    // resolve attacks
-    physics.overlap(player.attackGroup, this.enemy.sprite, (enemy, attack) => {
-      // enemy and attack are flipped for some reason??
-      console.log("hit", attack, enemy)
-      player.attackGroup.remove(attack, true, true)
-    })
   }
 
   destroy() {
