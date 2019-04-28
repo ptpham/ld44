@@ -23,5 +23,6 @@ function preload ()
   this.load.json('player_attack_data', 'assets/player_allattacks.json');
 
   this.load.audio('swoosh', 'assets/swoosh.mp3');
+  this.load.audio('bullet_firing', 'assets/bullet.mp3');
 }
 

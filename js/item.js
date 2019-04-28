@@ -65,6 +65,7 @@ class Gun extends BaseItem {
     }
 
     getAttacks(fighter) {
+        state.screen.scene.sound.play('bullet_firing');
         return [
             new Bullet(fighter, this, 1, 50, 10, 10,
                 1000, 500)
