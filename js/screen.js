@@ -68,11 +68,16 @@ class StagingScreen extends Screen {
   createRequirementHearts(container, item) {
     let { scene } = this;
     let RANGE_X = 60;
-    let OFFSET_Y = 40;
+    let OFFSET_Y = 60;
     let hearts = [];
 
     let { cost } = item;
+    let carpet = scene.add.sprite(0, 0, 'carpet');
     let itemSprite = scene.physics.add.sprite(0, 0, item.spriteName);
+    carpet.scaleX = 1.5;
+    carpet.scaleY = 0.8;
+
+    container.add(carpet);
     container.add(itemSprite);
 
     for (let i = 0; i < cost; i++) {
