@@ -9,6 +9,10 @@ class FighterState {
     if (pickItem && !fighter.hasItem(pickItem)) {
       return new FighterPickItem(fighter, pickItem); 
     }
+    if (input.switchItem) {
+      this.fighter.currentItemIndex = (this.fighter.currentItemIndex + 1) % this.fighter.items.length
+      console.log('switched to item', this.fighter.currentItemIndex)
+    }
   }
 
   _updateHealth(input) {
@@ -214,6 +218,7 @@ class Fighter {
     // * attacking: boolean
     // * pickItem: item (item the player is picking up)
     // * dropItem: item (item the player is dropping)
+    // * switchItem: boolean (update current item index)
     const oldState = this.state;
     this.state = this.state.update(input) || this.state;
 

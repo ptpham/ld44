@@ -3,6 +3,7 @@
 class Screen {
   constructor(scene) {
     this.scene = scene;
+    this.lastTabTimeDown = 0;
   }
   
   getInputs() {
@@ -19,6 +20,15 @@ class Screen {
       playerY = 1;
     }
 
+    // keypress checking for tab
+    let tabpressed = false;
+    if (state.tabkey.isDown) {
+      if (this.lastTabTimeDown < state.tabkey.timeDown) {
+        tabpressed = true;
+        this.lastTabTimeDown = state.tabkey.timeDown
+      }
+    }
+
     return {
       move: { x: playerX, y: playerY },
       damage: 0,
@@ -26,6 +36,7 @@ class Screen {
       attacking: false,
       pickItem: null,
       dropItem: null,
+      switchItem: tabpressed,
     };
   }
 
@@ -195,6 +206,7 @@ class FightingScreen extends Screen {
 
     if (player.isDead()) return new LoseScreen(this.scene);
     if (this.enemy.isDead()) {
+      console.log('enemy dead!')
       if (this.index < state.enemyData.length - 1) {
         this.arrow.x = WIDTH/2;
         this.arrow.y = 12;
