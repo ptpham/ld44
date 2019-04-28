@@ -145,7 +145,12 @@ class FightingScreen extends Screen {
       }
     }
 
-    state.heartManager.update();
+    // resolve attacks
+    physics.overlap(player.attackGroup, this.enemy.sprite, (enemy, attack) => {
+      // enemy and attack are flipped for some reason??
+      console.log("hit", attack, enemy)
+      player.attackGroup.remove(attack, true, true)
+    })
   }
 
   destroy() {
