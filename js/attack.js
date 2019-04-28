@@ -81,8 +81,9 @@ class Slash extends BaseAttack {
     }
 
     onCollideEnemy(enemy, enemyInputs) {
+        if (!this.active) return;
         this.fighter.attackGroup.remove(this.sprite, true, true)
-        console.log('damage', this.damage, 'hitstun', this.hitstun, 'enemyHealth', enemy.health)
+        console.log('slash', 'damage', this.damage, 'hitstun', this.hitstun, 'enemyHealth', enemy.health)
         enemyInputs.hitstun = this.hitstun || 0;
         enemyInputs.damage = this.damage
     }
@@ -127,7 +128,7 @@ class Bullet extends BaseAttack {
         x += Math.random() * 20 - 10;
         y += Math.random() * 20 - 10;
 
-        const sprite = scene.add.sprite(x, y, 'slash');
+        let sprite = scene.physics.add.sprite(x, y, 'slash');
         sprite.scaleX = w / sprite.width;
         sprite.scaleY = h / sprite.height;
         sprite.flipX = orientation === 'left';
@@ -146,6 +147,15 @@ class Bullet extends BaseAttack {
                 sprite.setVelocityY(speed);
                 break;
         }
+        console.log('bullet', sprite.getCenter(), 'speed', speed, 'sprite', sprite, 'orientation', orientation, 'body velocity', sprite.body.velocity)
         super(fighter, item, damage, hitstun, sprite)
+    }
+    onCollideEnemy(enemy, enemyInputs) {
+        if (!this.active) return;
+        this.fighter.attackGroup.remove(this.sprite, true, true)
+        console.log('bullet', 'damage', this.damage, 'hitstun', this.hitstun, 'enemyHealth', enemy.health,
+            this.sprite.getCenter(), this.sprite.velocityX, this.sprite.velocityY)
+        enemyInputs.hitstun = this.hitstun || 0;
+        enemyInputs.damage = this.damage
     }
 }

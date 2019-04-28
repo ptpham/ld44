@@ -6,12 +6,12 @@ class FighterState {
   _updateItem(input) {
     let { fighter } = this;
     let { pickItem } = input;
-    if (pickItem && !fighter.hasItem(pickItem)) {
+    if (pickItem && !fighter.hasItem(pickItem.item)) {
       return new FighterPickItem(fighter, pickItem); 
     }
     if (input.switchItem) {
       this.fighter.currentItemIndex = (this.fighter.currentItemIndex + 1) % this.fighter.items.length
-      console.log('switched to item', this.fighter.currentItemIndex)
+      console.log('switched to item', this.fighter.currentItemIndex, this.fighter.getCurrentItem())
     }
   }
 
@@ -45,7 +45,6 @@ class FighterMoving extends FighterState {
   update(input) {
     let defaultState = this._updateDefault(input);
     if (defaultState) return defaultState;
-
     if (input.attacking && this.fighter.isReadyToAttack()) {
       return new FighterAttacking(this.fighter, this.fighter.getCurrentItem());
     }
@@ -59,7 +58,6 @@ class FighterMoving extends FighterState {
       let anim = `${spriteKey}_move`;
       if (y) anim = y < 0 ? `${anim}_up` : `${anim}_down`;
       if (x) anim = x < 0 ? `${anim}_left` : `${anim}_right`;
-
       if (x == 0 && y == 0) {
         return new FighterStanding(this.fighter);
       } else {
@@ -76,6 +74,7 @@ class FighterMoving extends FighterState {
 class FighterAttacking extends FighterState {
   constructor(fighter, item) {
     super(fighter);
+    console.log('attacking with item', item)
     this.item = item;
 
     const duration = this.fighter.attackSpeed;
@@ -106,7 +105,6 @@ class FighterStanding extends FighterState {
     let { fighter } = this;
     let defaultState = this._updateDefault(input);
     if (defaultState) return defaultState;
-
     let { sprite, spriteKey } = this.fighter;
     let anim = `${spriteKey}_stand_${this.fighter.orientation}`;
     anim = this.fighter.getPlayerAnimationForAttack(anim);
@@ -126,7 +124,13 @@ class FighterStanding extends FighterState {
 class FighterDead extends FighterState {
   constructor(fighter) {
     super(fighter);
+  }
+
+  update() {
+    let { fighter } = this;
     fighter.sprite.anims.play(`${fighter.spriteKey}_dead`, true);
+    fighter.sprite.setVelocityX(0);
+    fighter.sprite.setVelocityY(0);
   }
 }
 
@@ -147,21 +151,20 @@ class FighterHitstun extends FighterState {
 }
 
 class FighterPickItem extends FighterState {
-  constructor(fighter, item) {
+  constructor(fighter, pickItem) {
     super(fighter);
+    console.log('pick item', pickItem)
     this.done = true;
-    if (!fighter.hasItem(item)) {
-      fighter.items.push(item);
+      fighter.items.push(pickItem.item);
       this.done = false;
 
       let promise;
       let duration = 100;
-      let cost = Math.max(item.cost || 0, 1);
+      let cost = Math.max(pickItem.cost || 0, 1);
       for (let i = 0; i < cost; i++) {
         promise = fighter.adjustHealth(-1, duration);
       }
       promise.then(() => this.done = true);
-    }
   }
 
   update(input) {

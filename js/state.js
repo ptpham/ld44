@@ -4,22 +4,22 @@ let state = {
   player: null,
   cursors: null,
   arrow: null,
-  allItems: [
+  allPickItems: [
     {
       name: 'Item 1',
       spriteName: 'shield',
       cost: 1,
-      getItem: () => new DefaultSword(), // TODO: needs to be a shield
+      item: new DefaultSword(), // TODO: needs to be a shield
     }, {
       name: 'Item 2',
       spriteName: 'sword',
       cost: 2,
-      getItem: () => new LongSword(),
+      item: new LongSword(),
     }, {
       name: 'Item 3',
       spriteName: 'gun',
       cost: 1,
-      getItem: () => new Gun(),
+      item: new Gun(),
     }
   ],
   enemyData: [
