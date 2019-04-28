@@ -430,20 +430,7 @@ function createTexturesAndAnimationsForPlayerItems() {
 
   const modes = ['attack', 'hit']
   const itemsWithAttack = ['stick', 'sword', 'gun', 'shield'];
-
-
-
-  function getFramesForAction(item, direction) {
-    // reuse right action frame for down
-    if (direction == 'down') {
-      direction = 'right'
-    }
-    return [`${item}_${direction}_1`]
-  }
-
-  function getFramesForStanding(item, direction) {
-    return [`${item}_${direction}_0`];
-  }
+  const directions = ['up', 'left', 'right', 'down'];
 
   modes.forEach((mode) => {
     const data = this.cache.json.get(`player_${mode}_data`)
@@ -455,6 +442,7 @@ function createTexturesAndAnimationsForPlayerItems() {
     });
 
     function makeAnim(key, frames) {
+      console.log('makeAnim', key, frames)
       const animFrames = frames.map((frame) => ({
         key: `player_${mode}`,
         frame: frame,
@@ -466,22 +454,33 @@ function createTexturesAndAnimationsForPlayerItems() {
       });
     }
 
+    function getFramesForAction(item, direction) {
+      // reuse left action frame for down (just for stun)
+      if (mode == 'hit' && direction == 'down') {
+        direction = 'right'
+      }
+      return [`${item}_${direction}_1`]
+    }
+
+    function getFramesForStanding(item, direction) {
+      return [`${item}_${direction}_0`];
+    }
+
     if (mode == 'attack') {
       // add the standing animations just on the attack mode
       itemsWithAttack.forEach(key => {
-        makeAnim(`player_stand_up_${key}`, getFramesForStanding(key, 'up'));
-        makeAnim(`player_stand_down_${key}`, getFramesForStanding(key, 'down'));
-        makeAnim(`player_stand_left_${key}`, getFramesForStanding(key, 'left'));
-        makeAnim(`player_stand_right_${key}`, getFramesForStanding(key, 'right'));
+        directions.forEach((direction) => {
+          makeAnim(`player_stand_${direction}_${key}`, getFramesForStanding(key, direction))
+        })
       })
     }
 
+    // add action frames for mode
     itemsWithAttack.forEach(key => {
-      makeAnim(`player_${mode}_up_${key}`, getFramesForAction(key, 'up'));
-      makeAnim(`player_${mode}_left_${key}`, getFramesForAction(key, 'left'));
-      makeAnim(`player_${mode}_right_${key}`, getFramesForAction(key, 'right'));
-      makeAnim(`player_${mode}_down_${key}`, getFramesForAction(key, 'down'));
-    });
+        directions.forEach((direction) => {
+          makeAnim(`player_${mode}_${direction}_${key}`, getFramesForAction(key, direction))
+        })
+    })
   })
 
 }

@@ -110,11 +110,6 @@ class FighterAttacking extends FighterState {
     let anim = `${spriteKey}_attack_${orientation}`;
     anim = this.fighter.getPlayerAnimationForAttack(anim);
     sprite.anims.play(anim);
-
-    if (orientation === 'down') {
-      sprite.body.offset.y = sprite.height - sprite.body.height - 10;
-      sprite.y = this.startingY + 10;
-    }
   }
 }
 

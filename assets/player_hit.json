@@ -41,7 +41,7 @@
       "meta": {}
     },
     {
-      "name": "gun_top_0",
+      "name": "gun_up_0",
       "frame": {
         "x": 80,
         "y": 130,
@@ -51,7 +51,7 @@
       "meta": {}
     },
     {
-      "name": "gun_top_1",
+      "name": "gun_up_1",
       "frame": {
         "x": 121,
         "y": 130,
@@ -101,7 +101,7 @@
       "meta": {}
     },
     {
-      "name": "shield_top_0",
+      "name": "shield_up_0",
       "frame": {
         "x": 68,
         "y": 67,
@@ -111,7 +111,7 @@
       "meta": {}
     },
     {
-      "name": "shield_top_1",
+      "name": "shield_up_1",
       "frame": {
         "x": 98,
         "y": 67,

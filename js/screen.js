@@ -271,7 +271,6 @@ class FightingScreen extends Screen {
     }
 
     if (this.enemy.isDead()) {
-      console.log('enemy dead!')
       if (this.index < state.enemyData.length - 1) {
         this.arrow.rotation = Math.PI;
         this.arrow.x = WIDTH/2;
