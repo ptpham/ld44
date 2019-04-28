@@ -45,11 +45,42 @@ class StagingScreen extends Screen {
   constructor(scene) {
     super(scene);
     state.background.anims.play('background-staging');
-    this.items = _.sampleSize(state.allItems, 3);
-    this.sprites = _.map(this.items, (item, i) =>
-      scene.physics.add.sprite(i*WIDTH/3 + WIDTH/6, HEIGHT/4, item.spriteName));
+
+    let ITEM_COUNT = 3;
+    this.items = _.sampleSize(state.allItems, ITEM_COUNT);
+    this.itemContainers = _.times(ITEM_COUNT, i => {
+      let x = i*WIDTH/3 + WIDTH/6, y = HEIGHT/4;
+      let result =scene.add.container(x, y);
+      this.createRequirementHearts(result, this.items[i]);
+      return result;
+    });
+
     this.arrow = scene.physics.add.sprite(WIDTH/2, HEIGHT - 32, 'arrow');
     this.arrow.anims.play('arrow-bounce');
+  }
+
+  createRequirementHearts(container, item) {
+    let { scene } = this;
+    let RANGE_X = 60;
+    let OFFSET_Y = 40;
+    let hearts = [];
+
+    let { cost } = item;
+    let itemSprite = scene.physics.add.sprite(0, 0, item.spriteName);
+    container.add(itemSprite);
+
+    for (let i = 0; i < cost; i++) {
+      let x = RANGE_X*(i - cost/2 + 0.5)/ cost;
+      let y = OFFSET_Y;
+      let heart = scene.add.sprite(x, y, 'heart');
+      heart.anims.play('heart-empty');
+      container.add(heart);
+      hearts.push(heart);
+    }
+
+    container.itemSprite = itemSprite;
+    container.hearts = hearts;
+    container.item = item;
   }
 
   createSmoke(itemSprite) {
@@ -58,9 +89,18 @@ class StagingScreen extends Screen {
     this.smoke.scaleX = 3;
     this.smoke.scaleY = 3;
   }
+
+  selectItem(container, item) {
+    this.createSmoke(container);
+    container.itemSprite.destroy();
+    Promise.mapSeries(container.hearts, heart => {
+      heart.anims.play('heart-full');
+      return Promise.delay(100);
+    });
+  }
   
   destroy() {
-    for (let sprite of this.sprites) sprite.destroy();
+    for (let container of this.itemContainers) container.destroy();
     if (this.smoke) this.smoke.destroy();
     this.arrow.destroy();
   }
@@ -69,13 +109,13 @@ class StagingScreen extends Screen {
     let { player } = state;
     player.update(this.getInputs());
   
-    let { scene, items, sprites } = this;
+    let { scene, items, itemContainers } = this;
     let { physics } = scene;
     for (let i = 0; i < items.length; i++) {
-      if (physics.overlap(player.sprite, sprites[i])) {
+      let container = itemContainers[i];
+      if (physics.overlap(player.sprite, container.itemSprite)) {
+        this.selectItem(container, items[i]);
         player.update({ pickItem: items[i] });
-        this.createSmoke(sprites[i]);
-        sprites[i].destroy();
       }
     }
     

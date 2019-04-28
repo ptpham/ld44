@@ -12,7 +12,7 @@ let state = {
     }, {
       name: 'Item 2',
       spriteName: 'dude',
-      cost: 1,
+      cost: 2,
     }, {
       name: 'Item 3',
       spriteName: 'dude',
