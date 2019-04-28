@@ -30,6 +30,7 @@ function preload ()
   this.load.audio('bullet_firing', 'assets/bullet.mp3');
   this.load.audio('longsword_swipe', 'assets/longsword_swipe.mp3');
   this.load.audio('stick_hit', 'assets/stick_hit.mp3');
+  this.load.audio('shield_parry', 'assets/shield_parry.mp3');
   this.load.audio('boss_attack', 'assets/boss_attack.mp3');
   this.load.audio('boss_dying', 'assets/boss_dying.mp3');
   this.load.audio('player_dying', 'assets/player_dying.mp3');
