@@ -5,6 +5,7 @@ function create ()
   createAnimsForPlayer.call(this);
   createTexturesAndAnimationsForPlayerItems.call(this);
   createAnimsForBoss.call(this);
+  createAnimsForMerchant.call(this);
   createAnimsForItems.call(this);
 
   this.anims.create({
@@ -49,12 +50,6 @@ function create ()
     frames: this.anims.generateFrameNumbers('slash', { start: 0, end: 5 }),
     duration: 200,
     hideOnComplete: true,
-  });
-
-  this.anims.create({
-    key: 'merchant-idle',
-    frames: this.anims.generateFrameNumbers('merchant', { start: 0, end: 1 }),
-    frameRate: 5
   });
 
   this.anims.create({
@@ -350,6 +345,40 @@ function createAnimsForPlayer() {
     frameRate: 10,
     repeat: -1
   });
+}
+
+function createAnimsForMerchant() {
+  let label = 'merchant';
+  let config = {
+    stand_down: [0,1],
+    stand_up: [0,1],
+    stand_left: [0,1],
+    stand_right: [0,1],
+    hitstun: [0,1], 
+    dead: [0,1], 
+    pick: [0,1],
+    move_left: [0,1], 
+    move_right: [0,1],
+    move_down: [0,1],
+    move_up: [0,1], 
+    move_down_left: [0,1],
+    move_down_right: [0,1],
+    move_up_left: [0,1], 
+    move_up_right: [0,1],
+    attack_left: [0,1],
+    attack_right: [0,1],
+    attack_down: [0,1],
+    attack_up: [0,1]
+  };
+
+  for (let key in config) {
+    let [start, end] = config[key];
+    this.anims.create({
+      key: `${label}_${key}`,
+      frames: this.anims.generateFrameNumbers(label, { start, end }),
+      frameRate: 5
+    });
+  }
 }
 
 function createAnimsForBoss() {
