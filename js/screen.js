@@ -236,7 +236,10 @@ class FightingScreen extends Screen {
 
     this.arrow = scene.physics.add.sprite(-WIDTH, -HEIGHT, 'arrow');
     this.arrow.anims.play('arrow-bounce');
+    this.music = scene.sound.add('music_1', { volume: 0.1, loop: true})
+    this.music.play()
   }
+
 
   update() {
     let { player } = state;
@@ -281,6 +284,7 @@ class FightingScreen extends Screen {
     state.itemManager.update();
 
     if (player.isDead()) {
+      this.music.setLoop(false)
       return new DelayScreen(this.scene, 1000, () => new LoseScreen(this.scene), () => this.destroy());
     }
 
@@ -292,17 +296,20 @@ class FightingScreen extends Screen {
         state.currentEnemy = this.index + 1;
 
         if (physics.overlap(player.sprite, this.arrow)) {
+          this.music.setLoop(false)
           this.destroy();
           player.sprite.y = HEIGHT/2 + 72;
           return new StagingScreen(this.scene);
         }
       } else {
+        this.music.setLoop(false)
         return new VictoryScreen(this.scene);
       }
     }
   }
 
   destroy() {
+    this.music.setLoop(false)
     this.arrow.destroy();
     this.enemy.sprite.setCollideWorldBounds(false);
     this.enemy.sprite.x = -WIDTH;
