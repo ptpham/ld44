@@ -209,6 +209,8 @@ class Block extends BaseAttack {
     onCollideAttack(otherAttack, userInputs, enemyInputs) {
         if (!this.active) return;
         otherAttack.active = false;
-        // TODO
+        otherAttack.sprite.destroy();
+        userInputs.pushback = this.pushback;
+        this.active = false;
     }
 }
