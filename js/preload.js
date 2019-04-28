@@ -27,5 +27,6 @@ function preload ()
 
   this.load.audio('swoosh', 'assets/swoosh.mp3');
   this.load.audio('bullet_firing', 'assets/bullet.mp3');
+  this.load.audio('longsword_swipe', 'assets/longsword_swipe.mp3');
 }
 

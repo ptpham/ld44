@@ -51,6 +51,7 @@ class LongSword extends BaseItem {
     }
 
     getAttacks(fighter) {
+        state.screen.scene.sound.play('longsword_swipe');
         return [
             new Slash(fighter, this, 2, this.cooldown / 4,
             this.cooldown, this.range, 60, 50)
