@@ -81,6 +81,7 @@ function create ()
   state.tabkey = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.TAB)
   state.screen = new TitleScreen(this);
   state.heartManager = new HeartManager(this);
+  state.itemManager = new ItemManager(this);
   state.enemies = state.enemyData.map((data) => {
     const fighter = new Fighter(this.physics.add.sprite(-WIDTH, -HEIGHT, data.sprite));
     fighter.health = data.health;
@@ -493,7 +494,7 @@ function createTexturesAndAnimationsForPlayerItems() {
 }
 
 function createAnimsForItems() {
-  let config = ['sword', 'shield', 'gun'];
+  let config = ['sword', 'shield', 'gun', 'stick'];
   for (let i = 0; i < config.length; i++) {
     this.anims.create({
       key: config[i],

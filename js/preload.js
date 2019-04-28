@@ -16,6 +16,7 @@ function preload ()
   this.load.spritesheet('block', 'assets/block.png', { frameWidth: 12, frameHeight: 32 });
   this.load.spritesheet('items', 'assets/items.png', { frameWidth: 30, frameHeight: 60 });
   this.load.spritesheet('dialog', 'assets/dialog.png', { frameWidth: 300, frameHeight: 200 });
+  this.load.spritesheet('box', 'assets/box.png', { frameWidth: 30, frameHeight: 30 });
 
   this.load.image('bullet', 'assets/sprites/bullet.png');
   this.load.spritesheet('fire', 'assets/sprites/fire.png', { frameWidth: 8, frameHeight: 16 });
@@ -34,5 +35,9 @@ function preload ()
   this.load.audio('boss_dying', 'assets/boss_dying.mp3');
   this.load.audio('player_dying', 'assets/player_dying.mp3');
   this.load.audio('item_switch', 'assets/item_switch.mp3');
+
+  this.load.image('white', 'assets/white.png');
+  this.load.image('black', 'assets/black.png');
+  this.load.image('clear', 'assets/clear.png');
 }
 
