@@ -45,6 +45,8 @@ function create ()
   state.background = this.add.sprite(WIDTH/2, HEIGHT/2, 'background');
   state.player = new Fighter(this.physics.add.sprite(WIDTH/2, HEIGHT/2, 'player'));
   state.player.sprite.setCollideWorldBounds(true);
+  state.player.sprite.depth = 1000;
+
   state.cursors = this.input.keyboard.createCursorKeys();
   state.screen = new TitleScreen(this);
   state.heartManager = new HeartManager(this);
