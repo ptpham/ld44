@@ -108,7 +108,6 @@ class StagingScreen extends Screen {
 
     this.merchant = scene.physics.add.sprite(PLAYER_START_X / 2, PLAYER_START_Y, 'merchant');
     this.merchant.setCollideWorldBounds(true);
-    this.merchant.anims.play('merchant-idle');
     this.merchantFighter = new Fighter(this.merchant);
     this.merchantFighter.speed = 60;
     this.merchantAI = new StayInPlaceAI(PLAYER_START_X / 2, PLAYER_START_Y);
