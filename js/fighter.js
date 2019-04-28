@@ -52,7 +52,9 @@ class FighterMoving extends FighterState {
       let anim = `${spriteKey}_move`;
       if (y) anim = y < 0 ? `${anim}_up` : `${anim}_down`;
       if (x) anim = x < 0 ? `${anim}_left` : `${anim}_right`;
-      
+      anim = this.fighter.getPlayerAnimationForMove(anim);
+      console.log(anim);
+
       if (x == 0 && y == 0) {
         return new FighterStanding(this.fighter);
       } else {
@@ -88,7 +90,10 @@ class FighterAttacking extends FighterState {
 
     this.fighter.sprite.setVelocityX(0)
     this.fighter.sprite.setVelocityY(0)
-    this.fighter.sprite.anims.play(`${spriteKey}_attack_${this.fighter.orientation}`);
+
+    let anim = `${spriteKey}_attack_${this.fighter.orientation}`;
+    anim = this.fighter.getPlayerAnimationForMove(anim);
+    this.fighter.sprite.anims.play(anim);
   }
 }
 
@@ -99,7 +104,9 @@ class FighterStanding extends FighterState {
     if (defaultState) return defaultState;
 
     let { sprite, spriteKey } = this.fighter;
-    sprite.anims.play(`${spriteKey}_stand_${this.fighter.orientation}`, true);
+    let anim = `${spriteKey}_stand_${this.fighter.orientation}`;
+    anim = this.fighter.getPlayerAnimationForAttack(anim);
+    sprite.anims.play(anim, true);
     if (input.attacking && this.fighter.isReadyToAttack()) {
       return new FighterAttacking(this.fighter, this.fighter.getCurrentItem());
     }
@@ -229,5 +236,33 @@ class Fighter {
       return;
     }
     this.health -= amount;
+  }
+
+  getPlayerAnimationForAttack(key) {
+    if (this.spriteKey !== 'player') {
+      // Only available for player
+      return key;
+    }
+
+    const item = this.getCurrentItem();
+    if (!item.playerAttackSprite) {
+      return key;
+    }
+
+    return `${key}_${item.playerAttackSprite}`;
+  }
+
+  getPlayerAnimationForMove(key) {
+    if (this.spriteKey !== 'player') {
+      // Only available for player
+      return key;
+    }
+
+    const item = this.getCurrentItem();
+    if (!item.playerMoveSprite) {
+      return key;
+    }
+
+    return `${key}_${item.playerMoveSprite}`;
   }
 }

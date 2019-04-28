@@ -74,6 +74,8 @@ class DefaultSword extends BaseItem {
     constructor() {
         super(500)
         this.range = 20;
+        this.playerAttackSprite = 'stick';
+        this.playerMoveSprite = 'stick';
     }
 
     newAttacks(fighter) {
@@ -103,6 +105,8 @@ class LongSword extends BaseItem {
     constructor() {
         super(1000)
         this.range = 20;
+        this.playerAttackSprite = 'sword';
+        this.playerMoveSprite = 'sword';
     }
 
     newAttacks(fighter) {
@@ -116,6 +120,7 @@ class LongSword extends BaseItem {
 class Gun extends BaseItem {
     constructor() {
         super(500)
+        this.playerAttackSprite = 'gun';
     }
 
     newAttacks(fighter) {

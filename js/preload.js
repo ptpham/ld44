@@ -11,5 +11,8 @@ function preload ()
   this.load.spritesheet('merchant', 'assets/merchant.png', { frameWidth: 30, frameHeight: 60 });
   this.load.spritesheet('carpet', 'assets/carpet.png', { frameWidth: 50, frameHeight: 120 });
   this.load.spritesheet('slash', 'assets/slash.png', { frameWidth: 24, frameHeight: 24 });
+
+  this.load.image('player_attack', 'assets/player_attack.png');
+  this.load.json('player_attack_data', 'assets/player_attack.json');
 }
 
