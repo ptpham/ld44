@@ -204,7 +204,7 @@ class Fighter {
   }
 
   hasItem(item) {
-    return _.find(this.items, item) != null;
+    return _.find(this.items, other => item === other) != null;
   }
 
   isDead() {
