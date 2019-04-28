@@ -215,6 +215,7 @@ class StagingScreen extends Screen {
     }
 
     state.heartManager.update();
+    state.itemManager.update();
   }
 }
 
@@ -277,6 +278,7 @@ class FightingScreen extends Screen {
       physics.collide(player.sprite, this.enemy.sprite);
     }
     state.heartManager.update();
+    state.itemManager.update();
 
     if (player.isDead()) {
       return new DelayScreen(this.scene, 1000, () => new LoseScreen(this.scene), () => this.destroy());
@@ -319,6 +321,7 @@ class LoseScreen extends Screen {
   update() {
     let { player } = state;
     state.heartManager.update();
+    state.itemManager.update();
     player.update();
 
     let dialogUpdate = this._updateDialog();
