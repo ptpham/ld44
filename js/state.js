@@ -22,7 +22,7 @@ let state = {
   enemyData: [
     {
       name: 'Bad Dude',
-      sprite: 'dude',
+      sprite: 'boss',
       health: 5,
       speed: 200,
       baseDamage: 2,
@@ -30,8 +30,8 @@ let state = {
       getAI: () => new SimpleEnemyAI(),
     },
     {
-      name: 'Bad Dude 2',
-      sprite: 'dude',
+      name: 'Boss',
+      sprite: 'boss',
       health: 10,
       speed: 80,
       baseDamage: 2,

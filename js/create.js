@@ -3,6 +3,7 @@ function create ()
 {
   createAnimsForDude.call(this);
   createAnimsForPlayer.call(this);
+  createAnimsForBoss.call(this);
 
   this.anims.create({
     key: 'arrow-bounce',
@@ -41,9 +42,17 @@ function create ()
     frameRate: 20
   });
 
+  this.anims.create({
+    key: 'merchant-idle',
+    frames: this.anims.generateFrameNumbers('merchant', { start: 0, end: 1 }),
+    frameRate: 5
+  });
+
   state.background = this.add.sprite(WIDTH/2, HEIGHT/2, 'background');
-  state.player = new Fighter(this.physics.add.sprite(WIDTH/2, HEIGHT/2, 'player'));
+  state.player = new Fighter(this.physics.add.sprite(PLAYER_START_X, PLAYER_START_Y, 'player'));
   state.player.sprite.setCollideWorldBounds(true);
+  state.player.sprite.depth = 1000;
+
   state.cursors = this.input.keyboard.createCursorKeys();
   state.screen = new TitleScreen(this);
   state.heartManager = new HeartManager(this);
@@ -324,4 +333,38 @@ function createAnimsForPlayer() {
     frameRate: 10,
     repeat: -1
   });
+}
+
+function createAnimsForBoss() {
+  let label = 'boss';
+  let config = {
+    stand_down: [9,9],
+    stand_up: [4,4],
+    stand_left: [13,13],
+    stand_right: [0,0],
+    hitstun: [0,0], 
+    dead: [0,0], 
+    pick: [0,0],
+    move_left: [12,15], 
+    move_right: [0,3],
+    move_down: [8,11],
+    move_up: [4,7], 
+    move_down_left: [12,15],
+    move_down_right: [0,3],
+    move_up_left: [12,15], 
+    move_up_right: [0,3],
+    attack_left: [12,15],
+    attack_right: [0,3],
+    attack_down: [8,11],
+    attack_up: [4,7]
+  };
+
+  for (let key in config) {
+    let [start, end] = config[key];
+    this.anims.create({
+      key: `${label}_${key}`,
+      frames: this.anims.generateFrameNumbers(label, { start, end }),
+      frameRate: 20
+    });
+  }
 }
