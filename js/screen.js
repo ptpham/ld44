@@ -228,7 +228,7 @@ class FightingScreen extends Screen {
     */
 
     player.attacks = player.attacks.map((attack) => {
-      let collided = physics.overlap(this.enemy, attack.sprite)
+      let collided = physics.overlap(this.enemy.sprite, attack.sprite)
       console.log("attack", attack, "collided", collided)
       if (collided) {
         attack.onCollideEnemy(this.enemy, enemyInputs)
@@ -237,7 +237,7 @@ class FightingScreen extends Screen {
     }).filter((x) => x.active)
 
     this.enemy.attacks = this.enemy.attacks.map((attack) => {
-      if (physics.overlap(player, attack.sprite)) {
+      if (physics.overlap(player.sprite, attack.sprite)) {
         attack.onCollideEnemy(player, inputs)
       }
       return attack
