@@ -30,8 +30,20 @@ class FighterState {
     let healthUpdate = this._updateHealth(input);
     if (healthUpdate) return healthUpdate;
 
-    this.fighter.sprite.setVelocityX(0)
-    this.fighter.sprite.setVelocityY(0)
+    const {sprite, orientation} = this.fighter;
+
+    sprite.setVelocityX(0)
+    sprite.setVelocityY(0)
+    sprite.body.offset.x = 0;
+    sprite.body.offset.y = 0;
+
+    if (orientation === 'left') {
+      sprite.body.offset.x = sprite.width - sprite.body.width;
+    }
+
+    if (orientation === 'up') {
+      sprite.body.offset.y = sprite.height - sprite.body.height;
+    }
 
     if (input.hitstun) {
       return new FighterHitstun(this.fighter, input.hitstun);
@@ -81,7 +93,8 @@ class FighterAttacking extends FighterState {
     this.done = false;
     setTimeout(() => { this.done = true; }, duration);
     item.resetCooldown()
-    this.fighter.attackGroup.addMultiple(item.getAttacks(this.fighter).map(x => x.sprite))
+    this.fighter.attacks.push(...item.getAttacks(this.fighter))
+    this.startingY = this.fighter.sprite.y;
   }
 
   update(input) {
@@ -89,15 +102,19 @@ class FighterAttacking extends FighterState {
     if (defaultState) return defaultState;
     if (this.done) return new FighterStanding(this.fighter);
 
-    const spriteKey = this.fighter.spriteKey;
+    const {spriteKey, orientation, sprite} = this.fighter;
 
-    this.fighter.sprite.setVelocityX(0)
-    this.fighter.sprite.setVelocityY(0)
+    sprite.setVelocityX(0)
+    sprite.setVelocityY(0)
 
-    let anim = `${spriteKey}_attack_${this.fighter.orientation}`;
+    let anim = `${spriteKey}_attack_${orientation}`;
     anim = this.fighter.getPlayerAnimationForAttack(anim);
-    console.log(anim);
-    this.fighter.sprite.anims.play(anim);
+    sprite.anims.play(anim);
+
+    if (orientation === 'down') {
+      sprite.body.offset.y = sprite.height - sprite.body.height - 10;
+      sprite.y = this.startingY + 10;
+    }
   }
 }
 
@@ -110,6 +127,7 @@ class FighterStanding extends FighterState {
     let anim = `${spriteKey}_stand_${this.fighter.orientation}`;
     anim = this.fighter.getPlayerAnimationForAttack(anim);
     sprite.anims.play(anim, true);
+
     if (input.attacking && this.fighter.isReadyToAttack()) {
       return new FighterAttacking(this.fighter, this.fighter.getCurrentItem());
     }
@@ -194,7 +212,7 @@ class Fighter {
     this.spriteKey = sprite.frame.texture.key;
 
     this.lastStateChange = 0;
-    this.attackGroup = this.sprite.scene.physics.add.group()
+    this.attacks = []
   }
 
   adjustHealth(amount, duration) {
