@@ -59,6 +59,13 @@ function create ()
   });
 
   this.anims.create({
+    key: 'block',
+    frames: this.anims.generateFrameNumbers('block', { start: 0, end: 5 }),
+    duration: 200,
+    hideOnComplete: true,
+  });
+
+  this.anims.create({
     key: 'dialog-main',
     frames: this.anims.generateFrameNumbers('dialog', { start: 0, end: 0 }),
     frameRate: 20

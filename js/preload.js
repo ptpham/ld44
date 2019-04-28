@@ -13,6 +13,7 @@ function preload ()
   this.load.spritesheet('merchant', 'assets/merchant.png', { frameWidth: 23, frameHeight: 40 });
   this.load.spritesheet('carpet', 'assets/carpet.png', { frameWidth: 50, frameHeight: 120 });
   this.load.spritesheet('slash', 'assets/slash.png', { frameWidth: 24, frameHeight: 24 });
+  this.load.spritesheet('block', 'assets/block.png', { frameWidth: 12, frameHeight: 32 });
   this.load.spritesheet('items', 'assets/items.png', { frameWidth: 30, frameHeight: 60 });
   this.load.spritesheet('dialog', 'assets/dialog.png', { frameWidth: 300, frameHeight: 200 });
 

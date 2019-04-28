@@ -6,7 +6,7 @@ class BaseItem {
     }
 
     // creates new attacks
-    getAttacks(fighter) {}
+    getAttacks(fighter) { return []; }
     resetCooldown() {
         this.ready = false
         setTimeout(() => { this.ready = true }, this.cooldown)
@@ -22,8 +22,17 @@ class DefaultSword extends BaseItem {
     }
 
     getAttacks(fighter) {
-        return [new Slash(fighter, this, 1, this.cooldown / 4, this.cooldown,
-            this.range, 30, 50)
+        return [
+            new Slash({
+                fighter,
+                item: this,
+                damage: 1,
+                hitstun: this.cooldown / 4,
+                duration: this.cooldown,
+                range: this.range,
+                w: 30,
+                h: 50
+            })
         ]
     }
 }
@@ -37,8 +46,16 @@ class SuperSlowSword extends BaseItem {
 
     getAttacks(fighter) {
         return [
-            new Slash(fighter, this, 1, this.cooldown / 6, this.cooldown,
-            this.range, 40, 70)
+            new Slash({
+                fighter,
+                item: this,
+                damage: 1,
+                hitstun: this.cooldown / 6,
+                duration: this.cooldown,
+                range: this.range,
+                w: 40,
+                h: 70
+            })
         ]
     }
 }
@@ -52,8 +69,16 @@ class LongSword extends BaseItem {
 
     getAttacks(fighter) {
         return [
-            new Slash(fighter, this, 2, this.cooldown / 4,
-            this.cooldown, this.range, 60, 50)
+            new Slash({
+                fighter,
+                item: this,
+                damage: 2,
+                hitstun: this.cooldown / 4,
+                duration: this.cooldown,
+                range: this.range,
+                w: 60,
+                h: 50
+            })
         ]
     }
 }
@@ -66,8 +91,29 @@ class Gun extends BaseItem {
 
     getAttacks(fighter) {
         return [
-            new Bullet(fighter, this, 1, 50, 10, 10,
-                1000, 500)
+            new Bullet({
+                fighter,
+                item: this,
+                damage: 1,
+                hitstun: 50,
+                w: 10,
+                h: 10,
+                duration: 1000,
+                speed: 500
+            })
+        ]
+    }
+}
+
+class Shield extends BaseItem {
+    constructor() {
+        super(1000)
+        this.playerAttackSprite = 'shield';
+    }
+
+    getAttacks(fighter) {
+        return [
+            new Block({ fighter, item: this, pushback: 20, w: 12, h: 32, duration: this.cooldown })
         ]
     }
 }

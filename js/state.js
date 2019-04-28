@@ -9,7 +9,7 @@ let state = {
       name: 'Item 1',
       spriteName: 'shield',
       cost: 1,
-      item: new DefaultSword(), // TODO: needs to be a shield
+      item: new Shield(),
     }, {
       name: 'Item 2',
       spriteName: 'sword',
@@ -28,7 +28,6 @@ let state = {
       sprite: 'boss',
       health: 5,
       speed: 200,
-      baseDamage: 2,
       items: [
         new SuperSlowSword(),
       ],
@@ -39,7 +38,6 @@ let state = {
       sprite: 'boss',
       health: 10,
       speed: 80,
-      baseDamage: 2,
       items: [
         new SuperSlowSword(),
       ],
