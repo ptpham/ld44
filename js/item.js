@@ -22,6 +22,7 @@ class DefaultSword extends BaseItem {
     }
 
     getAttacks(fighter) {
+        state.screen.scene.sound.play('stick_hit', { volume: 0.2 });
         return [
             new Slash({
                 fighter,
@@ -45,6 +46,7 @@ class SuperSlowSword extends BaseItem {
     }
 
     getAttacks(fighter) {
+        state.screen.scene.sound.play('boss_attack');
         return [
             new Slash({
                 fighter,
@@ -68,6 +70,7 @@ class LongSword extends BaseItem {
     }
 
     getAttacks(fighter) {
+        state.screen.scene.sound.play('longsword_swipe');
         return [
             new Slash({
                 fighter,
@@ -90,6 +93,7 @@ class Gun extends BaseItem {
     }
 
     getAttacks(fighter) {
+        state.screen.scene.sound.play('bullet_firing');
         return [
             new Bullet({
                 fighter,

@@ -22,5 +22,14 @@ function preload ()
 
   this.load.image('player_attack', 'assets/player_allattacks.png');
   this.load.json('player_attack_data', 'assets/player_allattacks.json');
+
+  this.load.image('player_hit', 'assets/player_hit.png')
+  this.load.json('player_hit_data', 'assets/player_hit.json')
+
+  this.load.audio('swoosh', 'assets/swoosh.mp3');
+  this.load.audio('bullet_firing', 'assets/bullet.mp3');
+  this.load.audio('longsword_swipe', 'assets/longsword_swipe.mp3');
+  this.load.audio('stick_hit', 'assets/stick_hit.mp3');
+  this.load.audio('boss_attack', 'assets/boss_attack.mp3');
 }
 

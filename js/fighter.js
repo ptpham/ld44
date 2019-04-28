@@ -110,11 +110,6 @@ class FighterAttacking extends FighterState {
     let anim = `${spriteKey}_attack_${orientation}`;
     anim = this.fighter.getPlayerAnimationForAttack(anim);
     sprite.anims.play(anim);
-
-    if (orientation === 'down') {
-      sprite.body.offset.y = sprite.height - sprite.body.height - 10;
-      sprite.y = this.startingY + 10;
-    }
   }
 }
 
@@ -160,8 +155,9 @@ class FighterHitstun extends FighterState {
     let healthUpdate = this._updateHealth(input);
     if (healthUpdate) return healthUpdate;
     if (this.done) return new FighterStanding(this.fighter);
-    this.fighter.sprite.anims
-      .play(`${this.fighter.spriteKey}_hitstun`, true);
+    let anim = `${this.fighter.spriteKey}_hit_${this.fighter.orientation}`;
+    anim = this.fighter.getPlayerAnimationForAttack(anim);
+    this.fighter.sprite.anims.play(anim, true);
   }
 }
 

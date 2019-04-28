@@ -205,6 +205,7 @@ class StagingScreen extends Screen {
       if (physics.overlap(player.sprite, container.itemSprite)) {
         this.selectItem(container, items[i]);
         player.update({ pickItem: items[i] });
+        scene.sound.play('swoosh', { volume: 0.1 });
       }
     }
 
@@ -282,7 +283,6 @@ class FightingScreen extends Screen {
     }
 
     if (this.enemy.isDead()) {
-      console.log('enemy dead!')
       if (this.index < state.enemyData.length - 1) {
         this.arrow.rotation = Math.PI;
         this.arrow.x = WIDTH/2;
