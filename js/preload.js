@@ -21,5 +21,8 @@ function preload ()
 
   this.load.image('player_attack', 'assets/player_allattacks.png');
   this.load.json('player_attack_data', 'assets/player_allattacks.json');
+
+  this.load.image('player_hit', 'assets/player_hit.png')
+  this.load.json('player_hit_data', 'assets/player_hit.json')
 }
 

@@ -160,8 +160,9 @@ class FighterHitstun extends FighterState {
     let healthUpdate = this._updateHealth(input);
     if (healthUpdate) return healthUpdate;
     if (this.done) return new FighterStanding(this.fighter);
-    this.fighter.sprite.anims
-      .play(`${this.fighter.spriteKey}_hitstun`, true);
+    let anim = `${this.fighter.spriteKey}_hit_${this.fighter.orientation}`;
+    anim = this.fighter.getPlayerAnimationForAttack(anim);
+    this.fighter.sprite.anims.play(anim, true);
   }
 }
 
