@@ -147,6 +147,8 @@ class FightingScreen extends Screen {
     this.arrow.anims.play('arrow-bounce');
   }
 
+  resolveAtt
+
   update() {
     let { player } = state;
     let { physics } = this.scene;
@@ -157,11 +159,17 @@ class FightingScreen extends Screen {
 
     // resolve attacks
     physics.overlap(player.attackGroup, this.enemy.sprite, (enemy, attack) => {
-      // enemy and attack are flipped for some reason??
-      console.log("hit", attack, enemy)
+      console.log("hit enemy", attack, enemy)
       player.attackGroup.remove(attack, true, true)
       this.enemy.health -= attack.damage;
       enemyInputs.hitstun = attack.hitstun || 0;
+    })
+
+    physics.overlap(enemy.attackGroup, player.sprite, (player, attack) => {
+      console.log("hit player", attack, player)
+      enemy.attackGroup.remove(attack, true, true)
+      player.health -= attack.damage;
+      inputs.hitstun = attack.hitstun || 0;
     })
 
     player.update(inputs);
