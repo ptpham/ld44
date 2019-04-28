@@ -9,7 +9,7 @@ class Screen {
   setDialog(sprite, string) {
     sprite.x += sprite.width - DIALOG_WIDTH/2 + 16;
     let font = _.clone(DEFAULT_FONT);
-    font.wordWrap = { width: DIALOG_WIDTH/2 + 32 };
+    font.wordWrap = { width: DIALOG_WIDTH/2 + 16 };
 
     let dialog = this.scene.add.sprite(0, 0, 'dialog');
     let text = this.scene.add.text(-DIALOG_WIDTH/2 + 100, -DIALOG_HEIGHT/2 + 32, string, font);
