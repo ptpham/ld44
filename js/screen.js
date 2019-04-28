@@ -95,7 +95,7 @@ class StagingScreen extends Screen {
     state.background.anims.play('background-staging');
 
     let ITEM_COUNT = 3;
-    this.items = _.sampleSize(state.allItems, ITEM_COUNT);
+    this.items = _.sampleSize(state.allPickItems, ITEM_COUNT);
     this.itemContainers = _.times(ITEM_COUNT, i => {
       let x = i*WIDTH/3 + WIDTH/6, y = HEIGHT/4;
       let result =scene.add.container(x, y);

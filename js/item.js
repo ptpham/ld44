@@ -23,9 +23,9 @@ class DefaultSword extends BaseItem {
     }
 
     getAttacks(fighter) {
-        let attack = new Slash(fighter, this, 1, this.cooldown / 4, this.cooldown,
-            this.range, 30, 50);
-        return [attack]
+        return [new Slash(fighter, this, 1, this.cooldown / 4, this.cooldown,
+            this.range, 30, 50)
+        ]
     }
 }
 
@@ -69,7 +69,7 @@ class Gun extends BaseItem {
     getAttacks(fighter) {
         return [
             new Bullet(fighter, this, 1, 10, 1000, 10,
-                10, 10, 10)
+                10, 10, 1000)
         ]
     }
 }
