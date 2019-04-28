@@ -61,7 +61,7 @@ function create ()
   state.player = new Fighter(this.physics.add.sprite(PLAYER_START_X, PLAYER_START_Y, 'player'));
   state.player.sprite.setCollideWorldBounds(true);
   state.player.sprite.depth = 1000;
-  state.player.items.push(new LongSword());
+  state.player.items.push(new DefaultSword());
 
   state.cursors = this.input.keyboard.createCursorKeys();
   state.tabkey = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.TAB)
@@ -417,7 +417,6 @@ function createTexturesAndAnimationsForPlayerItems() {
 
   function getFramesForAttack(item, direction) {
     return [
-      `${item}_attack_${direction}_0`,
       `${item}_attack_${direction}_1`,
     ];
   }

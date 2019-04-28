@@ -53,18 +53,31 @@ class Slash extends BaseAttack {
         // Add some random noise for variation
         x += Math.random() * 20 - 10;
         y += Math.random() * 20 - 10;
+        const rotation = Math.random() * 2 -1;
 
-        const sprite = scene.add.sprite(x, y, 'slash');
-        sprite.scaleX = w/sprite.width;
-        sprite.scaleY = h/sprite.height;
-        sprite.flipX = orientation === 'left';
-        sprite.flipY = orientation === 'up';
+        function makeSlashSprite() {
+            const sprite = scene.add.sprite(x, y, 'slash');
+            sprite.scaleX = w / sprite.width;
+            sprite.scaleY = h / sprite.height;
+            sprite.flipX = orientation === 'left';
+            sprite.flipY = orientation === 'up';
+            sprite.rotation = rotation;
 
-        sprite.anims.play('slash');
-        sprite.anims.setTimeScale(500 / duration);
+            sprite.anims.play('slash');
+            sprite.anims.setTimeScale(500 / duration);
+            return sprite;
+        }
+
+        const sprite = makeSlashSprite();
+         // Make an extra so we see the slashes even when they hit
+        const sprite2 = makeSlashSprite();
 
         super(fighter, item, damage, hitstun, sprite)
-        setTimeout( () => { sprite.destroy(); this.active = false }, duration)
+        setTimeout(() => {
+            sprite.destroy();
+            sprite2.destroy();
+            this.active = false
+        }, duration)
     }
 
     onCollideEnemy(enemy, enemyInputs) {

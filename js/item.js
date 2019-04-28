@@ -24,8 +24,8 @@ class DefaultSword extends BaseItem {
 
     getAttacks(fighter) {
         let attack = new Slash(fighter, this, 1, this.cooldown / 4, this.cooldown,
-            this.range, 30, 50)
-        fighter.attackGroup.addChild(attack.sprite)
+            this.range, 30, 50);
+        return [attack]
     }
 }
 
@@ -38,7 +38,7 @@ class SuperSlowSword extends BaseItem {
 
     getAttacks(fighter) {
         return [
-            new Slash(fighter, this, 1, 500, this.cooldown,
+            new Slash(fighter, this, 1, this.cooldown / 6, this.cooldown,
             this.range, 40, 70)
         ]
     }

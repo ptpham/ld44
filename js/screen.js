@@ -9,7 +9,7 @@ class Screen {
   getInputs() {
     let playerX = 0, playerY = 0;
     if (state.cursors.left.isDown) {
-      playerX = -1; 
+      playerX = -1;
     } else if (state.cursors.right.isDown) {
       playerX = 1;
     }
@@ -19,6 +19,7 @@ class Screen {
     } else if (state.cursors.down.isDown) {
       playerY = 1;
     }
+    
 
     // keypress checking for tab
     let tabpressed = false;
@@ -33,7 +34,7 @@ class Screen {
       move: { x: playerX, y: playerY },
       damage: 0,
       hitstun: 0,
-      attacking: false,
+      attacking: state.cursors.space.isDown,
       pickItem: null,
       dropItem: null,
       switchItem: tabpressed,
@@ -72,13 +73,6 @@ class StagingScreen extends Screen {
     this.merchant = scene.physics.add.sprite(PLAYER_START_X / 2, PLAYER_START_Y, 'merchant');
     this.merchant.setCollideWorldBounds(true);
     this.merchant.anims.play('merchant-idle');
-
-    // if (fromTitle) {
-    //   this.itemContainers.forEach((container) => {
-    //     container.alpha = 0;
-    //     container.
-    //   });
-    // }
   }
 
   createRequirementHearts(container, item) {
@@ -186,8 +180,6 @@ class FightingScreen extends Screen {
     let { physics } = this.scene;
     let inputs = this.getInputs();
     let enemyInputs = this.enemyAI.getInputsForEnemy(this.enemy, player);
-
-    inputs.attacking = state.cursors.space.isDown;
 
     // resolve attacks
     physics.overlap(player.attackGroup, this.enemy.sprite, (obj, attackSprite) => {
