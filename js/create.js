@@ -70,6 +70,7 @@ function create ()
   state.player.items.push(new LongSword());
 
   state.cursors = this.input.keyboard.createCursorKeys();
+  state.tabkey = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.TAB)
   state.screen = new TitleScreen(this);
   state.heartManager = new HeartManager(this);
   state.enemies = state.enemyData.map((data) => {

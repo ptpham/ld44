@@ -3,6 +3,7 @@
 class Screen {
   constructor(scene) {
     this.scene = scene;
+    this.lastTabTimeDown = 0;
   }
 
   setDialog(sprite, string) {
@@ -50,6 +51,15 @@ class Screen {
       playerY = 1;
     }
 
+    // keypress checking for tab
+    let tabpressed = false;
+    if (state.tabkey.isDown) {
+      if (this.lastTabTimeDown < state.tabkey.timeDown) {
+        tabpressed = true;
+        this.lastTabTimeDown = state.tabkey.timeDown
+      }
+    }
+
     return {
       move: { x: playerX, y: playerY },
       damage: 0,
@@ -57,6 +67,7 @@ class Screen {
       attacking: false,
       pickItem: null,
       dropItem: null,
+      switchItem: tabpressed,
     };
   }
 
@@ -215,16 +226,12 @@ class FightingScreen extends Screen {
     inputs.attacking = state.cursors.space.isDown;
 
     // resolve attacks
-    physics.overlap(player.attackGroup, this.enemy.sprite, (obj, attack) => {
-      player.attackGroup.remove(attack, true, true)
-      this.enemy.takeDamage(attack.damage);
-      enemyInputs.hitstun = attack.hitstun || 0;
+    physics.overlap(player.attackGroup, this.enemy.sprite, (obj, attackSprite) => {
+      attackSprite.attack.onCollideEnemy(this.enemy, enemyInputs)
     })
 
-    physics.overlap(this.enemy.attackGroup, player.sprite, (obj, attack) => {
-      this.enemy.attackGroup.remove(attack, true, true)
-      player.takeDamage(attack.damage);
-      inputs.hitstun = attack.hitstun || 0;
+    physics.overlap(this.enemy.attackGroup, player.sprite, (obj, attackSprite) => {
+      attackSprite.attack.onCollideEnemy(player, inputs)
     })
 
     player.update(inputs);
@@ -235,6 +242,7 @@ class FightingScreen extends Screen {
 
     if (player.isDead()) return new LoseScreen(this.scene);
     if (this.enemy.isDead()) {
+      console.log('enemy dead!')
       if (this.index < state.enemyData.length - 1) {
         this.arrow.x = WIDTH/2;
         this.arrow.y = 12;
