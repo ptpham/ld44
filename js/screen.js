@@ -5,7 +5,38 @@ class Screen {
     this.scene = scene;
     this.lastTabTimeDown = 0;
   }
-  
+
+  setDialog(sprite, string) {
+    sprite.x += sprite.width - DIALOG_WIDTH/2 + 16;
+    let font = _.clone(DEFAULT_FONT);
+    font.wordWrap = { width: DIALOG_WIDTH/2 };
+
+    let dialog = this.scene.add.sprite(0, 0, 'dialog');
+    let text = this.scene.add.text(-DIALOG_WIDTH/2 + 100, -DIALOG_HEIGHT/2 + 32, string, font);
+    let nextText = this.scene.add.text(DIALOG_WIDTH/2 - 72, DIALOG_HEIGHT/2 - 40, 'Space', DEFAULT_FONT);
+    let arrow = this.scene.add.sprite(DIALOG_WIDTH/2 - 16, DIALOG_HEIGHT/2 - 32, 'arrow');
+    arrow.anims.play('arrow-bounce');
+    arrow.rotation = -Math.PI/2;
+
+    let children = [dialog, sprite, text, nextText, arrow];
+    this.dialog = this.scene.add.container(WIDTH/2, HEIGHT/2, children);
+    this.dialog.depth = 5000;
+  }
+
+  clearDialog() {
+    if (this.dialog) {
+      this.dialog.destroy();
+      this.dialog = null;
+    }
+  }
+
+  _updateDialog() {
+    if (this.dialog) {
+      if (state.cursors.space.isDown) this.clearDialog();
+      return this;
+    }
+  }
+
   getInputs() {
     let playerX = 0, playerY = 0;
     if (state.cursors.left.isDown) {
@@ -45,11 +76,16 @@ class Screen {
 }
 
 class TitleScreen extends Screen {
+  constructor(scene) {
+    super(scene);
+    let sprite = this.scene.add.sprite(0, 0, 'dude');
+    this.setDialog(sprite, 'You find yourself in a strange place. Use the arrow keys to move.');
+  }
+
   update() {
-    if ( state.cursors.left.isDown || state.cursors.right.isDown
-      || state.cursors.up.isDown || state.cursors.down.isDown) {
-      return new StagingScreen(this.scene);
-    }
+    let dialogUpdate = this._updateDialog();
+    if (dialogUpdate) return dialogUpdate;
+    else return new StagingScreen(this.scene);
   }
 }
 
@@ -200,6 +236,7 @@ class FightingScreen extends Screen {
     if (this.enemy.isDead()) {
       console.log('enemy dead!')
       if (this.index < state.enemyData.length - 1) {
+        this.arrow.rotation = Math.PI;
         this.arrow.x = WIDTH/2;
         this.arrow.y = 12;
         state.currentEnemy = this.index + 1;
