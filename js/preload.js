@@ -34,5 +34,7 @@ function preload ()
   this.load.audio('boss_dying', 'assets/boss_dying.mp3');
   this.load.audio('player_dying', 'assets/player_dying.mp3');
   this.load.audio('item_switch', 'assets/item_switch.mp3');
+  this.load.audio('boss_damaged', 'assets/boss_damaged.mp3');
+  this.load.audio('player_damaged', 'assets/player_damaged.mp3');
 }
 

@@ -20,6 +20,9 @@ class FighterState {
     let { fighter } = this;
     if (input.damage) {
       fighter.health -= input.damage;
+      if (fighter.health > 0) {
+        fighter.sprite.scene.sound.play(`${fighter.spriteKey}_damaged`);
+      }
     }
 
     if (fighter.health <= 0) {
