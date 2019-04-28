@@ -129,7 +129,7 @@ class Bullet extends BaseAttack {
         x += Math.random() * 20 - 10;
         y += Math.random() * 20 - 10;
 
-        let sprite = scene.physics.add.sprite(x, y, 'slash');
+        let sprite = scene.physics.add.sprite(x, y, 'gun-fire');
         sprite.scaleX = w / sprite.width;
         sprite.scaleY = h / sprite.height;
         sprite.flipX = orientation === 'left';
