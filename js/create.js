@@ -389,7 +389,6 @@ function createAnimsForBoss() {
     stand_left: [13,13],
     stand_right: [0,0],
     hitstun: [0,0], 
-    dead: [0,0], 
     pick: [0,0],
     move_left: [12,15], 
     move_right: [0,3],
@@ -413,6 +412,12 @@ function createAnimsForBoss() {
       frameRate: 20
     });
   }
+
+  this.anims.create({
+    key: 'boss_dead',
+    frames: this.anims.generateFrameNumbers('bossDeath', { start: 0, end: 4 }),
+    frameRate: 10
+  });
 }
 
 function createTexturesAndAnimationsForPlayerItems() {
