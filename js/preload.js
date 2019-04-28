@@ -31,5 +31,8 @@ function preload ()
   this.load.audio('longsword_swipe', 'assets/longsword_swipe.mp3');
   this.load.audio('stick_hit', 'assets/stick_hit.mp3');
   this.load.audio('boss_attack', 'assets/boss_attack.mp3');
+  this.load.audio('boss_dying', 'assets/boss_dying.mp3');
+  this.load.audio('player_dying', 'assets/player_dying.mp3');
+  this.load.audio('item_switch', 'assets/item_switch.mp3');
 }
 
