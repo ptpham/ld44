@@ -112,10 +112,11 @@ class StagingScreen extends Screen {
     state.background.anims.play('background-staging');
 
     let ITEM_COUNT = 3;
-    this.items = _.sampleSize(state.allPickItems, ITEM_COUNT);
-    this.itemContainers = _.times(ITEM_COUNT, i => {
-      let x = i*WIDTH/3 + WIDTH/6, y = HEIGHT/4;
-      let result =scene.add.container(x, y);
+    this.items = _.sampleSize(_.filter(state.allPickItems,
+      pickItem => !state.player.hasItem(pickItem.item)), ITEM_COUNT);
+    this.itemContainers = _.times(this.items.length, i => {
+      let x = (i + 0.5)*WIDTH/(this.items.length), y = HEIGHT/4;
+      let result = scene.add.container(x, y);
       this.createRequirementHearts(result, this.items[i]);
       return result;
     });
@@ -133,7 +134,7 @@ class StagingScreen extends Screen {
   createRequirementHearts(container, item) {
     let { scene } = this;
     let RANGE_X = 60;
-    let OFFSET_Y = 60;
+    let OFFSET_Y = 50;
     let hearts = [];
 
     let { cost } = item;
@@ -150,6 +151,7 @@ class StagingScreen extends Screen {
       let x = RANGE_X*(i - cost/2 + 0.5)/ cost;
       let y = OFFSET_Y;
       let heart = scene.add.sprite(x, y, 'heart');
+      heart.scaleX = heart.scaleY = 0.7;
       heart.anims.play('heart-empty');
       container.add(heart);
       hearts.push(heart);
