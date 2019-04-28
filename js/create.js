@@ -45,6 +45,12 @@ function create ()
   });
 
   this.anims.create({
+    key: 'gun-fire',
+    frames: this.anims.generateFrameNumbers('fire', { start: 0, end: 11 }),
+    frameRate: 20
+  })
+
+  this.anims.create({
     key: 'slash',
     frames: this.anims.generateFrameNumbers('slash', { start: 0, end: 5 }),
     duration: 200,
