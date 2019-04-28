@@ -90,7 +90,7 @@ class FighterAttacking extends FighterState {
 
     const item = this.fighter.getCurrentItem()
     const center = this.fighter.sprite.getCenter()
-    this.fighter.attacks.push(item.newAttacks(center.x, center.y, this.fighter.orientation))
+    this.fighter.attackGroup.addMultiple(item.newAttacks(center.x, center.y, this.fighter.orientation))
     item.resetCooldown()
   }
 }
@@ -183,10 +183,10 @@ class Fighter {
     this._adjustHealthPromise = Promise.resolve();
     this.scene = this.sprite.scene
     this.orientation = 'down'
-    this.attacks = []
     this.spriteKey = sprite.frame.texture.key;
 
     this.lastStateChange = 0;
+    this.attackGroup = this.sprite.scene.physics.add.group()
   }
 
   adjustHealth(amount, duration) {

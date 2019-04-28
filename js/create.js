@@ -35,6 +35,12 @@ function create ()
     frameRate: -1
   });
 
+  this.anims.create({
+    key: 'smoke-spin',
+    frames: this.anims.generateFrameNumbers('smoke', { start: 0, end: 15 }),
+    frameRate: 20
+  });
+
   state.background = this.add.sprite(WIDTH/2, HEIGHT/2, 'background');
   state.player = new Fighter(this.physics.add.sprite(WIDTH/2, HEIGHT/2, 'player'));
   state.player.sprite.setCollideWorldBounds(true);

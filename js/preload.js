@@ -2,9 +2,10 @@
 function preload ()
 {
   this.load.spritesheet('dude', 'assets/dude.png', { frameWidth: 32, frameHeight: 48 });
-  this.load.spritesheet('player', 'assets/player.png', { frameWidth: 54, frameHeight: 132 });
+  this.load.spritesheet('player', 'assets/player.png', { frameWidth: 27, frameHeight: 66 });
   this.load.spritesheet('arrow', 'assets/arrow.png', { frameWidth: 32, frameHeight: 32 });
   this.load.spritesheet('heart', 'assets/heart.png', { frameWidth: 32, frameHeight: 32 });
+  this.load.spritesheet('smoke', 'assets/smoke.png', { frameWidth: 32, frameHeight: 32 });
   this.load.spritesheet('background', 'assets/background.png', { frameWidth: 400, frameHeight: 300 });
 }
 
