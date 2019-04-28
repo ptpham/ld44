@@ -19,7 +19,6 @@ class DefaultSword extends BaseItem {
         super(500)
         this.range = 20;
         this.playerAttackSprite = 'stick';
-        this.playerMoveSprite = 'stick';
     }
 
     getAttacks(fighter) {
@@ -49,7 +48,6 @@ class LongSword extends BaseItem {
         super(1000)
         this.range = 20;
         this.playerAttackSprite = 'sword';
-        this.playerMoveSprite = 'sword';
     }
 
     getAttacks(fighter) {

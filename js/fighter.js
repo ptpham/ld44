@@ -95,7 +95,8 @@ class FighterAttacking extends FighterState {
     this.fighter.sprite.setVelocityY(0)
 
     let anim = `${spriteKey}_attack_${this.fighter.orientation}`;
-    anim = this.fighter.getPlayerAnimationForMove(anim);
+    anim = this.fighter.getPlayerAnimationForAttack(anim);
+    console.log(anim);
     this.fighter.sprite.anims.play(anim);
   }
 }
@@ -258,19 +259,5 @@ class Fighter {
     }
 
     return `${key}_${item.playerAttackSprite}`;
-  }
-
-  getPlayerAnimationForMove(key) {
-    if (this.spriteKey !== 'player') {
-      // Only available for player
-      return key;
-    }
-
-    const item = this.getCurrentItem();
-    if (!item.playerMoveSprite) {
-      return key;
-    }
-
-    return `${key}_${item.playerMoveSprite}`;
   }
 }
