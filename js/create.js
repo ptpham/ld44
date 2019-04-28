@@ -57,6 +57,12 @@ function create ()
     frameRate: 5
   });
 
+  this.anims.create({
+    key: 'dialog-main',
+    frames: this.anims.generateFrameNumbers('dialog', { start: 0, end: 0 }),
+    frameRate: 20
+  });
+
   state.background = this.add.sprite(WIDTH/2, HEIGHT/2, 'background');
   state.player = new Fighter(this.physics.add.sprite(PLAYER_START_X, PLAYER_START_Y, 'player'));
   state.player.sprite.setCollideWorldBounds(true);
