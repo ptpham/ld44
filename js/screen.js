@@ -55,8 +55,8 @@ class StagingScreen extends Screen {
       return result;
     });
 
-    state.player.sprite.x = WIDTH/2;
-    state.player.sprite.y = HEIGHT/2;
+    state.player.sprite.x = PLAYER_START_X;
+    state.player.sprite.y = PLAYER_START_Y;
     this.arrow = scene.physics.add.sprite(WIDTH/2, HEIGHT - 32, 'arrow');
     this.arrow.anims.play('arrow-bounce');
   }
