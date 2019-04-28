@@ -141,7 +141,6 @@ class FightingScreen extends Screen {
     this.enemy.sprite.x = WIDTH / 2;
     this.enemy.sprite.y = HEIGHT - this.enemy.sprite.height;
     this.enemy.sprite.setCollideWorldBounds(true);
-    this.hearts = _.times(player.healthMax, i => scene.add.sprite(32*(i+1), 32, 'heart'));
 
     this.arrow = scene.physics.add.sprite(-WIDTH, -HEIGHT, 'arrow');
     this.arrow.anims.play('arrow-bounce');
