@@ -109,6 +109,9 @@ class StagingScreen extends Screen {
     this.merchant = scene.physics.add.sprite(PLAYER_START_X / 2, PLAYER_START_Y, 'merchant');
     this.merchant.setCollideWorldBounds(true);
     this.merchant.anims.play('merchant-idle');
+    this.merchantFighter = new Fighter(this.merchant);
+    this.merchantFighter.speed = 60;
+    this.merchantAI = new StayInPlaceAI(PLAYER_START_X / 2, PLAYER_START_Y);
   }
 
   createRequirementHearts(container, item) {
@@ -171,8 +174,9 @@ class StagingScreen extends Screen {
     let { merchant, scene, items, itemContainers } = this;
     let { physics } = scene;
     physics.collide(player.sprite, merchant);
-    merchant.setVelocityX(0);
-    merchant.setVelocityY(0);
+
+    let merchantInputs = this.merchantAI.getInputsForEnemy(this.merchantFighter, player);
+    this.merchantFighter.update(merchantInputs);
     merchant.setVisible(true);
 
     for (let i = 0; i < items.length; i++) {

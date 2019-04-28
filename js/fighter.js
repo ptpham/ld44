@@ -30,6 +30,9 @@ class FighterState {
     let healthUpdate = this._updateHealth(input);
     if (healthUpdate) return healthUpdate;
 
+    this.fighter.sprite.setVelocityX(0)
+    this.fighter.sprite.setVelocityY(0)
+
     if (input.hitstun) {
       return new FighterHitstun(this.fighter, input.hitstun);
     }

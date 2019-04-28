@@ -17,6 +17,32 @@ class EnemyAI {
   getInputsForEnemy(enemy, player) { return this._makeBaseInputs(); }
 }
 
+class StayInPlaceAI extends EnemyAI {
+  constructor(x, y) {
+    super();
+    this.x = x;
+    this.y = y;
+  }
+
+  getInputsForEnemy(enemy, player) {
+    const inputs = this._makeBaseInputs();
+    const dX = this.x - enemy.sprite.getCenter().x;
+    const dY = this.y - enemy.sprite.getCenter().y;
+
+    const distance =
+      Math.sqrt(
+        Math.pow(dX, 2) +
+        Math.pow(dY, 2)
+      );
+
+    if (distance > 10) {
+      inputs.move.x = Math.sign(Math.round(dX / 10));
+      inputs.move.y = Math.sign(Math.round(dY / 10));
+    }
+    return inputs;
+  }
+}
+
 class SimpleEnemyAI extends EnemyAI {
   constructor() {
     super();
