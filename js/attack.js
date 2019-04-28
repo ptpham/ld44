@@ -1,5 +1,5 @@
 class BaseAttack {
-    constructor(fighter, item, damage, hitstun, sprite) {
+    constructor({fighter, item, damage, hitstun, sprite}) {
         this.fighter = fighter
         this.item = item
         this.damage = damage
@@ -16,7 +16,7 @@ class BaseAttack {
 }
 
 class Slash extends BaseAttack {
-    constructor(fighter, item, damage, hitstun, duration, range, w, h) {
+    constructor({fighter, item, damage, hitstun, duration, range, w, h}) {
         const orientation = fighter.orientation;
         const scene = fighter.sprite.scene;
 
@@ -72,7 +72,7 @@ class Slash extends BaseAttack {
          // Make an extra so we see the slashes even when they hit
         const sprite2 = makeSlashSprite();
 
-        super(fighter, item, damage, hitstun, sprite)
+        super({fighter, item, damage, hitstun, sprite})
         setTimeout(() => {
             sprite.destroy();
             sprite2.destroy();
@@ -90,7 +90,7 @@ class Slash extends BaseAttack {
 }
 
 class Bullet extends BaseAttack {
-    constructor(fighter, item, damage, hitstun, w, h, duration, speed) {
+    constructor({fighter, item, damage, hitstun, w, h, duration, speed}) {
         const orientation = fighter.orientation;
         const scene = fighter.sprite.scene;
         const length = w;
@@ -150,7 +150,7 @@ class Bullet extends BaseAttack {
                 break
         }
         console.log('bullet', sprite.getCenter(), 'sprite', sprite, 'orientation', orientation);
-        super(fighter, item, damage, hitstun, sprite)
+        super({fighter, item, damage, hitstun, sprite})
         setTimeout(() => {
             sprite.destroy();
             this.active = false
@@ -162,6 +162,55 @@ class Bullet extends BaseAttack {
             this.sprite.getCenter())
         enemyInputs.hitstun = this.hitstun || 0;
         enemyInputs.damage = this.damage
+        this.active = false;
+    }
+}
+
+class Block extends BaseAttack {
+    constructor({fighter, item, pushback, w, h, duration}) {
+        const dir = fighter.orientation;
+
+        const center = fighter.sprite.getCenter();
+        const scene = fighter.sprite.scene;
+        const sprite = scene.physics.add.sprite(center.x, center.y, 'block');
+        sprite.scaleX = w / sprite.width;
+        sprite.scaleY = h / sprite.height;
+        sprite.anims.play('block');
+
+        switch(dir) {
+            case 'left':
+                sprite.flipX = true;
+                sprite.x -= fighter.sprite.width / 2 + 12;
+                break;
+            case 'right':
+                sprite.x += fighter.sprite.width / 2 + 12;
+                break;
+            case 'up':
+                sprite.rotation = -Math.PI / 2;
+                sprite.body.width = h;
+                sprite.body.height = w;
+                sprite.y -= fighter.sprite.height / 2 + 24;
+                break;
+            case 'down':
+                sprite.rotation = Math.PI / 2;
+                sprite.body.width = h;
+                sprite.body.height = w;
+                sprite.y += fighter.sprite.height / 2 + 24;
+                break;
+        }
+
+        super({ fighter, item, damage: 0, hitstun: 0, sprite });
+        setTimeout(() => {
+            sprite.destroy();
+            this.active = false
+        }, duration)
+        this.pushback = pushback;
+    }
+    onCollideAttack(otherAttack, userInputs, enemyInputs) {
+        if (!this.active) return;
+        otherAttack.active = false;
+        otherAttack.sprite.destroy();
+        userInputs.pushback = this.pushback;
         this.active = false;
     }
 }

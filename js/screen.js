@@ -243,6 +243,18 @@ class FightingScreen extends Screen {
     let inputs = this.getInputs();
     let enemyInputs = this.enemyAI.getInputsForEnemy(this.enemy, player);
 
+    // Check for attack collisions first
+    this.enemy.attacks = this.enemy.attacks.map((enemyAttack) => {
+      player.attacks = player.attacks.map((playerAttack) => {
+        if (physics.overlap(playerAttack.sprite, enemyAttack.sprite)) {
+          playerAttack.onCollideAttack(enemyAttack, inputs, enemyInputs);
+          enemyAttack.onCollideAttack(playerAttack, enemyInputs, inputs);
+        }
+        return playerAttack;
+      }).filter((x) => x.active);
+      return enemyAttack;
+    }).filter((x) => x.active);
+
     // resolve attacks
     player.attacks = player.attacks.map((attack) => {
       if (physics.overlap(this.enemy.sprite, attack.sprite)) {
