@@ -10,6 +10,7 @@ class FighterState {
       return new FighterPickItem(fighter, pickItem); 
     }
     if (input.switchItem) {
+      fighter.sprite.scene.sound.play('item_switch');
       this.fighter.currentItemIndex = (this.fighter.currentItemIndex + 1) % this.fighter.items.length
       console.log('switched to item', this.fighter.currentItemIndex, this.fighter.getCurrentItem())
     }
