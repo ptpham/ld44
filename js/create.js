@@ -1,49 +1,8 @@
 
 function create ()
 {
-  this.anims.create({
-    key: 'left',
-    frames: this.anims.generateFrameNumbers('dude', { start: 0, end: 3 }),
-    frameRate: 10,
-    repeat: -1
-  });
-
-  this.anims.create({
-    key: 'stand',
-    frames: [{ key: 'dude', frame: 4 }],
-    frameRate: 20
-  });
-
-  this.anims.create({
-    key: 'stand_down',
-    frames: [{ key: 'dude', frame: 4 }],
-    frameRate: 20
-  });
-
-  this.anims.create({
-    key: 'stand_up',
-    frames: [{ key: 'dude', frame: 4 }],
-    frameRate: 20
-  });
-
-  this.anims.create({
-    key: 'stand_left',
-    frames: [{ key: 'dude', frame: 0 }],
-    frameRate: 20
-  });
-
-  this.anims.create({
-    key: 'stand_right',
-    frames: [{ key: 'dude', frame: 5 }],
-    frameRate: 20
-  });
-
-  this.anims.create({
-    key: 'right',
-    frames: this.anims.generateFrameNumbers('dude', { start: 5, end: 8 }),
-    frameRate: 10,
-    repeat: -1
-  });
+  createAnimsForDude.call(this);
+  createAnimsForPlayer.call(this);
 
   this.anims.create({
     key: 'arrow-bounce',
@@ -77,7 +36,7 @@ function create ()
   });
 
   state.background = this.add.sprite(WIDTH/2, HEIGHT/2, 'background');
-  state.player = new Fighter(this.physics.add.sprite(WIDTH/2, HEIGHT/2, 'dude'));
+  state.player = new Fighter(this.physics.add.sprite(WIDTH/2, HEIGHT/2, 'player'));
   state.player.sprite.setCollideWorldBounds(true);
   state.cursors = this.input.keyboard.createCursorKeys();
   state.screen = new TitleScreen(this);
@@ -99,3 +58,264 @@ function create ()
   }
 }
 
+function createAnimsForDude() {
+
+  const standDown = 4;
+  const moveLeft = { start: 0, end: 3 };
+  const moveRight = { start: 5, end: 8 };
+
+  this.anims.create({
+    key: 'dude_stand_down',
+    frames: [{ key: 'dude', frame: standDown }],
+    frameRate: 20
+  });
+
+  this.anims.create({
+    key: 'dude_stand_up',
+    frames: [{ key: 'dude', frame: standDown }],
+    frameRate: 20
+  });
+
+  this.anims.create({
+    key: 'dude_stand_left',
+    frames: [{ key: 'dude', frame: 0 }],
+    frameRate: 20
+  });
+
+  this.anims.create({
+    key: 'dude_stand_right',
+    frames: [{ key: 'dude', frame: 5 }],
+    frameRate: 20
+  });
+
+  this.anims.create({
+    key: 'dude_hitstun',
+    frames: [{ key: 'dude', frame: standDown }],
+    frameRate: 20
+  });
+
+  this.anims.create({
+    key: 'dude_dead',
+    frames: [{ key: 'dude', frame: standDown }],
+    frameRate: 20
+  });
+
+  this.anims.create({
+    key: 'dude_pick',
+    frames: [{ key: 'dude', frame: standDown }],
+    frameRate: 20
+  });
+
+  this.anims.create({
+    key: 'dude_move_left',
+    frames: this.anims.generateFrameNumbers('dude', moveLeft),
+    frameRate: 10,
+    repeat: -1
+  });
+
+  this.anims.create({
+    key: 'dude_move_right',
+    frames: this.anims.generateFrameNumbers('dude', moveRight),
+    frameRate: 10,
+    repeat: -1
+  });
+
+  this.anims.create({
+    key: 'dude_move_up',
+    frames: this.anims.generateFrameNumbers('dude', moveRight),
+    frameRate: 10,
+    repeat: -1
+  });
+
+  this.anims.create({
+    key: 'dude_move_up_right',
+    frames: this.anims.generateFrameNumbers('dude', moveRight),
+    frameRate: 10,
+    repeat: -1
+  });
+
+  this.anims.create({
+    key: 'dude_move_up_left',
+    frames: this.anims.generateFrameNumbers('dude', moveLeft),
+    frameRate: 10,
+    repeat: -1
+  });
+
+  this.anims.create({
+    key: 'dude_move_down',
+    frames: this.anims.generateFrameNumbers('dude', moveLeft),
+    frameRate: 10,
+    repeat: -1
+  });
+
+  this.anims.create({
+    key: 'dude_move_down_left',
+    frames: this.anims.generateFrameNumbers('dude', moveLeft),
+    frameRate: 10,
+    repeat: -1
+  });
+
+  this.anims.create({
+    key: 'dude_move_down_right',
+    frames: this.anims.generateFrameNumbers('dude', moveRight),
+    frameRate: 10,
+    repeat: -1
+  });
+
+
+  this.anims.create({
+    key: 'dude_attack_left',
+    frames: this.anims.generateFrameNumbers('dude', moveLeft),
+    frameRate: 10,
+    repeat: -1
+  });
+
+  this.anims.create({
+    key: 'dude_attack_right',
+    frames: this.anims.generateFrameNumbers('dude', moveRight),
+    frameRate: 10,
+    repeat: -1
+  });
+
+  this.anims.create({
+    key: 'dude_attack_down',
+    frames: this.anims.generateFrameNumbers('dude', moveLeft),
+    frameRate: 10,
+    repeat: -1
+  });
+
+  this.anims.create({
+    key: 'dude_attack_up',
+    frames: this.anims.generateFrameNumbers('dude', moveRight),
+    frameRate: 10,
+    repeat: -1
+  });
+}
+
+function createAnimsForPlayer() {
+  this.anims.create({
+    key: 'player_stand_down',
+    frames: [{ key: 'player', frame: 0 }],
+    frameRate: 20
+  });
+
+  this.anims.create({
+    key: 'player_stand_up',
+    frames: [{ key: 'player', frame: 4 }],
+    frameRate: 20
+  });
+
+  this.anims.create({
+    key: 'player_stand_left',
+    frames: [{ key: 'player', frame: 9 }],
+    frameRate: 20
+  });
+
+  this.anims.create({
+    key: 'player_stand_right',
+    frames: [{ key: 'player', frame: 0 }],
+    frameRate: 20
+  });
+
+  this.anims.create({
+    key: 'player_hitstun',
+    frames: [{ key: 'player', frame: 5 }],
+    frameRate: 20
+  });
+
+  this.anims.create({
+    key: 'player_dead',
+    frames: [{ key: 'player', frame: 5 }],
+    frameRate: 20
+  });
+
+  this.anims.create({
+    key: 'player_pick',
+    frames: [{ key: 'player', frame: 7 }],
+    frameRate: 20
+  });
+
+  this.anims.create({
+    key: 'player_move_left',
+    frames: this.anims.generateFrameNumbers('player', { start: 8, end: 11 }),
+    frameRate: 10,
+    repeat: -1
+  });
+
+  this.anims.create({
+    key: 'player_move_right',
+    frames: this.anims.generateFrameNumbers('player', { start: 0, end: 3 }),
+    frameRate: 10,
+    repeat: -1
+  });
+
+  this.anims.create({
+    key: 'player_move_down',
+    frames: this.anims.generateFrameNumbers('player', { start: 0, end: 3 }),
+    frameRate: 10,
+    repeat: -1
+  });
+
+  this.anims.create({
+    key: 'player_move_up',
+    frames: this.anims.generateFrameNumbers('player', { start: 4, end: 7 }),
+    frameRate: 10,
+    repeat: -1
+  });
+
+  this.anims.create({
+    key: 'player_move_down_left',
+    frames: this.anims.generateFrameNumbers('player', { start: 8, end: 11 }),
+    frameRate: 10,
+    repeat: -1
+  });
+
+  this.anims.create({
+    key: 'player_move_down_right',
+    frames: this.anims.generateFrameNumbers('player', { start: 0, end: 3 }),
+    frameRate: 10,
+    repeat: -1
+  });
+
+  this.anims.create({
+    key: 'player_move_up_left',
+    frames: this.anims.generateFrameNumbers('player', { start: 12, end: 15 }),
+    frameRate: 10,
+    repeat: -1
+  });
+
+  this.anims.create({
+    key: 'player_move_up_right',
+    frames: this.anims.generateFrameNumbers('player', { start: 4, end: 7 }),
+    frameRate: 10,
+    repeat: -1
+  });
+
+  this.anims.create({
+    key: 'player_attack_left',
+    frames: this.anims.generateFrameNumbers('player', { start: 8, end: 11 }),
+    frameRate: 10,
+    repeat: -1
+  });
+
+  this.anims.create({
+    key: 'player_attack_right',
+    frames: this.anims.generateFrameNumbers('player', { start: 0, end: 3 }),
+    frameRate: 10,
+    repeat: -1
+  });
+
+  this.anims.create({
+    key: 'player_attack_down',
+    frames: this.anims.generateFrameNumbers('player', { start: 0, end: 3 }),
+    frameRate: 10,
+    repeat: -1
+  });
+
+  this.anims.create({
+    key: 'player_attack_up',
+    frames: this.anims.generateFrameNumbers('player', { start: 4, end: 7 }),
+    frameRate: 10,
+    repeat: -1
+  });
+}

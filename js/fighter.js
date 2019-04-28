@@ -45,14 +45,18 @@ class FighterMoving extends FighterState {
   
     if (input.move) {
       let { x, y } = input.move;
-      let { sprite, speed } = this.fighter;
+      let { sprite, speed, spriteKey } = this.fighter;
       sprite.setVelocityX(x*speed);
       sprite.setVelocityY(y*speed);
-      if (x) sprite.anims.play(x < 0 ? 'left' : 'right', true);
-      if (y) sprite.anims.play(y < 0 ? 'up' : 'down', true);
+
+      let anim = `${spriteKey}_move`;
+      if (y) anim = y < 0 ? `${anim}_up` : `${anim}_down`;
+      if (x) anim = x < 0 ? `${anim}_left` : `${anim}_right`;
+      
       if (x == 0 && y == 0) {
         return new FighterStanding(this.fighter);
       } else {
+        sprite.anims.play(anim, true);
         // store last direction we were moving in for attack orientation
         this.fighter.orientation = getOrientationStr(x, y)
       }
@@ -78,8 +82,11 @@ class FighterAttacking extends FighterState {
     if (defaultState) return defaultState;
     if (this.done) return new FighterStanding(this.fighter);
 
+    const spriteKey = this.fighter.spriteKey;
+
     this.fighter.sprite.setVelocityX(0)
     this.fighter.sprite.setVelocityY(0)
+    this.fighter.sprite.anims.play(`${spriteKey}_attack_${this.fighter.orientation}`);
 
     const item = this.fighter.getCurrentItem()
     const center = this.fighter.sprite.getCenter()
@@ -94,8 +101,8 @@ class FighterStanding extends FighterState {
     let defaultState = this._updateDefault(input);
     if (defaultState) return defaultState;
 
-    let { sprite } = this.fighter;
-    sprite.anims.play(`stand_${this.fighter.orientation}`, true);
+    let { sprite, spriteKey } = this.fighter;
+    sprite.anims.play(`${spriteKey}_stand_${this.fighter.orientation}`, true);
     if (input.attacking && this.fighter.isReadyToAttack()) {
       return new FighterAttacking(this.fighter, this.fighter.getCurrentItem());
     }
@@ -111,7 +118,7 @@ class FighterStanding extends FighterState {
 class FighterDead extends FighterState {
   constructor(fighter) {
     super(fighter);
-    fighter.sprite.anims.play('stand_down', true);
+    fighter.sprite.anims.play(`${fighter.spriteKey}_dead`, true);
   }
 }
 
@@ -126,6 +133,8 @@ class FighterHitstun extends FighterState {
     let healthUpdate = this._updateHealth(input);
     if (healthUpdate) return healthUpdate;
     if (this.done) return new FighterStanding(this.fighter);
+    this.fighter.sprite.anims
+      .play(`${this.fighter.spriteKey}_hitstun`, true);
   }
 }
 
@@ -152,25 +161,10 @@ class FighterPickItem extends FighterState {
     if (defaultState) return defaultState;
     if (this.done) return new FighterStanding(this.fighter);
 
-    const sprite = this.fighter.sprite;
-    sprite.anims.play('stand', true);
+    const { sprite, spriteKey } = this.fighter;
+    sprite.anims.play(`${spriteKey}_pick`, true);
     sprite.setVelocityX(0);
     sprite.setVelocityY(0);
-  }
-}
-
-class FighterDropItem extends FighterState {
-  constructor(fighter, item) {
-    super(fighter);
-    _.pull(fighter.items, item);
-    this.done = false;
-    setTimeout(() => { this.done = true; }, 500);
-  }
-
-  update(input) {
-    let defaultState = this._updateDefault(input);
-    if (defaultState) return defaultState;
-    if (this.done) return new FighterStanding(this.fighter);
   }
 }
 
@@ -190,6 +184,7 @@ class Fighter {
     this.scene = this.sprite.scene
     this.orientation = 'down'
     this.attacks = []
+    this.spriteKey = sprite.frame.texture.key;
 
     this.lastStateChange = 0;
   }

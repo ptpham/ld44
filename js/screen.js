@@ -70,11 +70,7 @@ class StagingScreen extends Screen {
       }
     }
     
-    if (
-      player.sprite.y > 250 &&
-      player.sprite.x < WIDTH / 2 + 50 &&
-      player.sprite.x > WIDTH / 2 - 50
-    ) {
+    if (physics.overlap(player.sprite, this.arrow)) {
       this.destroy();
       return new FightingScreen(scene);
     }
@@ -122,11 +118,7 @@ class FightingScreen extends Screen {
         this.arrow.y = 32;
         state.currentEnemy = this.index + 1;
 
-        if (
-          player.sprite.y < 32 &&
-          player.sprite.x < WIDTH / 2 + 50 &&
-          player.sprite.x > WIDTH / 2 - 50
-        ) {
+        if (physics.overlap(player.sprite, this.arrow)) {
           this.destroy();
           player.sprite.y = HEIGHT - 50;
           return new StagingScreen(this.scene);
