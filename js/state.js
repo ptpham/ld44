@@ -9,14 +9,17 @@ let state = {
       name: 'Item 1',
       spriteName: 'dude',
       cost: 1,
+      getItem: () => new DefaultSword(), // TODO: needs to be a shield
     }, {
       name: 'Item 2',
       spriteName: 'dude',
       cost: 2,
+      getItem: () => new LongSword(),
     }, {
       name: 'Item 3',
       spriteName: 'dude',
       cost: 1,
+      getItem: () => new Gun(),
     }
   ],
   enemyData: [
@@ -26,7 +29,9 @@ let state = {
       health: 5,
       speed: 200,
       baseDamage: 2,
-      items: [],
+      items: [
+        new SuperSlowSword(),
+      ],
       getAI: () => new SimpleEnemyAI(),
     },
     {
@@ -35,7 +40,9 @@ let state = {
       health: 10,
       speed: 80,
       baseDamage: 2,
-      items: [],
+      items: [
+        new SuperSlowSword(),
+      ],
       getAI: () => new SimpleEnemyAI(),
     },
   ],

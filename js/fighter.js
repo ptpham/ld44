@@ -76,7 +76,7 @@ class FighterAttacking extends FighterState {
     this.done = false;
     setTimeout(() => { this.done = true; }, duration);
     item.resetCooldown()
-    this.fighter.attackGroup.addMultiple(item.newAttacks(center.x, center.y, this.fighter.orientation))
+    this.fighter.attackGroup.addMultiple(item.newAttacks(this.fighter))
   }
 
   update(input) {
@@ -167,7 +167,7 @@ class FighterPickItem extends FighterState {
 
 class Fighter {
   constructor(sprite) {
-    this.items = [new DefaultSword(sprite.scene)];
+    this.items = [];
     this.currentItemIndex = 0;
     this.health = 5;
     this.healthMax = 7;
@@ -224,7 +224,10 @@ class Fighter {
     return this.items[this.currentItemIndex];
   }
 
-  getDamage() {
-    return this.baseDamage;
+  takeDamage(amount) {
+    if (this.state instanceof FighterHitstun) {
+      return;
+    }
+    this.health -= amount;
   }
 }

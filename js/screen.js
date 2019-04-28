@@ -178,17 +178,15 @@ class FightingScreen extends Screen {
     inputs.attacking = state.cursors.space.isDown;
 
     // resolve attacks
-    physics.overlap(player.attackGroup, this.enemy.sprite, (enemy, attack) => {
-      console.log("hit enemy", attack, enemy)
+    physics.overlap(player.attackGroup, this.enemy.sprite, (obj, attack) => {
       player.attackGroup.remove(attack, true, true)
-      this.enemy.health -= attack.damage;
+      this.enemy.takeDamage(attack.damage);
       enemyInputs.hitstun = attack.hitstun || 0;
     })
 
-    physics.overlap(this.enemy.attackGroup, player.sprite, (player, attack) => {
-      console.log("hit player", attack, player)
+    physics.overlap(this.enemy.attackGroup, player.sprite, (obj, attack) => {
       this.enemy.attackGroup.remove(attack, true, true)
-      player.health -= attack.damage;
+      player.takeDamage(attack.damage);
       inputs.hitstun = attack.hitstun || 0;
     })
 
@@ -196,6 +194,7 @@ class FightingScreen extends Screen {
     this.enemy.update(enemyInputs);
 
     physics.collide(player.sprite, this.enemy.sprite);
+    state.heartManager.update();
 
     if (player.isDead()) return new LoseScreen(this.scene);
     if (this.enemy.isDead()) {

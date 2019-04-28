@@ -22,10 +22,22 @@ class SimpleEnemyAI extends EnemyAI {
     super();
     this.standingCooldown = 500;
     this.lastInputs = this._makeBaseInputs();
+    this.readyForAttack = 0;
   }
 
   getInputsForEnemy(enemy, player) {
+    const now = enemy.sprite.scene.time.now;
     const inputs = this._makeBaseInputs();
+
+    if (this.readyForAttack) {
+      if (this.readyForAttack > now) {
+        inputs.attacking = true;
+        this.readyForAttack = 0;
+        return inputs;
+      } else {
+        return inputs;
+      }
+    }
 
     const dX = player.sprite.getCenter().x - enemy.sprite.getCenter().x;
     const dY = player.sprite.getCenter().y - enemy.sprite.getCenter().y;
@@ -38,7 +50,7 @@ class SimpleEnemyAI extends EnemyAI {
 
     if (
       enemy.state instanceof FighterStanding &&
-      enemy.lastStateChange + this.standingCooldown >= enemy.sprite.scene.time.now
+      enemy.lastStateChange + this.standingCooldown >= now
     ) {
       return this.lastInputs;
     }
@@ -48,7 +60,8 @@ class SimpleEnemyAI extends EnemyAI {
       inputs.move.x = Math.sign(Math.round(dX / 10));
       inputs.move.y = Math.sign(Math.round(dY / 10));
     } else {
-      // If we're close enough, try to perform an attack in the direction of the player
+      // If we're close enough, ready an attack
+      this.readyForAttack = now + enemy.attackSpeed * 10;
       inputs.attacking = true;
     }
 

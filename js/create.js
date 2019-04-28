@@ -52,6 +52,7 @@ function create ()
   state.player = new Fighter(this.physics.add.sprite(PLAYER_START_X, PLAYER_START_Y, 'player'));
   state.player.sprite.setCollideWorldBounds(true);
   state.player.sprite.depth = 1000;
+  state.player.items.push(new DefaultSword());
 
   state.cursors = this.input.keyboard.createCursorKeys();
   state.screen = new TitleScreen(this);
