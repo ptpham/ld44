@@ -42,6 +42,12 @@ function create ()
     frameRate: 20
   });
 
+  this.anims.create({
+    key: 'merchant-idle',
+    frames: this.anims.generateFrameNumbers('merchant', { start: 0, end: 1 }),
+    frameRate: 5
+  });
+
   state.background = this.add.sprite(WIDTH/2, HEIGHT/2, 'background');
   state.player = new Fighter(this.physics.add.sprite(PLAYER_START_X, PLAYER_START_Y, 'player'));
   state.player.sprite.setCollideWorldBounds(true);

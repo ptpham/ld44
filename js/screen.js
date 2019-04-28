@@ -59,6 +59,10 @@ class StagingScreen extends Screen {
     state.player.sprite.y = PLAYER_START_Y;
     this.arrow = scene.physics.add.sprite(WIDTH/2, HEIGHT - 32, 'arrow');
     this.arrow.anims.play('arrow-bounce');
+
+    this.merchant = scene.physics.add.sprite(PLAYER_START_X/2, PLAYER_START_Y, 'merchant');
+    this.merchant.setCollideWorldBounds(true);
+    this.merchant.anims.play('merchant-idle');
   }
 
   createRequirementHearts(container, item) {
@@ -104,6 +108,7 @@ class StagingScreen extends Screen {
   destroy() {
     for (let container of this.itemContainers) container.destroy();
     if (this.smoke) this.smoke.destroy();
+    this.merchant.destroy();
     this.arrow.destroy();
   }
 
@@ -111,8 +116,13 @@ class StagingScreen extends Screen {
     let { player } = state;
     player.update(this.getInputs());
   
-    let { scene, items, itemContainers } = this;
+    let { merchant, scene, items, itemContainers } = this;
     let { physics } = scene;
+    physics.collide(player.sprite, merchant);
+    merchant.setVelocityX(0);
+    merchant.setVelocityY(0);
+    merchant.setVisible(true);
+
     for (let i = 0; i < items.length; i++) {
       let container = itemContainers[i];
       if (physics.overlap(player.sprite, container.itemSprite)) {
