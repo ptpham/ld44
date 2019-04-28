@@ -42,7 +42,7 @@ class TitleScreen extends Screen {
 }
 
 class StagingScreen extends Screen {
-  constructor(scene) {
+  constructor(scene, fromTitle) {
     super(scene);
     state.background.anims.play('background-staging');
 
@@ -55,18 +55,34 @@ class StagingScreen extends Screen {
       return result;
     });
 
-    this.arrow = scene.physics.add.sprite(WIDTH/2, HEIGHT - 32, 'arrow');
+    this.arrow = scene.physics.add.sprite(WIDTH/2, HEIGHT - 12, 'arrow');
     this.arrow.anims.play('arrow-bounce');
+
+    this.merchant = scene.physics.add.sprite(PLAYER_START_X / 2, PLAYER_START_Y, 'merchant');
+    this.merchant.setCollideWorldBounds(true);
+    this.merchant.anims.play('merchant-idle');
+
+    // if (fromTitle) {
+    //   this.itemContainers.forEach((container) => {
+    //     container.alpha = 0;
+    //     container.
+    //   });
+    // }
   }
 
   createRequirementHearts(container, item) {
     let { scene } = this;
     let RANGE_X = 60;
-    let OFFSET_Y = 40;
+    let OFFSET_Y = 60;
     let hearts = [];
 
     let { cost } = item;
+    let carpet = scene.add.sprite(0, 0, 'carpet');
     let itemSprite = scene.physics.add.sprite(0, 0, item.spriteName);
+    carpet.scaleX = 1.5;
+    carpet.scaleY = 0.8;
+
+    container.add(carpet);
     container.add(itemSprite);
 
     for (let i = 0; i < cost; i++) {
@@ -103,14 +119,20 @@ class StagingScreen extends Screen {
     for (let container of this.itemContainers) container.destroy();
     if (this.smoke) this.smoke.destroy();
     this.arrow.destroy();
+    this.merchant.destroy();
   }
 
   update() {
     let { player } = state;
     player.update(this.getInputs());
-  
-    let { scene, items, itemContainers } = this;
+
+    let { merchant, scene, items, itemContainers } = this;
     let { physics } = scene;
+    physics.collide(player.sprite, merchant);
+    merchant.setVelocityX(0);
+    merchant.setVelocityY(0);
+    merchant.setVisible(true);
+
     for (let i = 0; i < items.length; i++) {
       let container = itemContainers[i];
       if (physics.overlap(player.sprite, container.itemSprite)) {
@@ -118,7 +140,7 @@ class StagingScreen extends Screen {
         player.update({ pickItem: items[i] });
       }
     }
-    
+
     if (physics.overlap(player.sprite, this.arrow)) {
       this.destroy();
       return new FightingScreen(scene);
@@ -179,12 +201,12 @@ class FightingScreen extends Screen {
     if (this.enemy.isDead()) {
       if (this.index < state.enemyData.length - 1) {
         this.arrow.x = WIDTH/2;
-        this.arrow.y = 32;
+        this.arrow.y = 12;
         state.currentEnemy = this.index + 1;
 
         if (physics.overlap(player.sprite, this.arrow)) {
           this.destroy();
-          player.sprite.y = HEIGHT - 50;
+          player.sprite.y = HEIGHT/2 + 72;
           return new StagingScreen(this.scene);
         }
       } else {
