@@ -10,7 +10,9 @@ class FighterState {
       return new FighterPickItem(fighter, pickItem); 
     }
     if (input.switchItem) {
-      fighter.sprite.scene.sound.play('item_switch');
+      if (fighter === state.player) {
+        fighter.sprite.scene.sound.play('item_switch');
+      }
       this.fighter.currentItemIndex = (this.fighter.currentItemIndex + 1) % this.fighter.items.length
       console.log('switched to item', this.fighter.currentItemIndex, this.fighter.getCurrentItem())
     }
@@ -43,6 +45,10 @@ class FighterState {
     sprite.body.offset.x = 0;
     sprite.body.offset.y = 0;
 
+    if (input.turnToOrientation) {
+      this.fighter.orientation = input.turnToOrientation;
+    }
+
     if (orientation === 'left') {
       sprite.body.offset.x = sprite.width - sprite.body.width;
     }
@@ -57,6 +63,7 @@ class FighterState {
       sprite.setVelocityX(input.pushback.x);
       sprite.setVelocityY(input.pushback.y);
     }
+    
 
     if (input.hitstun) {
       return new FighterHitstun(this.fighter, input.hitstun);
