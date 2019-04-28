@@ -56,7 +56,7 @@ class Slash extends BaseAttack {
         const rotation = Math.random() * 2 -1;
 
         function makeSlashSprite() {
-            const sprite = scene.add.sprite(x, y, 'slash');
+            const sprite = scene.physics.add.sprite(x, y, 'slash');
             sprite.scaleX = w / sprite.width;
             sprite.scaleY = h / sprite.height;
             sprite.flipX = orientation === 'left';

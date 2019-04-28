@@ -67,7 +67,7 @@ class Gun extends BaseItem {
     getAttacks(fighter) {
         return [
             new Bullet(fighter, this, 1, 10, 1000, 10,
-                10, 10, 1000)
+                10, 10, 100)
         ]
     }
 }
