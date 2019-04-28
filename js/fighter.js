@@ -74,11 +74,10 @@ class FighterAttacking extends FighterState {
     this.item = item;
 
     const duration = this.fighter.attackSpeed;
-    const center = this.fighter.sprite.getCenter()
     this.done = false;
     setTimeout(() => { this.done = true; }, duration);
     item.resetCooldown()
-    this.fighter.attackGroup.addMultiple(item.newAttacks(this.fighter))
+    this.fighter.attackGroup.addMultiple(item.getAttacks(this.fighter).map(x => x.sprite))
   }
 
   update(input) {

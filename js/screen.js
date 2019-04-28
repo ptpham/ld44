@@ -179,16 +179,12 @@ class FightingScreen extends Screen {
     inputs.attacking = state.cursors.space.isDown;
 
     // resolve attacks
-    physics.overlap(player.attackGroup, this.enemy.sprite, (obj, attack) => {
-      player.attackGroup.remove(attack, true, true)
-      this.enemy.takeDamage(attack.damage);
-      enemyInputs.hitstun = attack.hitstun || 0;
+    physics.overlap(player.attackGroup, this.enemy.sprite, (obj, attackSprite) => {
+      attackSprite.attack.onCollideEnemy(this.enemy, enemyInputs)
     })
 
-    physics.overlap(this.enemy.attackGroup, player.sprite, (obj, attack) => {
-      this.enemy.attackGroup.remove(attack, true, true)
-      player.takeDamage(attack.damage);
-      inputs.hitstun = attack.hitstun || 0;
+    physics.overlap(this.enemy.attackGroup, player.sprite, (obj, attackSprite) => {
+      attackSprite.attack.onCollideEnemy(player, inputs)
     })
 
     player.update(inputs);
