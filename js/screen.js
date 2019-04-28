@@ -9,11 +9,11 @@ class Screen {
   setDialog(sprite, string) {
     sprite.x += sprite.width - DIALOG_WIDTH/2 + 16;
     let font = _.clone(DEFAULT_FONT);
-    font.wordWrap = { width: DIALOG_WIDTH/2 };
+    font.wordWrap = { width: DIALOG_WIDTH/2 + 16 };
 
     let dialog = this.scene.add.sprite(0, 0, 'dialog');
     let text = this.scene.add.text(-DIALOG_WIDTH/2 + 100, -DIALOG_HEIGHT/2 + 32, string, font);
-    let nextText = this.scene.add.text(DIALOG_WIDTH/2 - 72, DIALOG_HEIGHT/2 - 40, 'Space', DEFAULT_FONT);
+    let nextText = this.scene.add.text(DIALOG_WIDTH/2 - 130, DIALOG_HEIGHT/2 - 40, 'Shift + Space', DEFAULT_FONT);
     let arrow = this.scene.add.sprite(DIALOG_WIDTH/2 - 16, DIALOG_HEIGHT/2 - 32, 'arrow');
     arrow.anims.play('arrow-bounce');
     arrow.rotation = -Math.PI/2;
@@ -32,7 +32,7 @@ class Screen {
 
   _updateDialog() {
     if (this.dialog) {
-      if (state.cursors.space.isDown) this.clearDialog();
+      if (state.cursors.space.isDown && state.cursors.space.shiftKey) this.clearDialog();
       return this;
     }
   }
@@ -86,6 +86,23 @@ class TitleScreen extends Screen {
     let dialogUpdate = this._updateDialog();
     if (dialogUpdate) return dialogUpdate;
     else return new StagingScreen(this.scene);
+  }
+}
+
+class DelayScreen extends Screen {
+  constructor(scene, wait, nextScreen, onDestroy) {
+    super(scene);
+    this.onDestroy = onDestroy;
+    this.nextScreen = nextScreen;
+    this.begin = Date.now();
+    this.wait = wait;
+  }
+
+  update() {
+    if (Date.now() > this.begin + this.wait) {
+      if (this.onDestroy) this.onDestroy();
+      return this.nextScreen();
+    }
   }
 }
 
@@ -169,6 +186,9 @@ class StagingScreen extends Screen {
   update() {
     let { player } = state;
     player.update(this.getInputs());
+    if (player.isDead()) {
+      return new DelayScreen(this.scene, 1000, () => new LoseScreen(this.scene), () => this.destroy());
+    }
 
     let { merchant, scene, items, itemContainers } = this;
     let { physics } = scene;
@@ -221,21 +241,32 @@ class FightingScreen extends Screen {
     let enemyInputs = this.enemyAI.getInputsForEnemy(this.enemy, player);
 
     // resolve attacks
-    physics.overlap(player.attackGroup, this.enemy.sprite, (obj, attackSprite) => {
-      attackSprite.attack.onCollideEnemy(this.enemy, enemyInputs)
-    })
+    player.attacks = player.attacks.map((attack) => {
+      if (physics.overlap(this.enemy.sprite, attack.sprite)) {
+        attack.onCollideEnemy(this.enemy, enemyInputs)
+      }
+      return attack
+    }).filter((x) => x.active)
 
-    physics.overlap(this.enemy.attackGroup, player.sprite, (obj, attackSprite) => {
-      attackSprite.attack.onCollideEnemy(player, inputs)
-    })
+    this.enemy.attacks = this.enemy.attacks.map((attack) => {
+      if (physics.overlap(player.sprite, attack.sprite)) {
+        attack.onCollideEnemy(player, inputs)
+      }
+      return attack
+    }).filter((x) => x.active)
 
     player.update(inputs);
     this.enemy.update(enemyInputs);
 
-    physics.collide(player.sprite, this.enemy.sprite);
+    if (!this.enemy.isDead()) {
+      physics.collide(player.sprite, this.enemy.sprite);
+    }
     state.heartManager.update();
 
-    if (player.isDead()) return new LoseScreen(this.scene);
+    if (player.isDead()) {
+      return new DelayScreen(this.scene, 1000, () => new LoseScreen(this.scene), () => this.destroy());
+    }
+
     if (this.enemy.isDead()) {
       console.log('enemy dead!')
       if (this.index < state.enemyData.length - 1) {
@@ -266,19 +297,34 @@ class FightingScreen extends Screen {
 class LoseScreen extends Screen {
   constructor(scene) {
     super(scene);
-    this.text = scene.add.text(WIDTH/4, HEIGHT/2, 'Your suffering is eternal', DEFAULT_FONT);
+    let sprite = scene.add.sprite(0, 0, 'playerDeath');
+    sprite.anims.play('player_dead');
+    this.setDialog(sprite, 'You have failed to pass the tests of purgatory. Your suffering is eternal. Try again with another poor soul.');
   }
 
   update() {
     let { player } = state;
+    state.heartManager.update();
     player.update();
+
+    let dialogUpdate = this._updateDialog();
+    if (dialogUpdate) return dialogUpdate;
+    document.location.reload();
   }
 }
 
 class VictoryScreen extends Screen {
   constructor(scene) {
     super(scene);
-    this.text = scene.add.text(WIDTH/4, HEIGHT/2, 'You have escaped purgatory', DEFAULT_FONT);
+    let sprite = scene.add.sprite(0, 0, 'playerDeath');
+    sprite.anims.play('player_attack_right');
+    this.setDialog(sprite, 'You have escaped purgatory! Try again with another poor soul.');
+  }
+
+  update() {
+    let dialogUpdate = this._updateDialog();
+    if (dialogUpdate) return dialogUpdate;
+    document.location.reload();
   }
 }
 
