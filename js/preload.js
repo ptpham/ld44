@@ -24,5 +24,7 @@ function preload ()
 
   this.load.image('player_hit', 'assets/player_hit.png')
   this.load.json('player_hit_data', 'assets/player_hit.json')
+
+  this.load.audio('swoosh', 'assets/swoosh.mp3');
 }
 

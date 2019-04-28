@@ -42,7 +42,7 @@ function create ()
   this.anims.create({
     key: 'smoke-spin',
     frames: this.anims.generateFrameNumbers('smoke', { start: 0, end: 15 }),
-    frameRate: 20
+    frameRate: 15
   });
 
   this.anims.create({
