@@ -21,5 +21,7 @@ function preload ()
 
   this.load.image('player_attack', 'assets/player_allattacks.png');
   this.load.json('player_attack_data', 'assets/player_allattacks.json');
+
+  this.load.audio('swoosh', 'assets/swoosh.mp3');
 }
 

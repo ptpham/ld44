@@ -205,6 +205,7 @@ class StagingScreen extends Screen {
       if (physics.overlap(player.sprite, container.itemSprite)) {
         this.selectItem(container, items[i]);
         player.update({ pickItem: items[i] });
+        scene.sound.play('swoosh');
       }
     }
 
