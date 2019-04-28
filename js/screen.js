@@ -241,13 +241,19 @@ class FightingScreen extends Screen {
     let enemyInputs = this.enemyAI.getInputsForEnemy(this.enemy, player);
 
     // resolve attacks
-    physics.overlap(player.attackGroup, this.enemy.sprite, (obj, attackSprite) => {
-      attackSprite.attack.onCollideEnemy(this.enemy, enemyInputs)
-    })
+    player.attacks = player.attacks.map((attack) => {
+      if (physics.overlap(this.enemy.sprite, attack.sprite)) {
+        attack.onCollideEnemy(this.enemy, enemyInputs)
+      }
+      return attack
+    }).filter((x) => x.active)
 
-    physics.overlap(this.enemy.attackGroup, player.sprite, (obj, attackSprite) => {
-      attackSprite.attack.onCollideEnemy(player, inputs)
-    })
+    this.enemy.attacks = this.enemy.attacks.map((attack) => {
+      if (physics.overlap(player.sprite, attack.sprite)) {
+        attack.onCollideEnemy(player, inputs)
+      }
+      return attack
+    }).filter((x) => x.active)
 
     player.update(inputs);
     this.enemy.update(enemyInputs);

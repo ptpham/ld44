@@ -81,7 +81,7 @@ class FighterAttacking extends FighterState {
     this.done = false;
     setTimeout(() => { this.done = true; }, duration);
     item.resetCooldown()
-    this.fighter.attackGroup.addMultiple(item.getAttacks(this.fighter).map(x => x.sprite))
+    this.fighter.attacks.push(...item.getAttacks(this.fighter))
   }
 
   update(input) {
@@ -194,7 +194,7 @@ class Fighter {
     this.spriteKey = sprite.frame.texture.key;
 
     this.lastStateChange = 0;
-    this.attackGroup = this.sprite.scene.physics.add.group()
+    this.attacks = []
   }
 
   adjustHealth(amount, duration) {
