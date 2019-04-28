@@ -5,6 +5,7 @@ function create ()
   createAnimsForPlayer.call(this);
   createTexturesAndAnimationsForPlayerItems.call(this);
   createAnimsForBoss.call(this);
+  createAnimsForItems.call(this);
 
   this.anims.create({
     key: 'arrow-bounce',
@@ -460,3 +461,15 @@ function createTexturesAndAnimationsForPlayerItems() {
     makeAnim(`player_attack_down_${key}`, attackRight);
   });
 }
+
+function createAnimsForItems() {
+  let config = ['sword', 'shield', 'gun'];
+  for (let i = 0; i < config.length; i++) {
+    this.anims.create({
+      key: config[i],
+      frames: this.anims.generateFrameNumbers('items', { start: i, end: i }),
+      frameRate: 20
+    });
+  }
+}
+

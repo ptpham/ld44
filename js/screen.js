@@ -78,7 +78,8 @@ class StagingScreen extends Screen {
 
     let { cost } = item;
     let carpet = scene.add.sprite(0, 0, 'carpet');
-    let itemSprite = scene.physics.add.sprite(0, 0, item.spriteName);
+    let itemSprite = scene.physics.add.sprite(0, 0, 'items');
+    itemSprite.anims.play(item.spriteName);
     carpet.scaleX = 1.5;
     carpet.scaleY = 0.8;
 

@@ -7,17 +7,17 @@ let state = {
   allItems: [
     {
       name: 'Item 1',
-      spriteName: 'dude',
+      spriteName: 'shield',
       cost: 1,
       getItem: () => new DefaultSword(), // TODO: needs to be a shield
     }, {
       name: 'Item 2',
-      spriteName: 'dude',
+      spriteName: 'sword',
       cost: 2,
       getItem: () => new LongSword(),
     }, {
       name: 'Item 3',
-      spriteName: 'dude',
+      spriteName: 'gun',
       cost: 1,
       getItem: () => new Gun(),
     }
