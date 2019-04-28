@@ -73,6 +73,7 @@ class Slash extends BaseAttack {
         const sprite2 = makeSlashSprite();
 
         super({fighter, item, damage, hitstun, sprite})
+        this.sprite2 = sprite2;
         setTimeout(() => {
             sprite.destroy();
             sprite2.destroy();
@@ -86,6 +87,10 @@ class Slash extends BaseAttack {
         enemyInputs.hitstun = this.hitstun || 0;
         enemyInputs.damage = this.damage
         this.active = false
+    }
+
+    onCollideAttack() {
+        this.sprite2.alpha = 0.5;
     }
 }
 
@@ -205,12 +210,22 @@ class Block extends BaseAttack {
             this.active = false
         }, duration)
         this.pushback = pushback;
+        this.orientation = dir;
     }
     onCollideAttack(otherAttack, userInputs, enemyInputs) {
         if (!this.active) return;
+        const dir = this.orientation;
+
         otherAttack.active = false;
         otherAttack.sprite.destroy();
-        userInputs.pushback = this.pushback;
+        userInputs.pushback = {
+            x: dir === 'left' ? this.pushback : dir === 'right' ? -this.pushback : 0,
+            y: dir === 'up' ? this.pushback : dir === 'down' ? -this.pushback : 0
+        };
+        enemyInputs.pushback = {
+            x: -userInputs.pushback.x,
+            y: -userInputs.pushback.y
+        };
         this.active = false;
     }
 }

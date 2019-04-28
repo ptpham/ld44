@@ -7,6 +7,7 @@ class EnemyAI {
   _makeBaseInputs() {
     return {
       move: { x: 0, y: 0 },
+      pushback: {x: 0, y: 0},
       damage: 0,
       hitstun: 0,
       attacking: false,

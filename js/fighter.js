@@ -36,8 +36,10 @@ class FighterState {
 
     const {sprite, orientation} = this.fighter;
 
-    sprite.setVelocityX(0)
-    sprite.setVelocityY(0)
+    if (!this.isPushingBack) {
+      sprite.setVelocityX(0)
+      sprite.setVelocityY(0)
+    }
     sprite.body.offset.x = 0;
     sprite.body.offset.y = 0;
 
@@ -47,6 +49,13 @@ class FighterState {
 
     if (orientation === 'up') {
       sprite.body.offset.y = sprite.height - sprite.body.height;
+    }
+
+    if (input.pushback) {
+      this.isPushingBack = true;
+      setTimeout(() => { this.isPushingBack = false }, 400);
+      sprite.setVelocityX(input.pushback.x);
+      sprite.setVelocityY(input.pushback.y);
     }
 
     if (input.hitstun) {
@@ -108,9 +117,6 @@ class FighterAttacking extends FighterState {
 
     const {spriteKey, orientation, sprite} = this.fighter;
 
-    sprite.setVelocityX(0)
-    sprite.setVelocityY(0)
-
     let anim = `${spriteKey}_attack_${orientation}`;
     anim = this.fighter.getPlayerAnimationForAttack(anim);
     sprite.anims.play(anim);
@@ -144,8 +150,6 @@ class FighterDead extends FighterState {
     super(fighter);
     fighter.sprite.scene.sound.play(`${fighter.spriteKey}_dying`);
     fighter.sprite.anims.play(`${fighter.spriteKey}_dead`, true);
-    fighter.sprite.setVelocityX(0);
-    fighter.sprite.setVelocityY(0);
   }
 }
 
@@ -190,8 +194,6 @@ class FighterPickItem extends FighterState {
 
     const { sprite, spriteKey } = this.fighter;
     sprite.anims.play(`${spriteKey}_pick`, true);
-    sprite.setVelocityX(0);
-    sprite.setVelocityY(0);
   }
 }
 
