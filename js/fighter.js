@@ -56,8 +56,6 @@ class FighterMoving extends FighterState {
       let anim = `${spriteKey}_move`;
       if (y) anim = y < 0 ? `${anim}_up` : `${anim}_down`;
       if (x) anim = x < 0 ? `${anim}_left` : `${anim}_right`;
-      anim = this.fighter.getPlayerAnimationForMove(anim);
-      console.log(anim);
 
       if (x == 0 && y == 0) {
         return new FighterStanding(this.fighter);
