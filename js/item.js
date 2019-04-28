@@ -37,6 +37,7 @@ class SuperSlowSword extends BaseItem {
     }
 
     getAttacks(fighter) {
+        state.screen.scene.sound.play('boss_attack');
         return [
             new Slash(fighter, this, 1, this.cooldown / 6, this.cooldown,
             this.range, 40, 70)
