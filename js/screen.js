@@ -55,29 +55,18 @@ class StagingScreen extends Screen {
       return result;
     });
 
-    state.player.sprite.x = PLAYER_START_X;
-    state.player.sprite.y = PLAYER_START_Y;
     this.arrow = scene.physics.add.sprite(WIDTH/2, HEIGHT - 32, 'arrow');
     this.arrow.anims.play('arrow-bounce');
-
-    this.merchant = scene.physics.add.sprite(PLAYER_START_X/2, PLAYER_START_Y, 'merchant');
-    this.merchant.setCollideWorldBounds(true);
-    this.merchant.anims.play('merchant-idle');
   }
 
   createRequirementHearts(container, item) {
     let { scene } = this;
     let RANGE_X = 60;
-    let OFFSET_Y = 60;
+    let OFFSET_Y = 40;
     let hearts = [];
 
     let { cost } = item;
-    let carpet = scene.add.sprite(0, 0, 'carpet');
     let itemSprite = scene.physics.add.sprite(0, 0, item.spriteName);
-    carpet.scaleX = 1.5;
-    carpet.scaleY = 0.8;
-
-    container.add(carpet);
     container.add(itemSprite);
 
     for (let i = 0; i < cost; i++) {
@@ -113,7 +102,6 @@ class StagingScreen extends Screen {
   destroy() {
     for (let container of this.itemContainers) container.destroy();
     if (this.smoke) this.smoke.destroy();
-    this.merchant.destroy();
     this.arrow.destroy();
   }
 
@@ -121,13 +109,8 @@ class StagingScreen extends Screen {
     let { player } = state;
     player.update(this.getInputs());
   
-    let { merchant, scene, items, itemContainers } = this;
+    let { scene, items, itemContainers } = this;
     let { physics } = scene;
-    physics.collide(player.sprite, merchant);
-    merchant.setVelocityX(0);
-    merchant.setVelocityY(0);
-    merchant.setVisible(true);
-
     for (let i = 0; i < items.length; i++) {
       let container = itemContainers[i];
       if (physics.overlap(player.sprite, container.itemSprite)) {
@@ -158,12 +141,11 @@ class FightingScreen extends Screen {
     this.enemy.sprite.x = WIDTH / 2;
     this.enemy.sprite.y = HEIGHT - this.enemy.sprite.height;
     this.enemy.sprite.setCollideWorldBounds(true);
+    this.hearts = _.times(player.healthMax, i => scene.add.sprite(32*(i+1), 32, 'heart'));
 
     this.arrow = scene.physics.add.sprite(-WIDTH, -HEIGHT, 'arrow');
     this.arrow.anims.play('arrow-bounce');
   }
-
-  resolveAtt
 
   update() {
     let { player } = state;
@@ -181,9 +163,9 @@ class FightingScreen extends Screen {
       enemyInputs.hitstun = attack.hitstun || 0;
     })
 
-    physics.overlap(enemy.attackGroup, player.sprite, (player, attack) => {
+    physics.overlap(this.enemy.attackGroup, player.sprite, (player, attack) => {
       console.log("hit player", attack, player)
-      enemy.attackGroup.remove(attack, true, true)
+      this.enemy.attackGroup.remove(attack, true, true)
       player.health -= attack.damage;
       inputs.hitstun = attack.hitstun || 0;
     })
