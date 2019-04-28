@@ -90,9 +90,10 @@ class Slash extends BaseAttack {
 }
 
 class Bullet extends BaseAttack {
-    constructor(fighter, item, damage, hitstun, duration, range, w, h, speed) {
+    constructor(fighter, item, damage, hitstun, w, h, duration) {
         const orientation = fighter.orientation;
         const scene = fighter.sprite.scene;
+        const length = w;
 
         if (orientation == 'up' || orientation == 'down') {
             // swap width/height
@@ -107,20 +108,20 @@ class Bullet extends BaseAttack {
 
         switch (orientation) {
             case 'left':
-                x = center.x - fighter.sprite.width / 2 - range;
+                x = center.x - length/2;
                 y = center.y;
                 break
             case 'right':
-                x = center.x + fighter.sprite.width / 2 + range;
+                x = center.x + length/2;
                 y = center.y;
                 break
             case 'up':
                 x = center.x
-                y = center.y - fighter.sprite.height / 2 - range;
+                y = center.y - length / 2;
                 break
             case 'down':
                 x = center.x
-                y = center.y + fighter.sprite.height / 2 + range;
+                y = center.y + length / 2;
                 break
         }
 
@@ -129,26 +130,17 @@ class Bullet extends BaseAttack {
         y += Math.random() * 20 - 10;
 
         let sprite = scene.physics.add.sprite(x, y, 'slash');
+        sprite.anims.play('slash');
         sprite.scaleX = w / sprite.width;
         sprite.scaleY = h / sprite.height;
         sprite.flipX = orientation === 'left';
         sprite.flipY = orientation === 'up';
-        switch (orientation) {
-            case 'left':
-                sprite.setVelocityX(-speed);
-                break;
-            case 'right':
-                sprite.setVelocityX(speed);
-                break;
-            case 'up':
-                sprite.setVelocityY(-speed);
-                break;
-            case 'down':
-                sprite.setVelocityY(speed);
-                break;
-        }
-        console.log('bullet', sprite.getCenter(), 'speed', speed, 'sprite', sprite, 'orientation', orientation, 'body velocity', sprite.body.velocity)
+        console.log('bullet', sprite.getCenter(), 'sprite', sprite, 'orientation', orientation);
         super(fighter, item, damage, hitstun, sprite)
+        setTimeout(() => {
+            sprite.destroy();
+            this.active = false
+        }, duration)
     }
     onCollideEnemy(enemy, enemyInputs) {
         if (!this.active) return;
