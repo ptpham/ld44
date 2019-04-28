@@ -437,11 +437,9 @@ function createTexturesAndAnimationsForPlayerItems() {
   const data = this.cache.json.get('player_attack_data');
   const texture = this.textures.get('player_attack');
   const anims = this.anims;
-  const frameNamesToIndex = {};
 
   data.frames.forEach((frame, i) => {
     texture.add(frame.name, 0, frame.frame.x, frame.frame.y, frame.frame.w, frame.frame.h);
-    frameNamesToIndex[frame.name] = i;
   });
 
   const itemsWithAttack = ['stick', 'sword', 'gun', 'shield'];

@@ -113,7 +113,7 @@ class Shield extends BaseItem {
 
     getAttacks(fighter) {
         return [
-            new Block({ fighter, item: this, pushback: 20, w: 12, h: 32, duration: this.cooldown })
+            new Block({ fighter, item: this, pushback: 20, w: 30, h: 80, duration: this.cooldown })
         ]
     }
 }

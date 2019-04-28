@@ -175,31 +175,40 @@ class Block extends BaseAttack {
         const sprite = scene.physics.add.sprite(center.x, center.y, 'block');
         sprite.scaleX = w / sprite.width;
         sprite.scaleY = h / sprite.height;
+        sprite.anims.play('block');
 
         switch(dir) {
             case 'left':
                 sprite.flipX = true;
-                sprite.x -= fighter.sprite.width / 2;
+                sprite.x -= fighter.sprite.width / 2 + 12;
                 break;
             case 'right':
-                sprite.x += fighter.sprite.width / 2;
+                sprite.x += fighter.sprite.width / 2 + 12;
                 break;
             case 'up':
                 sprite.rotation = -Math.PI / 2;
+                sprite.body.width = h;
+                sprite.body.height = w;
+                sprite.y -= fighter.sprite.height / 2 + 24;
                 break;
             case 'down':
                 sprite.rotation = Math.PI / 2;
+                sprite.body.width = h;
+                sprite.body.height = w;
+                sprite.y += fighter.sprite.height / 2 + 24;
                 break;
         }
 
-        super({ fighter, item, damage, hitstun, sprite });
+        super({ fighter, item, damage: 0, hitstun: 0, sprite });
         setTimeout(() => {
             sprite.destroy();
             this.active = false
         }, duration)
         this.pushback = pushback;
     }
-    onCollideAttack(attack) {
+    onCollideAttack(otherAttack, userInputs, enemyInputs) {
+        if (!this.active) return;
+        otherAttack.active = false;
         // TODO
     }
 }
