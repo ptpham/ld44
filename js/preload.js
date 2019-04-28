@@ -10,5 +10,6 @@ function preload ()
   this.load.spritesheet('background', 'assets/background.png', { frameWidth: 400, frameHeight: 300 });
   this.load.spritesheet('merchant', 'assets/merchant.png', { frameWidth: 30, frameHeight: 60 });
   this.load.spritesheet('carpet', 'assets/carpet.png', { frameWidth: 50, frameHeight: 120 });
+  this.load.spritesheet('slash', 'assets/slash.png', { frameWidth: 24, frameHeight: 24 });
 }
 

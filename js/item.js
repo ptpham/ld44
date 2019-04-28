@@ -17,7 +17,7 @@ class BaseItem {
 }
 
 // Returns a rectangle oriented toward direction of attack
-function getAttackRect(fighter, d, w, h, duration = 100) {
+function getAttackRect(fighter, d, w, h, duration = 200) {
     const orientation = fighter.orientation;
     const scene = fighter.sprite.scene;
 
@@ -50,20 +50,34 @@ function getAttackRect(fighter, d, w, h, duration = 100) {
             y = center.y + fighter.sprite.height/2 + d;
             break
     }
+
+    // Add some random noise for variation
+    x += Math.random() * 20 - 10;
+    y += Math.random() * 20 - 10;
+
     const rect = scene.add.rectangle(x, y, w, h);
-    setTimeout(() => { rect.destroy(); }, duration);
+    const sprite = scene.add.sprite(x, y, 'slash');
+    sprite.scaleX = w/sprite.width;
+    sprite.scaleY = h/sprite.height;
+    sprite.flipX = orientation === 'left';
+    sprite.flipY = orientation === 'up';
+
+    sprite.anims.play('slash');
+    sprite.anims.setTimeScale(500 / duration);
+
+    setTimeout(() => { rect.destroy(); sprite.destroy(); }, duration);
     return rect;
 }
 
 class DefaultSword extends BaseItem {
 
     constructor() {
-        super(1000)
+        super(500)
         this.range = 20;
     }
 
     newAttacks(fighter) {
-        let attack = getAttackRect(fighter, this.range, 30, 50)
+        let attack = getAttackRect(fighter, this.range, 30, 50, this.cooldown)
         attack.damage = 1 // hack: just add a property to the GameObject
         attack.hitstun = this.cooldown / 4;
         return [attack]
@@ -87,12 +101,12 @@ class SuperSlowSword extends BaseItem {
 
 class LongSword extends BaseItem {
     constructor() {
-        super(2000)
+        super(1000)
         this.range = 20;
     }
 
     newAttacks(fighter) {
-        let attack = getAttackRect(fighter, this.ranve, 60, 50)
+        let attack = getAttackRect(fighter, this.range, 60, 50, this.cooldown)
         attack.damage = 2
         attack.hitstun = this.cooldown / 4;
         return [attack]

@@ -43,6 +43,12 @@ function create ()
   });
 
   this.anims.create({
+    key: 'slash',
+    frames: this.anims.generateFrameNumbers('slash', { start: 0, end: 5 }),
+    duration: 200,
+  });
+
+  this.anims.create({
     key: 'merchant-idle',
     frames: this.anims.generateFrameNumbers('merchant', { start: 0, end: 1 }),
     frameRate: 5
@@ -52,7 +58,7 @@ function create ()
   state.player = new Fighter(this.physics.add.sprite(PLAYER_START_X, PLAYER_START_Y, 'player'));
   state.player.sprite.setCollideWorldBounds(true);
   state.player.sprite.depth = 1000;
-  state.player.items.push(new DefaultSword());
+  state.player.items.push(new LongSword());
 
   state.cursors = this.input.keyboard.createCursorKeys();
   state.screen = new TitleScreen(this);
