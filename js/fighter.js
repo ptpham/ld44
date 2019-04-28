@@ -27,7 +27,7 @@ class FighterState {
     if (healthUpdate) return healthUpdate;
 
     if (input.hitstun) {
-      return new FighterHitstun(fighter, input.hitstun);
+      return new FighterHitstun(this.fighter, input.hitstun);
     }
   }
 
@@ -72,12 +72,14 @@ class FighterAttacking extends FighterState {
     this.item = item;
 
     const duration = this.fighter.attackSpeed;
+    const center = this.fighter.sprite.getCenter()
     this.done = false;
     setTimeout(() => { this.done = true; }, duration);
+    item.resetCooldown()
+    this.fighter.attackGroup.addMultiple(item.newAttacks(center.x, center.y, this.fighter.orientation))
   }
 
   update(input) {
-
     let defaultState = this._updateDefault(input);
     if (defaultState) return defaultState;
     if (this.done) return new FighterStanding(this.fighter);
@@ -87,11 +89,6 @@ class FighterAttacking extends FighterState {
     this.fighter.sprite.setVelocityX(0)
     this.fighter.sprite.setVelocityY(0)
     this.fighter.sprite.anims.play(`${spriteKey}_attack_${this.fighter.orientation}`);
-
-    const item = this.fighter.getCurrentItem()
-    const center = this.fighter.sprite.getCenter()
-    this.fighter.attackGroup.addMultiple(item.newAttacks(center.x, center.y, this.fighter.orientation))
-    item.resetCooldown()
   }
 }
 
