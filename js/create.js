@@ -426,7 +426,6 @@ function createTexturesAndAnimationsForPlayerItems() {
     frameNamesToIndex[frame.name] = i;
   });
 
-  const itemsWithMove = ['stick', 'sword'];
   const itemsWithAttack = ['stick', 'sword', 'gun', 'shield'];
 
   function makeAnim(key, frames) {
@@ -441,59 +440,24 @@ function createTexturesAndAnimationsForPlayerItems() {
     });
   }
 
-  function getFramesForMove(item, direction) {
-    return [
-      `${item}_${direction}_0`,
-      `${item}_${direction}_1`,
-      `${item}_${direction}_2`,
-      `${item}_${direction}_3`,
-    ];
-  }
-
   function getFramesForAttack(item, direction) {
-    return [
-      `${item}_attack_${direction}_1`,
-    ];
+    return [`${item}_${direction}_1`];
   }
 
   function getFramesForStanding(item, direction) {
-    if (direction === 'up') {
-      return [`${item}_up_left_1`];
-    }
-    if (direction === 'down' || direction === 'right') {
-      return [`${item}_down_right_0`];
-    }
-    return [`${item}_down_left_1`];
+    return [`${item}_${direction}_0`];
   }
 
-  itemsWithMove.forEach(key => {
-    const moveUpLeft = getFramesForMove(key, 'up_left');
-    const moveUpRight = getFramesForMove(key, 'up_right');
-    const moveDownLeft = getFramesForMove(key, 'down_left');
-    const moveDownRight = getFramesForMove(key, 'down_right');
-
-    makeAnim(`player_move_up_${key}`, moveUpLeft);
-    makeAnim(`player_move_up_left_${key}`, moveUpLeft);
-    makeAnim(`player_move_left_${key}`, moveDownLeft);
-    makeAnim(`player_move_down_left_${key}`, moveDownLeft);
-    makeAnim(`player_move_down_${key}`, moveDownRight);
-    makeAnim(`player_move_down_right_${key}`, moveDownRight);
-    makeAnim(`player_move_right_${key}`, moveDownRight);
-    makeAnim(`player_move_up_right_${key}`, moveUpRight);
-
+  itemsWithAttack.forEach(key => {
     makeAnim(`player_stand_up_${key}`, getFramesForStanding(key, 'up'));
     makeAnim(`player_stand_down_${key}`, getFramesForStanding(key, 'down'));
     makeAnim(`player_stand_left_${key}`, getFramesForStanding(key, 'left'));
     makeAnim(`player_stand_right_${key}`, getFramesForStanding(key, 'right'));
-  });
 
-  itemsWithAttack.forEach(key => {
-    // TODO: need to somehow flip for left orientation
-    const attackRight = getFramesForAttack(key, 'right');
-    makeAnim(`player_attack_up_${key}`, attackRight);
-    makeAnim(`player_attack_left_${key}`, attackRight);
-    makeAnim(`player_attack_right_${key}`, attackRight);
-    makeAnim(`player_attack_down_${key}`, attackRight);
+    makeAnim(`player_attack_up_${key}`, getFramesForAttack(key, 'up'));
+    makeAnim(`player_attack_left_${key}`, getFramesForAttack(key, 'left'));
+    makeAnim(`player_attack_right_${key}`, getFramesForAttack(key, 'right'));
+    makeAnim(`player_attack_down_${key}`, getFramesForAttack(key, 'down'));
   });
 }
 

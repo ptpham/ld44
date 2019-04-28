@@ -15,7 +15,7 @@ function preload ()
   this.load.spritesheet('items', 'assets/items.png', { frameWidth: 30, frameHeight: 60 });
   this.load.spritesheet('dialog', 'assets/dialog.png', { frameWidth: 300, frameHeight: 200 });
 
-  this.load.image('player_attack', 'assets/player_attack.png');
-  this.load.json('player_attack_data', 'assets/player_attack.json');
+  this.load.image('player_attack', 'assets/player_allattacks.png');
+  this.load.json('player_attack_data', 'assets/player_allattacks.json');
 }
 

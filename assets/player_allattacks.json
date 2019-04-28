@@ -1,0 +1,327 @@
+{
+  "frames": [
+    {
+      "name": "gun_down_0",
+      "frame": {
+        "x": 411,
+        "y": 208,
+        "w": 39,
+        "h": 55
+      },
+      "meta": {}
+    },
+    {
+      "name": "gun_down_1",
+      "frame": {
+        "x": 450,
+        "y": 208,
+        "w": 31,
+        "h": 64
+      },
+      "meta": {}
+    },
+    {
+      "name": "gun_left_0",
+      "frame": {
+        "x": 55,
+        "y": 208,
+        "w": 42,
+        "h": 55
+      },
+      "meta": {}
+    },
+    {
+      "name": "gun_left_1",
+      "frame": {
+        "x": 5,
+        "y": 208,
+        "w": 50,
+        "h": 55
+      },
+      "meta": {}
+    },
+    {
+      "name": "gun_right_0",
+      "frame": {
+        "x": 97,
+        "y": 208,
+        "w": 43,
+        "h": 55
+      },
+      "meta": {}
+    },
+    {
+      "name": "gun_right_1",
+      "frame": {
+        "x": 140,
+        "y": 208,
+        "w": 51,
+        "h": 55
+      },
+      "meta": {}
+    },
+    {
+      "name": "gun_up_0",
+      "frame": {
+        "x": 191,
+        "y": 208,
+        "w": 41,
+        "h": 55
+      },
+      "meta": {}
+    },
+    {
+      "name": "gun_up_1",
+      "frame": {
+        "x": 232,
+        "y": 199,
+        "w": 31,
+        "h": 64
+      },
+      "meta": {}
+    },
+    {
+      "name": "shield_down_0",
+      "frame": {
+        "x": 337,
+        "y": 141,
+        "w": 29,
+        "h": 55
+      },
+      "meta": {}
+    },
+    {
+      "name": "shield_down_1",
+      "frame": {
+        "x": 366,
+        "y": 141,
+        "w": 33,
+        "h": 60
+      },
+      "meta": {}
+    },
+    {
+      "name": "shield_left_0",
+      "frame": {
+        "x": 47,
+        "y": 141,
+        "w": 30,
+        "h": 55
+      },
+      "meta": {}
+    },
+    {
+      "name": "shield_left_1",
+      "frame": {
+        "x": 4,
+        "y": 141,
+        "w": 43,
+        "h": 55
+      },
+      "meta": {}
+    },
+    {
+      "name": "shield_right_0",
+      "frame": {
+        "x": 77,
+        "y": 141,
+        "w": 30,
+        "h": 55
+      },
+      "meta": {}
+    },
+    {
+      "name": "shield_right_1",
+      "frame": {
+        "x": 107,
+        "y": 141,
+        "w": 42,
+        "h": 55
+      },
+      "meta": {}
+    },
+    {
+      "name": "shield_up_0",
+      "frame": {
+        "x": 149,
+        "y": 141,
+        "w": 30,
+        "h": 55
+      },
+      "meta": {}
+    },
+    {
+      "name": "shield_up_1",
+      "frame": {
+        "x": 179,
+        "y": 141,
+        "w": 33,
+        "h": 55
+      },
+      "meta": {}
+    },
+    {
+      "name": "stick_down_0",
+      "frame": {
+        "x": 352,
+        "y": 276,
+        "w": 29,
+        "h": 56
+      },
+      "meta": {}
+    },
+    {
+      "name": "stick_down_1",
+      "frame": {
+        "x": 381,
+        "y": 276,
+        "w": 35,
+        "h": 67
+      },
+      "meta": {}
+    },
+    {
+      "name": "stick_left_0",
+      "frame": {
+        "x": 61,
+        "y": 277,
+        "w": 31,
+        "h": 55
+      },
+      "meta": {}
+    },
+    {
+      "name": "stick_left_1",
+      "frame": {
+        "x": 3,
+        "y": 277,
+        "w": 58,
+        "h": 55
+      },
+      "meta": {}
+    },
+    {
+      "name": "stick_right_0",
+      "frame": {
+        "x": 92,
+        "y": 277,
+        "w": 30,
+        "h": 55
+      },
+      "meta": {}
+    },
+    {
+      "name": "stick_right_1",
+      "frame": {
+        "x": 122,
+        "y": 277,
+        "w": 58,
+        "h": 55
+      },
+      "meta": {}
+    },
+    {
+      "name": "stick_up_0",
+      "frame": {
+        "x": 180,
+        "y": 277,
+        "w": 28,
+        "h": 55
+      },
+      "meta": {}
+    },
+    {
+      "name": "stick_up_1",
+      "frame": {
+        "x": 208,
+        "y": 267,
+        "w": 26,
+        "h": 65
+      },
+      "meta": {}
+    },
+    {
+      "name": "sword_down_0",
+      "frame": {
+        "x": 368,
+        "y": 362,
+        "w": 28,
+        "h": 64
+      },
+      "meta": {}
+    },
+    {
+      "name": "sword_down_1",
+      "frame": {
+        "x": 396,
+        "y": 362,
+        "w": 35,
+        "h": 86
+      },
+      "meta": {}
+    },
+    {
+      "name": "sword_left_0",
+      "frame": {
+        "x": 69,
+        "y": 364,
+        "w": 30,
+        "h": 62
+      },
+      "meta": {}
+    },
+    {
+      "name": "sword_left_1",
+      "frame": {
+        "x": 0,
+        "y": 364,
+        "w": 69,
+        "h": 62
+      },
+      "meta": {}
+    },
+    {
+      "name": "sword_right_0",
+      "frame": {
+        "x": 99,
+        "y": 364,
+        "w": 30,
+        "h": 62
+      },
+      "meta": {}
+    },
+    {
+      "name": "sword_right_1",
+      "frame": {
+        "x": 129,
+        "y": 364,
+        "w": 68,
+        "h": 62
+      },
+      "meta": {}
+    },
+    {
+      "name": "sword_up_0",
+      "frame": {
+        "x": 197,
+        "y": 364,
+        "w": 28,
+        "h": 62
+      },
+      "meta": {}
+    },
+    {
+      "name": "sword_up_1",
+      "frame": {
+        "x": 225,
+        "y": 346,
+        "w": 26,
+        "h": 80
+      },
+      "meta": {}
+    }
+  ],
+  "meta": {
+    "image": "player_allattack.png"
+  }
+}
