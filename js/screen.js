@@ -269,6 +269,11 @@ class LoseScreen extends Screen {
     super(scene);
     this.text = scene.add.text(WIDTH/4, HEIGHT/2, 'Your suffering is eternal', DEFAULT_FONT);
   }
+
+  update() {
+    let { player } = state;
+    player.update();
+  }
 }
 
 class VictoryScreen extends Screen {

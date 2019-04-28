@@ -124,10 +124,6 @@ class FighterStanding extends FighterState {
 class FighterDead extends FighterState {
   constructor(fighter) {
     super(fighter);
-  }
-
-  update() {
-    let { fighter } = this;
     fighter.sprite.anims.play(`${fighter.spriteKey}_dead`, true);
     fighter.sprite.setVelocityX(0);
     fighter.sprite.setVelocityY(0);
