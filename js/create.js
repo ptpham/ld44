@@ -257,8 +257,8 @@ function createAnimsForPlayer() {
 
   this.anims.create({
     key: 'player_dead',
-    frames: [{ key: 'player', frame: 5 }],
-    frameRate: 20
+    frames: this.anims.generateFrameNumbers('playerDeath', { start: 0, end: 2 }),
+    frameRate: 10
   });
 
   this.anims.create({
