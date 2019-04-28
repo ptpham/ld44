@@ -22,6 +22,7 @@ class DefaultSword extends BaseItem {
     }
 
     getAttacks(fighter) {
+        state.screen.scene.sound.play('stick_hit', { volume: 0.2 });
         return [new Slash(fighter, this, 1, this.cooldown / 4, this.cooldown,
             this.range, 30, 50)
         ]
