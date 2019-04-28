@@ -427,49 +427,62 @@ function createAnimsForBoss() {
 }
 
 function createTexturesAndAnimationsForPlayerItems() {
-  const data = this.cache.json.get('player_attack_data');
-  const texture = this.textures.get('player_attack');
-  const anims = this.anims;
-  const frameNamesToIndex = {};
 
-  data.frames.forEach((frame, i) => {
-    texture.add(frame.name, 0, frame.frame.x, frame.frame.y, frame.frame.w, frame.frame.h);
-    frameNamesToIndex[frame.name] = i;
-  });
-
+  const modes = ['attack', 'hit']
   const itemsWithAttack = ['stick', 'sword', 'gun', 'shield'];
+  const directions = ['up', 'left', 'right', 'down'];
 
-  function makeAnim(key, frames) {
-    const animFrames = frames.map((frame) => ({
-      key: 'player_attack',
-      frame: frame,
-    }));
-    anims.create({
-      key: key,
-      frames: animFrames,
-      frameRate: 20
+  modes.forEach((mode) => {
+    const data = this.cache.json.get(`player_${mode}_data`)
+    const texture = this.textures.get(`player_${mode}`)
+    const anims = this.anims;
+
+    data.frames.forEach((frame, i) => {
+      texture.add(frame.name, 0, frame.frame.x, frame.frame.y, frame.frame.w, frame.frame.h);
     });
-  }
 
-  function getFramesForAttack(item, direction) {
-    return [`${item}_${direction}_1`];
-  }
+    function makeAnim(key, frames) {
+      console.log('makeAnim', key, frames)
+      const animFrames = frames.map((frame) => ({
+        key: `player_${mode}`,
+        frame: frame,
+      }));
+      anims.create({
+        key: key,
+        frames: animFrames,
+        frameRate: 20
+      });
+    }
 
-  function getFramesForStanding(item, direction) {
-    return [`${item}_${direction}_0`];
-  }
+    function getFramesForAction(item, direction) {
+      // reuse left action frame for down (just for stun)
+      if (mode == 'hit' && direction == 'down') {
+        direction = 'right'
+      }
+      return [`${item}_${direction}_1`]
+    }
 
-  itemsWithAttack.forEach(key => {
-    makeAnim(`player_stand_up_${key}`, getFramesForStanding(key, 'up'));
-    makeAnim(`player_stand_down_${key}`, getFramesForStanding(key, 'down'));
-    makeAnim(`player_stand_left_${key}`, getFramesForStanding(key, 'left'));
-    makeAnim(`player_stand_right_${key}`, getFramesForStanding(key, 'right'));
+    function getFramesForStanding(item, direction) {
+      return [`${item}_${direction}_0`];
+    }
 
-    makeAnim(`player_attack_up_${key}`, getFramesForAttack(key, 'up'));
-    makeAnim(`player_attack_left_${key}`, getFramesForAttack(key, 'left'));
-    makeAnim(`player_attack_right_${key}`, getFramesForAttack(key, 'right'));
-    makeAnim(`player_attack_down_${key}`, getFramesForAttack(key, 'down'));
-  });
+    if (mode == 'attack') {
+      // add the standing animations just on the attack mode
+      itemsWithAttack.forEach(key => {
+        directions.forEach((direction) => {
+          makeAnim(`player_stand_${direction}_${key}`, getFramesForStanding(key, direction))
+        })
+      })
+    }
+
+    // add action frames for mode
+    itemsWithAttack.forEach(key => {
+        directions.forEach((direction) => {
+          makeAnim(`player_${mode}_${direction}_${key}`, getFramesForAction(key, direction))
+        })
+    })
+  })
+
 }
 
 function createAnimsForItems() {
