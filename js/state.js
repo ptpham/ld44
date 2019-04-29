@@ -26,7 +26,7 @@ let state = {
     {
       name: 'Bad Dude',
       sprite: 'boss',
-      health: 1, //5,
+      health: 5,
       speed: 80,
       items: [
         new SuperSlowSword(),
@@ -36,7 +36,7 @@ let state = {
     {
       name: 'Bad Dude 2',
       sprite: 'boss',
-      health: 1, // 10,
+      health: 7,
       speed: 120,
       tint: 0xff0000,
       items: [
