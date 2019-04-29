@@ -36,7 +36,7 @@ class Screen {
     let dialog = this.scene.add.sprite(0, 0, 'dialog');
     let text = this.scene.add.text(-DIALOG_WIDTH/2 + 100, -DIALOG_HEIGHT/2 + 32, string, font);
     let nextText = this.scene.add.text(DIALOG_WIDTH/2 - 75, DIALOG_HEIGHT/2 - 40, 'Enter', DEFAULT_FONT);
-    let arrow = this.scene.add.sprite(DIALOG_WIDTH/2 - 16, DIALOG_HEIGHT/2 - 32, 'arrow');
+    let arrow = this.scene.add.sprite(DIALOG_WIDTH/2 - 16, DIALOG_HEIGHT/2 - 34, 'arrow');
     arrow.anims.play('arrow-bounce');
     arrow.rotation = -Math.PI/2;
 
@@ -170,7 +170,7 @@ class StagingScreen extends Screen {
     super(scene);
     state.background.anims.play('background-staging');
 
-    this.arrow = scene.physics.add.sprite(WIDTH/2, HEIGHT - 12, 'arrow');
+    this.arrow = scene.physics.add.sprite(WIDTH/2, HEIGHT - 15, 'arrow');
     this.arrow.anims.play('arrow-bounce');
     this.isStagingForFinalBoss = state.currentEnemy >= state.enemyData.length - 1;
     this.itemContainers = [];
@@ -507,7 +507,7 @@ class FightingScreen extends Screen {
       if (this.index < state.enemyData.length - 1) {
         this.arrow.rotation = Math.PI;
         this.arrow.x = WIDTH/2;
-        this.arrow.y = 12;
+        this.arrow.y = 15;
         state.currentEnemy = this.index + 1;
 
         if (physics.overlap(player.sprite, this.arrow)) {
