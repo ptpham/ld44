@@ -41,6 +41,12 @@ function create ()
   });
 
   this.anims.create({
+    key: 'background-fighting-closed',
+    frames: [{ key: 'background', frame: 2 }],
+    frameRate: -1
+  });
+
+  this.anims.create({
     key: 'smoke-spin',
     frames: this.anims.generateFrameNumbers('smoke', { start: 0, end: 15 }),
     frameRate: 15
