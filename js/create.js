@@ -17,6 +17,13 @@ function create ()
   });
 
   this.anims.create({
+    key: 'light-bounce',
+    frames: this.anims.generateFrameNumbers('light', { start: 0, end: 1 }),
+    frameRate: 2,
+    repeat: -1
+  });
+
+  this.anims.create({
     key: 'heart-empty',
     frames: this.anims.generateFrameNumbers('heart', { start: 8, end: 15 }),
     frameRate: 10
