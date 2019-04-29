@@ -95,7 +95,7 @@ class SimpleEnemyAI extends EnemyAI {
       }
     }
 
-    this.lastInputs = inputs;
+    this.lastInputs = _.clone(inputs);
     return inputs;
   }
 
