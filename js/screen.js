@@ -28,8 +28,8 @@ class Screen {
   }
 
   setDialog(sprite, string) {
-    sprite.x = sprite.width - DIALOG_WIDTH/2 + 16;
-    sprite.y = sprite.height - DIALOG_HEIGHT / 2 + 16;
+    sprite.x = -DIALOG_WIDTH/2 + 52;
+    sprite.y = 0;
     let font = _.clone(DEFAULT_FONT);
     font.wordWrap = { width: DIALOG_WIDTH/2 + 16 };
 
@@ -370,13 +370,92 @@ class FightingScreen extends Screen {
     const musicVolume = this.isFinalBoss() ? 0.3 : 0.2;
     this.music = scene.sound.add(musicKey, { volume: musicVolume, loop: true})
     this.music.play()
+
+    // Make sure we don't slide around during the dialog
+    state.player.state = new FighterStanding(state.player);
+
+    this.showFinalBossStory = true; //this.isFinalBoss();
+    this.finalBossDialogIndex = 0;
+    this.finalBossDialog = [
+      {
+        sprite: this.scene.add.sprite(-WIDTH, -HEIGHT, 'merchant', 1),
+        text: 'Oh, you’re here...'
+      },
+      {
+        sprite: this.scene.add.sprite(-WIDTH, -HEIGHT, 'merchant', 3),
+        text: 'I really must thank you for helping me dispose of those guards. ' +
+        'They were really quite a nuisance, weren’t they?'
+      },
+      {
+        sprite: this.scene.add.sprite(-WIDTH, -HEIGHT, 'player'),
+        text: '...?'
+      },
+      {
+        sprite: this.scene.add.sprite(-WIDTH, -HEIGHT, 'merchant', 5),
+        text: 'Do you know about those hearts you’ve been paying me with? ' + 
+        'They\'re the virtues from your life.'
+      },
+      {
+        sprite: this.scene.add.sprite(-WIDTH, -HEIGHT, 'player_hit', 'unarmed_right_1'),
+        text: '... !!'
+      },
+      {
+        sprite: this.scene.add.sprite(-WIDTH, -HEIGHT, 'merchant', 5),
+        text: 'That\'s right, you\'re dead. We\'re in Purgatory, awaiting judgement. ' +
+        'Those with many virtues will get into Heaven, and the rest are doomed to eternal ' +
+        'suffering in Hell.'
+      },
+      {
+        sprite: this.scene.add.sprite(-WIDTH, -HEIGHT, 'player_hit', 'unarmed_right_1'),
+        text: '!!'
+      },
+      {
+        sprite: this.scene.add.sprite(-WIDTH, -HEIGHT, 'merchant', 5),
+        text: 'I committed quite a few sins in my life so I had a pretty ' +
+        'big hole to dig myself out of. I had to lead a lot of suckers like ' +
+        'you to eternal damnation to get to where am I now.'
+      },
+      {
+        sprite: this.scene.add.sprite(-WIDTH, -HEIGHT, 'merchant', 5),
+        text: 'But now, thanks to ' +
+          'you, I\'ll finally have enough virtues to get into Heaven. I just need ' +
+          'those last few hearts you got there...'
+      },
+      {
+        sprite: this.scene.add.sprite(-WIDTH, -HEIGHT, 'player', 1),
+        text: '!!!'
+      },
+      {
+        sprite: this.scene.add.sprite(-WIDTH, -HEIGHT, 'finalboss', 2),
+        text: 'Not gonna hand \'em over, huh? Well, enjoy spending the eternity in Hell!'
+      },
+    ];
   }
 
   isFinalBoss() {
     return this.index === (state.enemies.length - 1)
   }
 
+  updateForFinalBossStory() {
+    const bossDialog = this.finalBossDialog[this.finalBossDialogIndex];
+    if (!this.dialog) {
+      this.setDialog(bossDialog.sprite, bossDialog.text);
+      this.finalBossDialogIndex += 1;
+
+      if (this.finalBossDialogIndex >= this.finalBossDialog.length) {
+        this.showFinalBossStory = false;
+      }
+    }
+  }
+
   update() {
+    this._updateDialog();
+    if (this.showFinalBossStory) {
+      state.player.update({});
+      return this.updateForFinalBossStory();
+    }
+    if (this.dialog) return; // Don't start the fight until the user is done reading.
+
     let { player } = state;
     let { physics } = this.scene;
     let inputs = this.getInputs();
