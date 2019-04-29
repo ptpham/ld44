@@ -36,6 +36,7 @@ class ItemManager {
         container.add(box);
         container.add(itemSprite);
         container.box = box;
+        container.white = white;
         return container;
     }
 
@@ -47,6 +48,7 @@ class ItemManager {
             container.x = (ITEM_BOX_SIZE + 5) * i + ITEM_BOX_SIZE;
             container.y = HEIGHT - ITEM_BOX_SIZE - 1;
             container.alpha = item === currentItem ? 1: 0.5;
+            container.white.tint = item.ready ? 0xffffff : 0xff0000;
             container.box.frame = state.screen instanceof FightingScreen ?
                 container.box.texture.frames[1] :
                 container.box.texture.frames[0];
