@@ -5,6 +5,7 @@ function create ()
   createAnimsForPlayer.call(this);
   createTexturesAndAnimationsForPlayerItems.call(this);
   createAnimsForBoss.call(this);
+  createAnimsForFinalBoss.call(this);
   createAnimsForMerchant.call(this);
   createAnimsForItems.call(this);
 
@@ -417,6 +418,7 @@ function createAnimsForBoss() {
     attack_down: [8,11],
     attack_up: [4,7]
   };
+
 
   for (let key in config) {
     let [start, end] = config[key];

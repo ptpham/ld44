@@ -111,24 +111,28 @@ class StagingScreen extends Screen {
     super(scene);
     state.background.anims.play('background-staging');
 
-    let ITEM_COUNT = 3;
-    this.items = _.sampleSize(_.filter(state.allPickItems,
-      pickItem => !state.player.hasItem(pickItem.item)), ITEM_COUNT);
-    this.itemContainers = _.times(this.items.length, i => {
-      let x = (i + 0.5)*WIDTH/(this.items.length), y = HEIGHT/4;
-      let result = scene.add.container(x, y);
-      this.createRequirementHearts(result, this.items[i]);
-      return result;
-    });
-
     this.arrow = scene.physics.add.sprite(WIDTH/2, HEIGHT - 12, 'arrow');
     this.arrow.anims.play('arrow-bounce');
+    this.isStagingForFinalBoss = state.currentEnemy >= state.enemyData.length - 1;
+    this.itemContainers = [];
 
-    this.merchant = scene.physics.add.sprite(PLAYER_START_X / 2, PLAYER_START_Y, 'merchant');
-    this.merchant.setCollideWorldBounds(true);
-    this.merchantFighter = new Fighter(this.merchant);
-    this.merchantFighter.speed = 60;
-    this.merchantAI = new StayInPlaceAI(PLAYER_START_X / 2, PLAYER_START_Y);
+    if (!this.isStagingForFinalBoss) {
+      let ITEM_COUNT = 3;
+      this.items = _.sampleSize(_.filter(state.allPickItems,
+        pickItem => !state.player.hasItem(pickItem.item)), ITEM_COUNT);
+      this.itemContainers = _.times(this.items.length, i => {
+        let x = (i + 0.5) * WIDTH / (this.items.length), y = HEIGHT / 4;
+        let result = scene.add.container(x, y);
+        this.createRequirementHearts(result, this.items[i]);
+        return result;
+      });
+
+      this.merchant = scene.physics.add.sprite(PLAYER_START_X / 2, PLAYER_START_Y, 'merchant');
+      this.merchant.setCollideWorldBounds(true);
+      this.merchantFighter = new Fighter(this.merchant);
+      this.merchantFighter.speed = 60;
+      this.merchantAI = new StayInPlaceAI(PLAYER_START_X / 2, PLAYER_START_Y);
+    }
   }
 
   createRequirementHearts(container, item) {
@@ -182,36 +186,41 @@ class StagingScreen extends Screen {
     for (let container of this.itemContainers) container.destroy();
     if (this.smoke) this.smoke.destroy();
     this.arrow.destroy();
-    this.merchant.destroy();
+    if (this.merchant) { this.merchant.destroy(); }
   }
 
   update() {
     let { player } = state;
     player.update(this.getInputs());
-    if (player.isDead()) {
-      return new DelayScreen(this.scene, 1000, () => new LoseScreen(this.scene), () => this.destroy());
-    }
 
     let { merchant, scene, items, itemContainers } = this;
     let { physics } = scene;
-    physics.collide(player.sprite, merchant);
 
-    let merchantInputs = this.merchantAI.getInputsForEnemy(this.merchantFighter, player);
-    this.merchantFighter.update(merchantInputs);
-    merchant.setVisible(true);
-
-    for (let i = 0; i < items.length; i++) {
-      let container = itemContainers[i];
-      if (physics.overlap(player.sprite, container.itemSprite)) {
-        this.selectItem(container, items[i]);
-        player.update({ pickItem: items[i] });
-        scene.sound.play('swoosh', { volume: 0.1 });
-      }
+    if (player.isDead()) {
+      return new DelayScreen(this.scene, 1000, () => new LoseScreen(this.scene), () => this.destroy());
     }
 
     if (physics.overlap(player.sprite, this.arrow)) {
       this.destroy();
       return new FightingScreen(scene);
+    }
+
+
+    if (!this.isStagingForFinalBoss) {
+      physics.collide(player.sprite, merchant);
+
+      let merchantInputs = this.merchantAI.getInputsForEnemy(this.merchantFighter, player);
+      this.merchantFighter.update(merchantInputs);
+      merchant.setVisible(true);
+
+      for (let i = 0; i < items.length; i++) {
+        let container = itemContainers[i];
+        if (physics.overlap(player.sprite, container.itemSprite)) {
+          this.selectItem(container, items[i]);
+          player.update({ pickItem: items[i] });
+          scene.sound.play('swoosh', { volume: 0.1 });
+        }
+      }
     }
 
     state.heartManager.update();
