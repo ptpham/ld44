@@ -255,6 +255,12 @@ class StagingScreen extends Screen {
       ],
       [
         {
+          sprite: this.scene.add.sprite(-WIDTH, -HEIGHT, 'merchant', 5),
+          text: 'I can\'t believe we made it this far! There\'s only one more left, who happens to be the strongest of all. But after your take care of him we\'ll be home free!'
+        },
+      ],
+      [
+        {
           sprite: this.scene.add.sprite(-WIDTH, -HEIGHT, 'player'),
           text: '...?'
         },

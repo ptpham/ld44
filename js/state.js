@@ -38,9 +38,21 @@ let state = {
       sprite: 'boss',
       health: 7,
       speed: 120,
-      tint: 0xff0000,
+      tint: 0x00ff00,
       items: [
         new SuperSlowSword(),
+        new Shield(),
+      ],
+      getAI: () => new HitAndRunAI(),
+    },
+    {
+      name: 'Bad Dude 3',
+      sprite: 'boss',
+      health: 9,
+      speed: 120,
+      tint: 0xff0000,
+      items: [
+        new DoubleSword(),
         new Shield(),
       ],
       getAI: () => new HitAndRunAI(),
