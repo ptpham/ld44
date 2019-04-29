@@ -25,7 +25,7 @@ let state = {
   enemyData: [
     {
       name: 'Bad Dude',
-      sprite: 'boss',
+      sprite: 'finalboss',
       health: 5,
       speed: 80,
       items: [

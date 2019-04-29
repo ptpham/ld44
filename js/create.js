@@ -467,10 +467,11 @@ function createAnimsForFinalBoss() {
 
   for (let key in config) {
     let [start, end] = config[key];
+    let frameRate = key == 'dead' ? 3 : 20;
     this.anims.create({
       key: `${label}_${key}`,
       frames: this.anims.generateFrameNumbers(label, { start, end }),
-      frameRate: 20
+      frameRate
     });
   }
 }
