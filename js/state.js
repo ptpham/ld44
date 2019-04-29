@@ -34,6 +34,17 @@ let state = {
       getAI: () => new SimpleEnemyAI(),
     },
     {
+      name: 'Bad Dude 2',
+      sprite: 'boss',
+      health: 10,
+      speed: 120,
+      items: [
+        new SuperSlowSword(),
+        new Shield(),
+      ],
+      getAI: () => new HitAndRunAI(),
+    },
+    {
       name: 'Boss',
       sprite: 'boss',
       health: 10,

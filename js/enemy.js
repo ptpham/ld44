@@ -58,16 +58,6 @@ class SimpleEnemyAI extends EnemyAI {
     const now = enemy.sprite.scene.time.now;
     const inputs = this._makeBaseInputs();
 
-    if (this.readyForAttack) {
-      if (this.readyForAttack > now) {
-        inputs.attacking = true;
-        this.readyForAttack = 0;
-        return inputs;
-      } else {
-        return inputs;
-      }
-    }
-
     const dX = player.sprite.getCenter().x - enemy.sprite.getCenter().x;
     const dY = player.sprite.getCenter().y - enemy.sprite.getCenter().y;
 
@@ -91,10 +81,65 @@ class SimpleEnemyAI extends EnemyAI {
     } else {
       // If we're close enough, ready an attack
       this.readyForAttack = now + enemy.attackSpeed * 10;
+      this.turnToPlayer(dX, dY);
       inputs.attacking = true;
     }
 
+    if (this.readyForAttack) {
+      if (this.readyForAttack < now) {
+        inputs.attacking = true;
+        this.readyForAttack = 0;
+        return inputs;
+      } else {
+        return inputs;
+      }
+    }
+
     this.lastInputs = inputs;
+    return inputs;
+  }
+
+  turnToPlayer(dX, dY) {
+    if (Math.abs(dX) > Math.abs(dY)) {
+      if (dX < 0) {
+        return 'left';
+      }
+      return 'right';
+    } else {
+      if (dY < 0) {
+        return 'up';
+      }
+      return 'down';
+    }
+  }
+}
+
+class HitAndRunAI extends SimpleEnemyAI {
+  getInputsForEnemy(enemy, player) {
+    const now = enemy.sprite.scene.time.now;
+    let inputs = this._makeBaseInputs();
+
+    const isUsingShield = enemy.getCurrentItem() instanceof Shield;
+    const damagingWeapon = enemy.items.find((item) => {
+      return !(item instanceof Shield);
+    });
+
+    const dX = player.sprite.getCenter().x - enemy.sprite.getCenter().x;
+    const dY = player.sprite.getCenter().y - enemy.sprite.getCenter().y;
+
+    if (damagingWeapon.ready) {
+      // Do the Simple AI thing
+      inputs = SimpleEnemyAI.prototype.getInputsForEnemy.call(this, enemy, player);
+      if (isUsingShield) inputs.switchItem = true;
+      console.log(inputs);
+    } else {
+      if (!isUsingShield) inputs.switchItem = true;
+      inputs.turnToOrientation = this.turnToPlayer(dX, dY);
+      inputs.attacking = true;
+      // Run Away :D
+      inputs.move.x = -Math.sign(Math.round(dX / 10));
+      inputs.move.y = -Math.sign(Math.round(dY / 10));
+    }
     return inputs;
   }
 }
