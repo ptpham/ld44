@@ -238,14 +238,14 @@ class FightingScreen extends Screen {
     this.arrow.anims.play('arrow-bounce');
 
     // switch music for final boss
-    const musicKey = this.isFinalBoss() ? 'music_1' : 'music_2';
-    const musicVolume = this.isFinalBoss() ? 0.1 : 0.2;
+    const musicKey = this.isFinalBoss() ? 'music_2' : 'music_1';
+    const musicVolume = this.isFinalBoss() ? 0.3 : 0.2;
     this.music = scene.sound.add(musicKey, { volume: musicVolume, loop: true})
     this.music.play()
   }
 
   isFinalBoss() {
-    return this.index < this.state.enemies.length - 1
+    return this.index === (state.enemies.length - 1)
   }
 
   update() {
@@ -317,6 +317,7 @@ class FightingScreen extends Screen {
 
   destroy() {
     this.music.setLoop(false)
+    this.music.stop()
     this.arrow.destroy();
     this.enemy.sprite.setCollideWorldBounds(false);
     this.enemy.sprite.x = -WIDTH;
