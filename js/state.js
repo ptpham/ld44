@@ -38,6 +38,7 @@ let state = {
       sprite: 'boss',
       health: 10,
       speed: 120,
+      tint: 0xff0000,
       items: [
         new SuperSlowSword(),
         new Shield(),

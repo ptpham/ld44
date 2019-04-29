@@ -89,7 +89,7 @@ function create ()
     fighter.speed = data.speed;
     fighter.items = data.items;
     fighter.baseDamage = data.baseDamage;
-    fighter.sprite.tint = 0xff0000;
+    if (data.tint) fighter.sprite.tint = data.tint;
 
     fighter.sprite.setImmovable(true);
     return fighter;
@@ -482,10 +482,11 @@ function createAnimsForFinalBoss() {
 
   for (let key in config) {
     let [start, end] = config[key];
+    let frameRate = key == 'dead' ? 3 : 20;
     this.anims.create({
       key: `${label}_${key}`,
       frames: this.anims.generateFrameNumbers(label, { start, end }),
-      frameRate: 20
+      frameRate
     });
   }
 }
