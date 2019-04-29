@@ -403,7 +403,6 @@ function createAnimsForBoss() {
     stand_up: [4,4],
     stand_left: [13,13],
     stand_right: [0,0],
-    hitstun: [0,0], 
     pick: [0,0],
     move_left: [12,15], 
     move_right: [0,3],
@@ -413,10 +412,6 @@ function createAnimsForBoss() {
     move_down_right: [0,3],
     move_up_left: [12,15], 
     move_up_right: [0,3],
-    attack_left: [12,15],
-    attack_right: [0,3],
-    attack_down: [8,11],
-    attack_up: [4,7]
   };
 
 
@@ -424,7 +419,27 @@ function createAnimsForBoss() {
     let [start, end] = config[key];
     this.anims.create({
       key: `${label}_${key}`,
-      frames: this.anims.generateFrameNumbers(label, { start, end }),
+      frames: this.anims.generateFrameNumbers('boss', { start, end }),
+      frameRate: 20
+    });
+  }
+
+  const configForHitAndAttack = {
+    hit_up: [3, 3],
+    hit_down: [1, 1],
+    hit_left: [6, 6],
+    hit_right: [1, 1],
+    attack_left: [14, 14],
+    attack_right: [9, 9],
+    attack_down: [9, 9],
+    attack_up: [11, 11]
+  }
+
+  for (let key in configForHitAndAttack) {
+    let [start, end] = configForHitAndAttack[key];
+    this.anims.create({
+      key: `${label}_${key}`,
+      frames: this.anims.generateFrameNumbers('bossHitAttack', { start, end }),
       frameRate: 20
     });
   }
