@@ -97,7 +97,7 @@ class DefaultSword extends BaseItem {
 class SuperSlowSword extends BaseItem {
 
     constructor() {
-        super(5000)
+        super(3500)
         this.range = 15;
     }
 

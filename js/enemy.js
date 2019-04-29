@@ -67,6 +67,10 @@ class SimpleEnemyAI extends EnemyAI {
         Math.pow(dY, 2)
       );
 
+    const damagingWeapon = enemy.items.find((item) => {
+      return !(item instanceof Shield);
+    });
+
     if (
       enemy.state instanceof FighterStanding &&
       enemy.lastStateChange + this.standingCooldown >= now
@@ -75,14 +79,20 @@ class SimpleEnemyAI extends EnemyAI {
     }
   
     // We'll try to move close to the player
-    if (distance > 80) {
-      inputs.move.x = Math.sign(Math.round(dX / 10));
-      inputs.move.y = Math.sign(Math.round(dY / 10));
-    } else {
-      // If we're close enough, ready an attack
-      this.readyForAttack = now + enemy.attackSpeed * 10;
-      this.turnToPlayer(dX, dY);
-      inputs.attacking = true;
+    if (damagingWeapon.ready) {
+      if (distance > 80) {
+        inputs.move.x = Math.sign(Math.round(dX / 10));
+        inputs.move.y = Math.sign(Math.round(dY / 10));
+      } else {
+        // If we're close enough, ready an attack
+        this.readyForAttack = now + enemy.attackSpeed * 10;
+        this.turnToPlayer(dX, dY);
+        inputs.attacking = true;
+      }
+    } else if (distance < 90) {
+      // Back off from the player a bit
+      inputs.move.x = -Math.sign(Math.round(dX / 10));
+      inputs.move.y = -Math.sign(Math.round(dY / 10));
     }
 
     if (this.readyForAttack) {
