@@ -239,6 +239,25 @@ class StagingScreen extends Screen {
       },
     ];
 
+    this.beforeBosses = [
+      [
+        {
+          sprite: this.scene.add.sprite(-WIDTH, -HEIGHT, 'merchant', 3),
+          text: 'Way to take that oaf out! You’re a natural at this.',
+        },
+        {
+          sprite: this.scene.add.sprite(-WIDTH, -HEIGHT, 'merchant', 5),
+          text: 'There\'s one more to go. Careful now, this one looks stronger than the last.',
+        },
+      ],
+      [
+        {
+          sprite: this.scene.add.sprite(-WIDTH, -HEIGHT, 'player'),
+          text: '...?'
+        },
+      ]
+    ];
+
     if (!this.isStagingForFinalBoss) {
       let ITEM_COUNT = 3;
       this.items = _.sampleSize(_.filter(state.allPickItems,
@@ -257,10 +276,11 @@ class StagingScreen extends Screen {
       this.merchantAI = new StayInPlaceAI(PLAYER_START_X / 2, PLAYER_START_Y);
     }
 
-    if (fromTitle) {
-      this.introIndex = 0;
-      this.inIntro = true;
-    } else {
+    this.inIntro = fromTitle;
+    this.currentDialog = fromTitle ? this.intro : this.beforeBosses[state.currentEnemy - 1];
+    this.currentDialogIndex = 0;
+
+    if (!fromTitle) {
       this.fadeFromBlack(800);
     }
 
@@ -321,15 +341,19 @@ class StagingScreen extends Screen {
     if (this.merchant) { this.merchant.destroy(); }
   }
 
-  updateForIntro() {
-    const introDialog = this.intro[this.introIndex];
-    if (!this.dialog) {
-      this.setDialog(introDialog.sprite, introDialog.text);
-      this.introIndex += 1;
+  updateForDialog() {
+    if (!this.dialog && this.currentDialog) {
+      const dialog = this.currentDialog[this.currentDialogIndex];
+      this.setDialog(dialog.sprite, dialog.text);
+      this.currentDialogIndex += 1;
 
-      if (this.introIndex >= this.intro.length) {
-        this.inIntro = false;
+      if (this.currentDialogIndex >= this.currentDialog.length) {
+        this.currentDialog = null;
       }
+    }
+    
+    if (this.dialog) {
+      this._updateDialog();
     }
   }
 
@@ -343,9 +367,8 @@ class StagingScreen extends Screen {
       this.stopPlayerMovement();
       return new FightingScreen(this.scene);
     }
-    this._updateDialog();
-    if (this.inIntro) {
-      return this.updateForIntro();
+    if (this.dialog || this.currentDialog) {
+      return this.updateForDialog();
     }
 
     let { player } = state;
@@ -476,14 +499,18 @@ class FightingScreen extends Screen {
   }
 
   updateForFinalBossStory() {
-    const bossDialog = this.finalBossDialog[this.finalBossDialogIndex];
-    if (!this.dialog) {
+    if (!this.dialog && this.finalBossDialog) {
+      const bossDialog = this.finalBossDialog[this.finalBossDialogIndex];
       this.setDialog(bossDialog.sprite, bossDialog.text);
       this.finalBossDialogIndex += 1;
 
       if (this.finalBossDialogIndex >= this.finalBossDialog.length) {
         this.showFinalBossStory = false;
       }
+    }
+
+    if (this.dialog) {
+      this._updateDialog();
     }
   }
 
@@ -498,11 +525,9 @@ class FightingScreen extends Screen {
       this.stopPlayerMovement();
       return new StagingScreen(this.scene);
     }
-    this._updateDialog();
-    if (this.showFinalBossStory) {
+    if (this.dialog || this.showFinalBossStory) {
       return this.updateForFinalBossStory();
     }
-    if (this.dialog) return; // Don't start the fight until the user is done reading.
 
     let { player } = state;
     let { physics } = this.scene;
