@@ -62,6 +62,9 @@ class Slash extends BaseAttack {
             sprite.flipX = orientation === 'left';
             sprite.flipY = orientation === 'up';
             sprite.rotation = rotation;
+            if (fighter !== state.player) {
+                sprite.tint = 0xff3333;
+            }
 
             sprite.anims.play('slash');
             sprite.anims.setTimeScale(500 / duration);
@@ -139,6 +142,9 @@ class Bullet extends BaseAttack {
         sprite.scaleY = h / sprite.height;
         sprite.flipX = orientation === 'left';
         sprite.flipY = orientation === 'up';
+        if (fighter !== state.player) {
+            sprite.tint = 0xff3333;
+        }
 
         switch (orientation) {
             case 'left':
@@ -154,7 +160,6 @@ class Bullet extends BaseAttack {
                 sprite.setVelocityY(speed)
                 break
         }
-        console.log('bullet', sprite.getCenter(), 'sprite', sprite, 'orientation', orientation);
         super({fighter, item, damage, hitstun, sprite})
         setTimeout(() => {
             sprite.destroy();
@@ -163,8 +168,6 @@ class Bullet extends BaseAttack {
     }
     onCollideEnemy(enemy, enemyInputs) {
         if (!this.active) return;
-        console.log('bullet', 'damage', this.damage, 'hitstun', this.hitstun, 'enemyHealth', enemy.health,
-            this.sprite.getCenter())
         enemyInputs.hitstun = this.hitstun || 0;
         enemyInputs.damage = this.damage
         this.active = false;
@@ -202,6 +205,12 @@ class Block extends BaseAttack {
                 sprite.body.height = w;
                 sprite.y += fighter.sprite.height / 2 + 24;
                 break;
+        }
+
+        if (fighter !== state.player) {
+            sprite.tint = 0xaaaaff;
+        } else {
+            sprite.tint = 0xaaaaaa;
         }
 
         super({ fighter, item, damage: 0, hitstun: 0, sprite });

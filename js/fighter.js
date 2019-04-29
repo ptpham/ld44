@@ -49,11 +49,7 @@ class FighterState {
       this.fighter.orientation = input.turnToOrientation;
     }
 
-    if (orientation === 'left') {
-      sprite.body.offset.x = sprite.width - sprite.body.width;
-    }
-
-    sprite.body.offset.y = sprite.height - sprite.body.height;
+    resizeAndCenterBody(sprite, sprite.width * 0.5, sprite.height * 0.5);
 
     if (input.pushback) {
       this.isPushingBack = true;
@@ -112,7 +108,6 @@ class FighterAttacking extends FighterState {
     setTimeout(() => { this.done = true; }, duration);
     item.resetCooldown()
     this.fighter.attacks.push(...item.getAttacks(this.fighter))
-    this.startingY = this.fighter.sprite.y;
   }
 
   update(input) {
@@ -121,18 +116,12 @@ class FighterAttacking extends FighterState {
 
     const { spriteKey, orientation, sprite } = this.fighter;
     if (this.done) {
-      sprite.y = this.startingY;
       return new FighterStanding(this.fighter);
     }
 
     let anim = `${spriteKey}_attack_${orientation}`;
     anim = this.fighter.getPlayerAnimationForAttack(anim);
     sprite.anims.play(anim);
-
-    if (orientation === 'down') {
-      sprite.y = this.startingY + (sprite.height - PLAYER_HEIGHT);
-      sprite.body.offset.y -= (sprite.height - PLAYER_HEIGHT);
-    }
   }
 }
 

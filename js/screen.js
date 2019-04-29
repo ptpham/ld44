@@ -270,6 +270,7 @@ class StagingScreen extends Screen {
       });
 
       this.merchant = scene.physics.add.sprite(PLAYER_START_X / 2, PLAYER_START_Y, 'merchant');
+      resizeAndCenterBody(this.merchant, 15, 30);
       this.merchant.setCollideWorldBounds(true);
       this.merchantFighter = new Fighter(this.merchant);
       this.merchantFighter.speed = 60;
@@ -297,6 +298,7 @@ class StagingScreen extends Screen {
     let carpet = scene.add.sprite(0, 0, 'carpet');
     let itemSprite = scene.physics.add.sprite(0, 0, 'items');
     itemSprite.anims.play(item.spriteName);
+    resizeAndCenterBody(itemSprite, 20, 20);
     carpet.scaleX = 1.5;
     carpet.scaleY = 0.8;
 
@@ -521,6 +523,7 @@ class FightingScreen extends Screen {
       this.destroy();
       this.music.setLoop(false)
       this.stopPlayerMovement();
+      state.player.sprite.y = HEIGHT / 2 + 72;
       return new StagingScreen(this.scene);
     }
     if (this.dialog || this.showFinalBossStory) {
@@ -582,7 +585,6 @@ class FightingScreen extends Screen {
         state.currentEnemy = this.index + 1;
 
         if (physics.overlap(player.sprite, this.arrow)) {
-          player.sprite.y = HEIGHT/2 + 72;
           this.willGoToStaging = true;
           this.fadeToBlack(800);
           return;
