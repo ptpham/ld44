@@ -49,7 +49,7 @@ class FighterState {
       this.fighter.orientation = input.turnToOrientation;
     }
 
-    resizeAndCenterBody(sprite, sprite.width * 0.5, sprite.height * 0.5);
+    resizeAndCenterBody(sprite, sprite.width * 0.5, sprite.height * 0.75);
 
     if (input.pushback) {
       this.isPushingBack = true;

@@ -270,7 +270,8 @@ class StagingScreen extends Screen {
       });
 
       this.merchant = scene.physics.add.sprite(PLAYER_START_X / 2, PLAYER_START_Y, 'merchant');
-      resizeAndCenterBody(this.merchant, 15, 30);
+      resizeAndCenterBody(this.merchant, 15, 35);
+      this.merchant.body.offset.y -= 5;
       this.merchant.setCollideWorldBounds(true);
       this.merchantFighter = new Fighter(this.merchant);
       this.merchantFighter.speed = 60;
