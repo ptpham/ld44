@@ -257,7 +257,6 @@ class StagingScreen extends Screen {
       let x = RANGE_X*(i - cost/2 + 0.5)/ cost;
       let y = OFFSET_Y;
       let heart = scene.add.sprite(x, y, 'heart');
-      heart.scaleX = heart.scaleY = 0.7;
       heart.anims.play('heart-empty');
       container.add(heart);
       hearts.push(heart);
@@ -279,7 +278,7 @@ class StagingScreen extends Screen {
     this.createSmoke(container);
     container.itemSprite.destroy();
     Promise.mapSeries(container.hearts, heart => {
-      heart.anims.play('heart-full');
+      heart.anims.play('heart-fill');
       return Promise.delay(100);
     });
   }
@@ -360,7 +359,6 @@ class FightingScreen extends Screen {
     this.enemy.sprite.x = WIDTH / 2;
     this.enemy.sprite.y = HEIGHT - this.enemy.sprite.height;
     this.enemy.sprite.setCollideWorldBounds(true);
-    this.hearts = _.times(player.healthMax, i => scene.add.sprite(32*(i+1), 32, 'heart'));
 
     this.arrow = scene.physics.add.sprite(-WIDTH, -HEIGHT, 'arrow');
     this.arrow.anims.play('arrow-bounce');

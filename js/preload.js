@@ -8,7 +8,7 @@ function preload ()
   this.load.spritesheet('bossHitAttack', 'assets/boss_hitattack.png', { frameWidth: 48, frameHeight: 86 });
   this.load.spritesheet('bossDeath', 'assets/boss_death.png', { frameWidth: 45, frameHeight: 87 });
   this.load.spritesheet('arrow', 'assets/arrow.png', { frameWidth: 32, frameHeight: 32 });
-  this.load.spritesheet('heart', 'assets/heart.png', { frameWidth: 32, frameHeight: 32 });
+  this.load.spritesheet('heart', 'assets/heart.png', { frameWidth: 24 , frameHeight: 24 });
   this.load.spritesheet('smoke', 'assets/smoke.png', { frameWidth: 32, frameHeight: 32 });
   this.load.spritesheet('background', 'assets/background.png', { frameWidth: 400, frameHeight: 300 });
   this.load.spritesheet('merchant', 'assets/merchant.png', { frameWidth: 23, frameHeight: 40 });

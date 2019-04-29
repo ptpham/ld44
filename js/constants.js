@@ -1,5 +1,5 @@
 
-let DEBUG = true;
+let DEBUG = false;
 let WIDTH = 400;
 let HEIGHT = 300;
 let DIALOG_WIDTH = 300;

@@ -18,14 +18,21 @@ function create ()
 
   this.anims.create({
     key: 'heart-empty',
-    frames: [{ key: 'heart', frame: 0 }],
-    frameRate: -1
+    frames: this.anims.generateFrameNumbers('heart', { start: 8, end: 15 }),
+    frameRate: 10
   });
 
   this.anims.create({
     key: 'heart-full',
-    frames: [{ key: 'heart', frame: 1 }],
-    frameRate: -1
+    frames: this.anims.generateFrameNumbers('heart', { start: 0, end: 7 }),
+    frameRate: 10,
+    repeat: -1
+  });
+
+  this.anims.create({
+    key: 'heart-fill',
+    frames: this.anims.generateFrameNumbers('heart', { start: 16, end: 23 }),
+    frameRate: 10,
   });
 
   this.anims.create({
