@@ -6,23 +6,49 @@ class Screen {
     this.lastTabTimeDown = 0;
   }
 
-  useBlackTransitionScreen(startBlack, onCompletelyBlack, onComplete) {
+  stopPlayerMovement() {
+    // Make sure we don't slide around during the dialog
+    state.player.update({ move: { x: 0, y: 0 } });
+    state.player.sprite.setVelocityX(0);
+    state.player.sprite.setVelocityY(0);
+  }
+
+  fadeFromBlack(duration, onComplete) {
     this.black = this.scene.add.sprite(WIDTH, HEIGHT, 'black');
     this.black.scaleX = WIDTH;
     this.black.scaleY = HEIGHT;
     this.black.depth = 20000;
-    this.black.alpha = startBlack ? 1 : 0;
+    this.black.alpha = 1;
 
     this.scene.tweens.add({
       targets: this.black,
-      alpha: startBlack ? 0 : 1,
+      alpha: 0,
       ease: 'Power1',
-      duration: startBlack ? 4000 : 6000,
-      yoyo: !startBlack,
-      onYoyo: onCompletelyBlack,
+      duration: duration,
       onComplete: () => {
         onComplete && onComplete();
         this.black.destroy();
+        this.black = null;
+      },
+    });
+  }
+
+  fadeToBlack(duration, onComplete) {
+    this.black = this.scene.add.sprite(WIDTH, HEIGHT, 'black');
+    this.black.scaleX = WIDTH;
+    this.black.scaleY = HEIGHT;
+    this.black.depth = 20000;
+    this.black.alpha = 0;
+
+    this.scene.tweens.add({
+      targets: this.black,
+      alpha: 1,
+      ease: 'Power1',
+      duration: duration,
+      onComplete: () => {
+        onComplete && onComplete();
+        this.black.destroy();
+        this.black = null
       },
     });
   }
@@ -104,7 +130,7 @@ class Screen {
 class TitleScreen extends Screen {
   constructor(scene) {
     super(scene);
-    this.useBlackTransitionScreen(true);
+    this.fadeFromBlack(4000);
     this.container = this.scene.add.container(0, 0);
     this.titleCard = this.scene.add.sprite(WIDTH/2, HEIGHT/2, 'title');
 
@@ -234,7 +260,11 @@ class StagingScreen extends Screen {
     if (fromTitle) {
       this.introIndex = 0;
       this.inIntro = true;
+    } else {
+      this.fadeFromBlack(800);
     }
+
+    this.willMoveToFighting = false;
   }
 
   createRequirementHearts(container, item) {
@@ -304,6 +334,15 @@ class StagingScreen extends Screen {
   }
 
   update() {
+    if (this.black) {
+      this.stopPlayerMovement();
+      return;
+    }
+    if (this.willMoveToFighting) {
+      this.destroy();
+      this.stopPlayerMovement();
+      return new FightingScreen(this.scene);
+    }
     this._updateDialog();
     if (this.inIntro) {
       return this.updateForIntro();
@@ -320,8 +359,8 @@ class StagingScreen extends Screen {
     }
 
     if (physics.overlap(player.sprite, this.arrow)) {
-      this.destroy();
-      return new FightingScreen(scene);
+      this.willMoveToFighting = true;
+      this.fadeToBlack(800);
     }
 
 
@@ -370,9 +409,6 @@ class FightingScreen extends Screen {
     const musicVolume = this.isFinalBoss() ? 0.3 : 0.2;
     this.music = scene.sound.add(musicKey, { volume: musicVolume, loop: true})
     this.music.play()
-
-    // Make sure we don't slide around during the dialog
-    state.player.state = new FighterStanding(state.player);
 
     this.showFinalBossStory = this.isFinalBoss();
     this.finalBossDialogIndex = 0;
@@ -430,6 +466,9 @@ class FightingScreen extends Screen {
         text: 'Not gonna hand \'em over, huh? Well, enjoy spending the eternity in Hell!'
       },
     ];
+
+    this.canStartFight = this.scene.time.now + 1500;
+    this.fadeFromBlack(800);
   }
 
   isFinalBoss() {
@@ -449,9 +488,18 @@ class FightingScreen extends Screen {
   }
 
   update() {
+    if (this.black || this.canStartFight > this.scene.time.now) {
+      this.stopPlayerMovement();
+      return;
+    }
+    if (this.willGoToStaging) {
+      this.destroy();
+      this.music.setLoop(false)
+      this.stopPlayerMovement();
+      return new StagingScreen(this.scene);
+    }
     this._updateDialog();
     if (this.showFinalBossStory) {
-      state.player.update({});
       return this.updateForFinalBossStory();
     }
     if (this.dialog) return; // Don't start the fight until the user is done reading.
@@ -511,10 +559,10 @@ class FightingScreen extends Screen {
         state.currentEnemy = this.index + 1;
 
         if (physics.overlap(player.sprite, this.arrow)) {
-          this.music.setLoop(false)
-          this.destroy();
           player.sprite.y = HEIGHT/2 + 72;
-          return new StagingScreen(this.scene);
+          this.willGoToStaging = true;
+          this.fadeToBlack(800);
+          return;
         }
       } else {
         this.music.setLoop(false)
