@@ -89,7 +89,7 @@ function create ()
     fighter.speed = data.speed;
     fighter.items = data.items;
     fighter.baseDamage = data.baseDamage;
-    fighter.sprite.tint = 0xff0000;
+    if (data.tint) fighter.sprite.tint = data.tint;
 
     fighter.sprite.setImmovable(true);
     return fighter;
