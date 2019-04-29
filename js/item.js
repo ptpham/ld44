@@ -109,7 +109,7 @@ class SuperSlowSword extends BaseItem {
                 item: this,
                 damage: 1,
                 hitstun: this.cooldown / 6,
-                duration: this.cooldown,
+                duration: 1000,
                 range: this.range,
                 w: 40,
                 h: 70
