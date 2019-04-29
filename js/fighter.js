@@ -53,9 +53,7 @@ class FighterState {
       sprite.body.offset.x = sprite.width - sprite.body.width;
     }
 
-    if (orientation === 'up') {
-      sprite.body.offset.y = sprite.height - sprite.body.height;
-    }
+    sprite.body.offset.y = sprite.height - sprite.body.height;
 
     if (input.pushback) {
       this.isPushingBack = true;
@@ -120,13 +118,21 @@ class FighterAttacking extends FighterState {
   update(input) {
     let defaultState = this._updateDefault(input);
     if (defaultState) return defaultState;
-    if (this.done) return new FighterStanding(this.fighter);
 
-    const {spriteKey, orientation, sprite} = this.fighter;
+    const { spriteKey, orientation, sprite } = this.fighter;
+    if (this.done) {
+      sprite.y = this.startingY;
+      return new FighterStanding(this.fighter);
+    }
 
     let anim = `${spriteKey}_attack_${orientation}`;
     anim = this.fighter.getPlayerAnimationForAttack(anim);
     sprite.anims.play(anim);
+
+    if (orientation === 'down') {
+      sprite.y = this.startingY + (sprite.height - PLAYER_HEIGHT);
+      sprite.body.offset.y -= (sprite.height - PLAYER_HEIGHT);
+    }
   }
 }
 
@@ -135,8 +141,8 @@ class FighterStanding extends FighterState {
     let { fighter } = this;
     let defaultState = this._updateDefault(input);
     if (defaultState) return defaultState;
-    let { sprite, spriteKey } = this.fighter;
-    let anim = `${spriteKey}_stand_${this.fighter.orientation}`;
+    let { sprite, spriteKey, orientation } = this.fighter;
+    let anim = `${spriteKey}_stand_${orientation}`;
     anim = this.fighter.getPlayerAnimationForAttack(anim);
     sprite.anims.play(anim, true);
 

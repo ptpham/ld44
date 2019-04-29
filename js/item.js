@@ -45,7 +45,7 @@ class ItemManager {
         player.items.forEach((item, i) => {
             const container = this.containers[item.spriteKey];
             container.x = (ITEM_BOX_SIZE + 5) * i + ITEM_BOX_SIZE;
-            container.y = HEIGHT - ITEM_BOX_SIZE;
+            container.y = HEIGHT - ITEM_BOX_SIZE - 1;
             container.alpha = item === currentItem ? 1: 0.5;
             container.box.frame = state.screen instanceof FightingScreen ?
                 container.box.texture.frames[1] :
