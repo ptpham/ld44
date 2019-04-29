@@ -196,8 +196,8 @@ class StagingScreen extends Screen {
     super(scene);
     state.background.anims.play('background-staging');
 
-    this.arrow = scene.physics.add.sprite(WIDTH/2, HEIGHT - 15, 'arrow');
-    this.arrow.anims.play('arrow-bounce');
+    this.arrow = scene.physics.add.sprite(WIDTH/2, HEIGHT, 'light');
+    this.arrow.anims.play('light-bounce');
     this.isStagingForFinalBoss = state.currentEnemy >= state.enemyData.length - 1;
     this.itemContainers = [];
 
@@ -422,8 +422,8 @@ class FightingScreen extends Screen {
     this.enemy.sprite.y = HEIGHT - this.enemy.sprite.height;
     this.enemy.sprite.setCollideWorldBounds(true);
 
-    this.arrow = scene.physics.add.sprite(-WIDTH, -HEIGHT, 'arrow');
-    this.arrow.anims.play('arrow-bounce');
+    this.arrow = scene.physics.add.sprite(-WIDTH, -HEIGHT, 'light');
+    this.arrow.anims.play('light-bounce');
 
     // switch music for final boss
     const musicKey = this.isFinalBoss() ? 'music_2' : 'music_1';
