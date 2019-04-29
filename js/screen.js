@@ -374,7 +374,7 @@ class FightingScreen extends Screen {
     // Make sure we don't slide around during the dialog
     state.player.state = new FighterStanding(state.player);
 
-    this.showFinalBossStory = true; //this.isFinalBoss();
+    this.showFinalBossStory = this.isFinalBoss();
     this.finalBossDialogIndex = 0;
     this.finalBossDialog = [
       {
