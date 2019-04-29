@@ -80,6 +80,7 @@ function create ()
 
   state.cursors = this.input.keyboard.createCursorKeys();
   state.tabkey = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.TAB)
+  state.enter = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.ENTER);
   state.screen = new TitleScreen(this);
   state.heartManager = new HeartManager(this);
   state.itemManager = new ItemManager(this);

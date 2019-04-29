@@ -6,6 +6,27 @@ class Screen {
     this.lastTabTimeDown = 0;
   }
 
+  useBlackTransitionScreen(startBlack, onCompletelyBlack, onComplete) {
+    this.black = this.scene.add.sprite(WIDTH, HEIGHT, 'black');
+    this.black.scaleX = WIDTH;
+    this.black.scaleY = HEIGHT;
+    this.black.depth = 20000;
+    this.black.alpha = startBlack ? 1 : 0;
+
+    this.scene.tweens.add({
+      targets: this.black,
+      alpha: startBlack ? 0 : 1,
+      ease: 'Power1',
+      duration: startBlack ? 4000 : 6000,
+      yoyo: !startBlack,
+      onYoyo: onCompletelyBlack,
+      onComplete: () => {
+        onComplete && onComplete();
+        this.black.destroy();
+      },
+    });
+  }
+
   setDialog(sprite, string) {
     sprite.x += sprite.width - DIALOG_WIDTH/2 + 16;
     let font = _.clone(DEFAULT_FONT);
@@ -13,7 +34,7 @@ class Screen {
 
     let dialog = this.scene.add.sprite(0, 0, 'dialog');
     let text = this.scene.add.text(-DIALOG_WIDTH/2 + 100, -DIALOG_HEIGHT/2 + 32, string, font);
-    let nextText = this.scene.add.text(DIALOG_WIDTH/2 - 130, DIALOG_HEIGHT/2 - 40, 'Shift + Space', DEFAULT_FONT);
+    let nextText = this.scene.add.text(DIALOG_WIDTH/2 - 75, DIALOG_HEIGHT/2 - 40, 'Enter', DEFAULT_FONT);
     let arrow = this.scene.add.sprite(DIALOG_WIDTH/2 - 16, DIALOG_HEIGHT/2 - 32, 'arrow');
     arrow.anims.play('arrow-bounce');
     arrow.rotation = -Math.PI/2;
@@ -21,10 +42,14 @@ class Screen {
     let children = [dialog, sprite, text, nextText, arrow];
     this.dialog = this.scene.add.container(WIDTH/2, HEIGHT/2, children);
     this.dialog.depth = 5000;
+    this.dialog.canBeDismissedMinTime = this.scene.time.now + DIALOG_COOLDOWN;
   }
 
   clearDialog() {
-    if (this.dialog) {
+    if (
+      this.dialog &&
+      this.dialog.canBeDismissedMinTime < this.scene.time.now
+    ) {
       this.dialog.destroy();
       this.dialog = null;
     }
@@ -32,7 +57,7 @@ class Screen {
 
   _updateDialog() {
     if (this.dialog) {
-      if (state.cursors.space.isDown && state.cursors.space.shiftKey) this.clearDialog();
+      if (state.enter.isDown) this.clearDialog();
       return this;
     }
   }
@@ -78,14 +103,47 @@ class Screen {
 class TitleScreen extends Screen {
   constructor(scene) {
     super(scene);
-    let sprite = this.scene.add.sprite(0, 0, 'dude');
-    this.setDialog(sprite, 'You find yourself in a strange place. Use the arrow keys to move.');
+    this.useBlackTransitionScreen(true);
+    this.container = this.scene.add.container(0, 0);
+    this.titleCard = this.scene.add.sprite(WIDTH/2, HEIGHT/2, 'title');
+
+    this.startText = this.scene.add.text(
+      15,
+      HEIGHT - 90,
+      'Press Enter',
+      DEFAULT_FONT
+    );
+
+    this.container.add(this.titleCard);
+    this.container.add(this.startText);
+    this.container.depth = 10000;
+    this.scene.tweens.add({
+      targets: this.startText,
+      x: 21,
+      ease: 'Power1',
+      yoyo: true,
+      repeat: -1,
+      duration: 1000,
+    });
+  }
+
+  destroy() {
+    this.scene.tweens.add({
+      targets: this.container,
+      alpha: 0,
+      ease: 'Power1',
+      duration: 3000,
+      onComplete: () => {
+        this.container.destroy();
+      }
+    });
   }
 
   update() {
-    let dialogUpdate = this._updateDialog();
-    if (dialogUpdate) return dialogUpdate;
-    else return new StagingScreen(this.scene);
+    if (state.enter.isDown) {
+      this.destroy();
+      return new StagingScreen(this.scene, true);
+    }
   }
 }
 
@@ -116,6 +174,44 @@ class StagingScreen extends Screen {
     this.isStagingForFinalBoss = state.currentEnemy >= state.enemyData.length - 1;
     this.itemContainers = [];
 
+    this.intro = [
+      {
+        sprite: this.scene.add.sprite(0, 0, 'player'),
+        text: 'You find yourself in a strange place.\n\n' +
+          'Use the arrow keys to move.\n' +
+          'Press "Space" to attack.\n' +
+          'Press "Tab" to switch weapons.'
+      },
+      {
+        sprite: this.scene.add.sprite(0, 0, 'merchant', 3),
+        text: 'Hey! You awake?'
+      },
+      {
+        sprite: this.scene.add.sprite(0, 0, 'player'),
+        text: '??'
+      },
+      {
+        sprite: this.scene.add.sprite(0, 0, 'merchant'),
+        text: 'There are a bunch of really dangerous guys in the other room, ' +
+          'by the only exit. I wish I were strong enough to fight them...\n' +
+          'but as you can see, I am very small, and very weak.'
+      },
+      {
+        sprite: this.scene.add.sprite(0, 0, 'merchant', 4),
+        text: 'I\'ve been trying to escape, but all I have are all these ' +
+          'weapons that are too big for my small hands.',
+      },
+      {
+        sprite: this.scene.add.sprite(0, 0, 'player'),
+        text: '...'
+      },
+      {
+        sprite: this.scene.add.sprite(0, 0, 'merchant', 5),
+        text: 'I could...give you these weapons in exchange for some of your hearts? ' +
+          'They\'re very cute and I want them. And then we can escape together!',
+      },
+    ];
+
     if (!this.isStagingForFinalBoss) {
       let ITEM_COUNT = 3;
       this.items = _.sampleSize(_.filter(state.allPickItems,
@@ -132,6 +228,11 @@ class StagingScreen extends Screen {
       this.merchantFighter = new Fighter(this.merchant);
       this.merchantFighter.speed = 60;
       this.merchantAI = new StayInPlaceAI(PLAYER_START_X / 2, PLAYER_START_Y);
+    }
+
+    if (fromTitle) {
+      this.introIndex = 0;
+      this.inIntro = true;
     }
   }
 
@@ -189,7 +290,25 @@ class StagingScreen extends Screen {
     if (this.merchant) { this.merchant.destroy(); }
   }
 
+  updateForIntro() {
+    const introDialog = this.intro[this.introIndex];
+    if (!this.dialog) {
+      this.setDialog(introDialog.sprite, introDialog.text);
+      this.introIndex += 1;
+
+      if (this.introIndex >= this.intro.length) {
+        this.inIntro = false;
+      }
+    }
+    this._updateDialog();
+  }
+
   update() {
+    if (this.inIntro) {
+      return this.updateForIntro();
+    }
+    this._updateDialog();
+
     let { player } = state;
     player.update(this.getInputs());
 

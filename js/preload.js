@@ -32,6 +32,7 @@ function preload ()
   this.load.image('white', 'assets/white.png');
   this.load.image('black', 'assets/black.png');
   this.load.image('clear', 'assets/clear.png');
+  this.load.image('title', 'assets/Titlecard.png');
 
   this.load.audio('swoosh', 'assets/swoosh.mp3');
   this.load.audio('bullet_firing', 'assets/bullet.mp3');
