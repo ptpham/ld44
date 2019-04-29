@@ -6,23 +6,49 @@ class Screen {
     this.lastTabTimeDown = 0;
   }
 
-  useBlackTransitionScreen(startBlack, onCompletelyBlack, onComplete) {
+  stopPlayerMovement() {
+    // Make sure we don't slide around during the dialog
+    state.player.update({ move: { x: 0, y: 0 } });
+    state.player.sprite.setVelocityX(0);
+    state.player.sprite.setVelocityY(0);
+  }
+
+  fadeFromBlack(duration, onComplete) {
     this.black = this.scene.add.sprite(WIDTH, HEIGHT, 'black');
     this.black.scaleX = WIDTH;
     this.black.scaleY = HEIGHT;
     this.black.depth = 20000;
-    this.black.alpha = startBlack ? 1 : 0;
+    this.black.alpha = 1;
 
     this.scene.tweens.add({
       targets: this.black,
-      alpha: startBlack ? 0 : 1,
+      alpha: 0,
       ease: 'Power1',
-      duration: startBlack ? 4000 : 6000,
-      yoyo: !startBlack,
-      onYoyo: onCompletelyBlack,
+      duration: duration,
       onComplete: () => {
         onComplete && onComplete();
         this.black.destroy();
+        this.black = null;
+      },
+    });
+  }
+
+  fadeToBlack(duration, onComplete) {
+    this.black = this.scene.add.sprite(WIDTH, HEIGHT, 'black');
+    this.black.scaleX = WIDTH;
+    this.black.scaleY = HEIGHT;
+    this.black.depth = 20000;
+    this.black.alpha = 0;
+
+    this.scene.tweens.add({
+      targets: this.black,
+      alpha: 1,
+      ease: 'Power1',
+      duration: duration,
+      onComplete: () => {
+        onComplete && onComplete();
+        this.black.destroy();
+        this.black = null
       },
     });
   }
@@ -104,7 +130,7 @@ class Screen {
 class TitleScreen extends Screen {
   constructor(scene) {
     super(scene);
-    this.useBlackTransitionScreen(true);
+    this.fadeFromBlack(4000);
     this.container = this.scene.add.container(0, 0);
     this.titleCard = this.scene.add.sprite(WIDTH/2, HEIGHT/2, 'title');
 
@@ -213,6 +239,25 @@ class StagingScreen extends Screen {
       },
     ];
 
+    this.beforeBosses = [
+      [
+        {
+          sprite: this.scene.add.sprite(-WIDTH, -HEIGHT, 'merchant', 3),
+          text: 'Way to take that oaf out! You’re a natural at this.',
+        },
+        {
+          sprite: this.scene.add.sprite(-WIDTH, -HEIGHT, 'merchant', 5),
+          text: 'There\'s one more to go. Careful now, this one looks stronger than the last.',
+        },
+      ],
+      [
+        {
+          sprite: this.scene.add.sprite(-WIDTH, -HEIGHT, 'player'),
+          text: '...?'
+        },
+      ]
+    ];
+
     if (!this.isStagingForFinalBoss) {
       let ITEM_COUNT = 3;
       this.items = _.sampleSize(_.filter(state.allPickItems,
@@ -231,10 +276,15 @@ class StagingScreen extends Screen {
       this.merchantAI = new StayInPlaceAI(PLAYER_START_X / 2, PLAYER_START_Y);
     }
 
-    if (fromTitle) {
-      this.introIndex = 0;
-      this.inIntro = true;
+    this.inIntro = fromTitle;
+    this.currentDialog = fromTitle ? this.intro : this.beforeBosses[state.currentEnemy - 1];
+    this.currentDialogIndex = 0;
+
+    if (!fromTitle) {
+      this.fadeFromBlack(800);
     }
+
+    this.willMoveToFighting = false;
   }
 
   createRequirementHearts(container, item) {
@@ -290,22 +340,34 @@ class StagingScreen extends Screen {
     if (this.merchant) { this.merchant.destroy(); }
   }
 
-  updateForIntro() {
-    const introDialog = this.intro[this.introIndex];
-    if (!this.dialog) {
-      this.setDialog(introDialog.sprite, introDialog.text);
-      this.introIndex += 1;
+  updateForDialog() {
+    if (!this.dialog && this.currentDialog) {
+      const dialog = this.currentDialog[this.currentDialogIndex];
+      this.setDialog(dialog.sprite, dialog.text);
+      this.currentDialogIndex += 1;
 
-      if (this.introIndex >= this.intro.length) {
-        this.inIntro = false;
+      if (this.currentDialogIndex >= this.currentDialog.length) {
+        this.currentDialog = null;
       }
+    }
+    
+    if (this.dialog) {
+      this._updateDialog();
     }
   }
 
   update() {
-    this._updateDialog();
-    if (this.inIntro) {
-      return this.updateForIntro();
+    if (this.black) {
+      this.stopPlayerMovement();
+      return;
+    }
+    if (this.willMoveToFighting) {
+      this.destroy();
+      this.stopPlayerMovement();
+      return new FightingScreen(this.scene);
+    }
+    if (this.dialog || this.currentDialog) {
+      return this.updateForDialog();
     }
 
     let { player } = state;
@@ -319,8 +381,8 @@ class StagingScreen extends Screen {
     }
 
     if (physics.overlap(player.sprite, this.arrow)) {
-      this.destroy();
-      return new FightingScreen(scene);
+      this.willMoveToFighting = true;
+      this.fadeToBlack(800);
     }
 
 
@@ -368,9 +430,6 @@ class FightingScreen extends Screen {
     const musicVolume = this.isFinalBoss() ? 0.3 : 0.2;
     this.music = scene.sound.add(musicKey, { volume: musicVolume, loop: true})
     this.music.play()
-
-    // Make sure we don't slide around during the dialog
-    state.player.state = new FighterStanding(state.player);
 
     this.showFinalBossStory = this.isFinalBoss();
     this.finalBossDialogIndex = 0;
@@ -428,6 +487,9 @@ class FightingScreen extends Screen {
         text: 'Not gonna hand \'em over, huh? Well, enjoy spending the eternity in Hell!'
       },
     ];
+
+    this.canStartFight = this.scene.time.now + 1500;
+    this.fadeFromBlack(800);
   }
 
   isFinalBoss() {
@@ -435,8 +497,8 @@ class FightingScreen extends Screen {
   }
 
   updateForFinalBossStory() {
-    const bossDialog = this.finalBossDialog[this.finalBossDialogIndex];
-    if (!this.dialog) {
+    if (!this.dialog && this.finalBossDialog) {
+      const bossDialog = this.finalBossDialog[this.finalBossDialogIndex];
       this.setDialog(bossDialog.sprite, bossDialog.text);
       this.finalBossDialogIndex += 1;
 
@@ -444,15 +506,26 @@ class FightingScreen extends Screen {
         this.showFinalBossStory = false;
       }
     }
+
+    if (this.dialog) {
+      this._updateDialog();
+    }
   }
 
   update() {
-    this._updateDialog();
-    if (this.showFinalBossStory) {
-      state.player.update({});
+    if (this.black || this.canStartFight > this.scene.time.now) {
+      this.stopPlayerMovement();
+      return;
+    }
+    if (this.willGoToStaging) {
+      this.destroy();
+      this.music.setLoop(false)
+      this.stopPlayerMovement();
+      return new StagingScreen(this.scene);
+    }
+    if (this.dialog || this.showFinalBossStory) {
       return this.updateForFinalBossStory();
     }
-    if (this.dialog) return; // Don't start the fight until the user is done reading.
 
     let { player } = state;
     let { physics } = this.scene;
@@ -509,10 +582,10 @@ class FightingScreen extends Screen {
         state.currentEnemy = this.index + 1;
 
         if (physics.overlap(player.sprite, this.arrow)) {
-          this.music.setLoop(false)
-          this.destroy();
           player.sprite.y = HEIGHT/2 + 72;
-          return new StagingScreen(this.scene);
+          this.willGoToStaging = true;
+          this.fadeToBlack(800);
+          return;
         }
       } else {
         this.music.setLoop(false)
