@@ -28,7 +28,8 @@ class Screen {
   }
 
   setDialog(sprite, string) {
-    sprite.x += sprite.width - DIALOG_WIDTH/2 + 16;
+    sprite.x = sprite.width - DIALOG_WIDTH/2 + 16;
+    sprite.y = sprite.height - DIALOG_HEIGHT / 2 + 16;
     let font = _.clone(DEFAULT_FONT);
     font.wordWrap = { width: DIALOG_WIDTH/2 + 16 };
 
@@ -176,37 +177,37 @@ class StagingScreen extends Screen {
 
     this.intro = [
       {
-        sprite: this.scene.add.sprite(0, 0, 'player'),
+        sprite: this.scene.add.sprite(-WIDTH, -HEIGHT, 'player'),
         text: 'You find yourself in a strange place.\n\n' +
           'Use the arrow keys to move.\n' +
           'Press "Space" to attack.\n' +
           'Press "Tab" to switch weapons.'
       },
       {
-        sprite: this.scene.add.sprite(0, 0, 'merchant', 3),
+        sprite: this.scene.add.sprite(-WIDTH, -HEIGHT, 'merchant', 3),
         text: 'Hey! You awake?'
       },
       {
-        sprite: this.scene.add.sprite(0, 0, 'player'),
+        sprite: this.scene.add.sprite(-WIDTH, -HEIGHT, 'player'),
         text: '??'
       },
       {
-        sprite: this.scene.add.sprite(0, 0, 'merchant'),
+        sprite: this.scene.add.sprite(-WIDTH, -HEIGHT, 'merchant'),
         text: 'There are a bunch of really dangerous guys in the other room, ' +
           'by the only exit. I wish I were strong enough to fight them...\n' +
           'but as you can see, I am very small, and very weak.'
       },
       {
-        sprite: this.scene.add.sprite(0, 0, 'merchant', 4),
+        sprite: this.scene.add.sprite(-WIDTH, -HEIGHT, 'merchant', 4),
         text: 'I\'ve been trying to escape, but all I have are all these ' +
           'weapons that are too big for my small hands.',
       },
       {
-        sprite: this.scene.add.sprite(0, 0, 'player'),
+        sprite: this.scene.add.sprite(-WIDTH, -HEIGHT, 'player'),
         text: '...'
       },
       {
-        sprite: this.scene.add.sprite(0, 0, 'merchant', 5),
+        sprite: this.scene.add.sprite(-WIDTH, -HEIGHT, 'merchant', 5),
         text: 'I could...give you these weapons in exchange for some of your hearts? ' +
           'They\'re very cute and I want them. And then we can escape together!',
       },
@@ -300,14 +301,13 @@ class StagingScreen extends Screen {
         this.inIntro = false;
       }
     }
-    this._updateDialog();
   }
 
   update() {
+    this._updateDialog();
     if (this.inIntro) {
       return this.updateForIntro();
     }
-    this._updateDialog();
 
     let { player } = state;
     player.update(this.getInputs());
