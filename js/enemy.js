@@ -71,7 +71,7 @@ class SimpleEnemyAI extends EnemyAI {
       enemy.state instanceof FighterStanding &&
       enemy.lastStateChange + this.standingCooldown >= now
     ) {
-      return this.lastInputs;
+      return _.clone(this.lastInputs);
     }
   
     // We'll try to move close to the player

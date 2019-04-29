@@ -352,7 +352,7 @@ class FightingScreen extends Screen {
     super(scene);
     let { player } = state;
     player.sprite.y = 50;
-    state.background.anims.play('background-fighting');
+    state.background.anims.play('background-fighting-closed');
 
     this.index = state.currentEnemy;
     this.enemy = state.enemies[this.index];
@@ -503,6 +503,7 @@ class FightingScreen extends Screen {
     }
 
     if (this.enemy.isDead()) {
+      state.background.anims.play('background-fighting');
       if (this.index < state.enemyData.length - 1) {
         this.arrow.rotation = Math.PI;
         this.arrow.x = WIDTH/2;
