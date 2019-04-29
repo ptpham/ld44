@@ -53,7 +53,7 @@ class Slash extends BaseAttack {
         // Add some random noise for variation
         x += Math.random() * 20 - 10;
         y += Math.random() * 20 - 10;
-        const rotation = Math.random() * 2 -1;
+        const rotation = Math.random() * Math.PI/4 - Math.PI/2;
 
         function makeSlashSprite() {
             const sprite = scene.physics.add.sprite(x, y, 'slash');
@@ -62,6 +62,9 @@ class Slash extends BaseAttack {
             sprite.flipX = orientation === 'left';
             sprite.flipY = orientation === 'up';
             sprite.rotation = rotation;
+            if (orientation === 'right' || orientation === 'up') {
+                sprite.rotation += Math.PI / 2;
+            }
             if (fighter !== state.player) {
                 sprite.tint = 0xff3333;
             }
@@ -74,12 +77,17 @@ class Slash extends BaseAttack {
         const sprite = makeSlashSprite();
          // Make an extra so we see the slashes even when they hit
         const sprite2 = makeSlashSprite();
+        const sprite3 = makeSlashSprite();
+        sprite3.flipY = true;
+        sprite3.rotation += Math.PI / 8;
 
         super({fighter, item, damage, hitstun, sprite})
         this.sprite2 = sprite2;
+        this.sprite3 = sprite3;
         setTimeout(() => {
             sprite.destroy();
             sprite2.destroy();
+            sprite3.destroy();
             this.active = false
         }, duration)
     }
@@ -93,7 +101,8 @@ class Slash extends BaseAttack {
     }
 
     onCollideAttack() {
-        this.sprite2.alpha = 0.5;
+        this.sprite2.alpha = 0.25;
+        this.sprite3.alpha = 0.25;
     }
 }
 
