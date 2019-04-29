@@ -615,7 +615,7 @@ class LoseScreen extends Screen {
     super(scene);
     let sprite = scene.add.sprite(0, 0, 'playerDeath');
     sprite.anims.play('player_dead');
-    this.setDialog(sprite, 'You have failed to pass the tests of purgatory. Your suffering is eternal. Try again with another poor soul.');
+    this.setDialog(sprite, 'Everything goes black. You awake several hours later without any memory of what happened, still trapped in these mysterious chambers.');
   }
 
   update() {
@@ -635,7 +635,7 @@ class VictoryScreen extends Screen {
     super(scene);
     let sprite = scene.add.sprite(0, 0, 'playerDeath');
     sprite.anims.play('player_attack_right');
-    this.setDialog(sprite, 'You have escaped purgatory! Try again with another poor soul.');
+    this.setDialog(sprite, 'You have escaped Purgatory! May your virtues bring you a favorable judgement.');
   }
 
   update() {
