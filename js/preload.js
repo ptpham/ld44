@@ -44,5 +44,6 @@ function preload ()
   this.load.audio('boss_damaged', 'assets/boss_damaged.mp3');
   this.load.audio('player_damaged', 'assets/player_damaged.mp3');
   this.load.audio('music_1', 'assets/music_1.mp3');
+  this.load.audio('music_2', 'assets/music_2.mp3');
 }
 
