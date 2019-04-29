@@ -17,6 +17,7 @@ function preload ()
   this.load.spritesheet('block', 'assets/block.png', { frameWidth: 12, frameHeight: 32 });
   this.load.spritesheet('items', 'assets/items.png', { frameWidth: 30, frameHeight: 60 });
   this.load.spritesheet('dialog', 'assets/dialog.png', { frameWidth: 300, frameHeight: 200 });
+  this.load.spritesheet('dialog_fight', 'assets/dialog_fight.png', { frameWidth: 300, frameHeight: 200 });
   this.load.spritesheet('finalboss', 'assets/finalboss.png', { frameWidth: 56, frameHeight: 86 });
   this.load.spritesheet('box', 'assets/box.png', { frameWidth: 30, frameHeight: 30 });
   this.load.spritesheet('light', 'assets/light.png', { frameWidth: 72, frameHeight: 72 });

@@ -59,7 +59,10 @@ class Screen {
     let font = _.clone(DEFAULT_FONT);
     font.wordWrap = { width: DIALOG_WIDTH/2 + 16 };
 
-    let dialog = this.scene.add.sprite(0, 0, 'dialog');
+    let dialog = this.scene.add.sprite(
+      0, 0,
+      state.background.frame.name > 0 ? 'dialog_fight' : 'dialog'
+    );
     let text = this.scene.add.text(-DIALOG_WIDTH/2 + 100, -DIALOG_HEIGHT/2 + 32, string, font);
     let nextText = this.scene.add.text(DIALOG_WIDTH/2 - 75, DIALOG_HEIGHT/2 - 40, 'Enter', DEFAULT_FONT);
     let arrow = this.scene.add.sprite(DIALOG_WIDTH/2 - 16, DIALOG_HEIGHT/2 - 34, 'arrow');
