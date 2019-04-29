@@ -102,7 +102,7 @@ class SuperSlowSword extends BaseItem {
     }
 
     getAttacks(fighter) {
-        state.screen.scene.sound.play('boss_attack');
+        state.screen.scene.sound.play('boss_attack', { volume: 0.2 });
         return [
             new Slash({
                 fighter,
@@ -127,7 +127,7 @@ class LongSword extends BaseItem {
     }
 
     getAttacks(fighter) {
-        state.screen.scene.sound.play('longsword_swipe');
+        state.screen.scene.sound.play('longsword_swipe', { volume: 0.2 });
         return [
             new Slash({
                 fighter,
@@ -151,7 +151,7 @@ class Gun extends BaseItem {
     }
 
     getAttacks(fighter) {
-        state.screen.scene.sound.play('bullet_firing');
+        state.screen.scene.sound.play('bullet_firing', { volume: 0.2 });
         return [
             new Bullet({
                 fighter,
@@ -175,7 +175,7 @@ class Shield extends BaseItem {
     }
 
     getAttacks(fighter) {
-        state.screen.scene.sound.play('shield_parry');
+        state.screen.scene.sound.play('shield_parry', { volume: 0.2 });
         return [
             new Block({ fighter, item: this, pushback: 100, w: 30, h: 80, duration: this.cooldown })
         ]

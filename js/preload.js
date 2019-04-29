@@ -49,5 +49,6 @@ function preload ()
   this.load.audio('finalboss_dying', 'assets/player_dying.mp3');
   this.load.audio('finalboss_damaged', 'assets/player_damaged.mp3');
   this.load.audio('music_1', 'assets/music_1.mp3');
+  this.load.audio('music_2', 'assets/music_2.mp3');
 }
 
