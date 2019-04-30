@@ -240,7 +240,7 @@ class FastGun extends BaseItem {
 
 class Shield extends BaseItem {
     constructor() {
-        super(500)
+        super(750)
         this.playerAttackSprite = 'shield';
         this.spriteKey = 'shield';
     }
