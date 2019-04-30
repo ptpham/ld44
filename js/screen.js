@@ -254,7 +254,8 @@ class StagingScreen extends Screen {
         },
         {
           sprite: this.scene.add.sprite(-WIDTH, -HEIGHT, 'merchant'),
-          text: 'Shhh...here comes another one. Careful now, this one looks stronger than the last.',
+          text: 'Shhh...here comes another one. Careful now, this one looks stronger than the last. ' +
+                'These weapons are still here if you need them.'
         },
       ],
       [
@@ -264,7 +265,8 @@ class StagingScreen extends Screen {
         },
         {
           sprite: this.scene.add.sprite(-WIDTH, -HEIGHT, 'merchant', 5),
-          text: 'But after you take care of him, we\'ll be home free!',
+          text: 'But after you take care of him, we\'ll be home free! ' +
+                'Just make sure you have a strong weapon to deal with him...'
         }
       ],
       [
@@ -495,8 +497,8 @@ class FightingScreen extends Screen {
         text: 'Those big oafs you defeated take you and toss you through when it\'s your turn. But I wasn\'t ready yet...'
       },
       {
-        sprite: this.scene.add.sprite(-WIDTH, -HEIGHT, 'player_hit', 'unarmed_right_1'),
-        text: '!!'
+        sprite: this.scene.add.sprite(-WIDTH, -HEIGHT, 'player'),
+        text: '??'
       },
       {
         sprite: this.scene.add.sprite(-WIDTH, -HEIGHT, 'merchant'),
