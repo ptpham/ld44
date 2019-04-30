@@ -226,7 +226,7 @@ class ShooterEnemyAI extends EnemyAI {
       );
 
     // Get away from the player
-    if (distance < 130) {
+    if (distance < 60) {
       this.readyEscape(inputs, center, dX, dY, now, enemy);
       if (Math.random() > .5) {
         this.readyBlocking(inputs, weapon, dX, dY);
@@ -235,9 +235,27 @@ class ShooterEnemyAI extends EnemyAI {
       this.readyFiring(inputs, weapon, center, dX, dY, now, player);
     }
 
+    // oscillation check
+    if ((this.lastMoveX || this.lastMoveY) &&
+        this.lastMoveX === -inputs.move.x && this.lastMoveY === -inputs.move.y) {
+      inputs.move.x = this.lastMoveX
+      inputs.move.y = this.lastMoveY
+    }
+
+    // bounds check to prevent it from running into a wall repeatedly when it's too close
+    if ((center.x + inputs.move.x < enemy.sprite.width / 2 && inputs.move.x < 0) ||
+        (center.x + inputs.move.x > WIDTH - enemy.sprite.width / 2 && inputs.move.x > 0)) {
+      inputs.move.x = 0
+    }
+
+    if ((center.y + inputs.move.y < enemy.sprite.height / 2 && inputs.move.y < 0) ||
+        (center.y + inputs.move.y > HEIGHT - enemy.sprite.height / 2 && inputs.move.y > 0)) {
+      inputs.move.y = 0
+    }
 
     this.lastMoveX = inputs.move.x
     this.lastMoveY = inputs.move.y
+
     return inputs;
   }
 
@@ -245,7 +263,6 @@ class ShooterEnemyAI extends EnemyAI {
     let stepSize = 1;
     let dXMove = -Math.sign(Math.round(dX)) * stepSize;
     let dYMove = -Math.sign(Math.round(dY)) * stepSize;
-    let cornered = false;
     if ( (this.corneredEndTime > now) ||
         (center.x < 64 && center.y < 64 ||
       center.x > WIDTH - 64 && center.y < 64 ||
@@ -255,29 +272,12 @@ class ShooterEnemyAI extends EnemyAI {
       // avoid getting cornered
       dXMove = Math.sign(Math.round(WIDTH / 2 - center.x)) * stepSize;
       dYMove = Math.sign(Math.round(HEIGHT / 2 - center.y)) * stepSize;
-      cornered = true
 
       if (this.corneredEndTime < now) {
         this.currentFirePattern = null;
         this.currentFirePatternIndex = 0;
         this.corneredEndTime += this.corneredCooldown
       }
-    } else {
-
-      // bounds check to prevent it from running into a wall
-      if (center.x + dXMove < enemy.sprite.width / 2 || center.x + dXMove > WIDTH - enemy.sprite.width / 2) {
-        dXMove = 0
-      }
-
-      if (center.y + dYMove < enemy.sprite.height / 2 || center.y + dYMove > HEIGHT - enemy.sprite.height / 2) {
-        dYMove = 0
-      }
-    }
-
-    // oscillation check
-    if (this.lastMoveX === -dXMove && this.lastMoveY === -dYMove) {
-      dXMove = this.lastMoveX
-      dYMove = this.lastMoveY
     }
 
     inputs.move.x = dXMove;
@@ -316,23 +316,7 @@ class ShooterEnemyAI extends EnemyAI {
     // pick a new fire pattern that we will go through
     this.currentFirePattern = _.sample(this.firePatterns);
     this.currentFirePatternIndex = 0;
-
-    // add some noise to the firing pattern
-    this.currentFirePattern.forEach(pattern => {
-      pattern.x += Math.round((Math.random() - .5) * 30);
-      pattern.y += Math.round((Math.random() - .5) * 30);
-    })
-
-    /*
-    // Try to get aligned with the player
-    if (dX > dY) {
-      inputs.move.y = Math.sign(Math.round(dY / 10));
-    } else {
-      inputs.move.x = Math.sign(Math.round(dX / 10));
-    }
-
-    inputs.turnToOrientation = this.turnToPlayer(dX, dY);
-    */
+    this.nextFirePatternTime += this.firePatternCooldown;
   }
 
   readyFirePattern(inputs, center, player) {
