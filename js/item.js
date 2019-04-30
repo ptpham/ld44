@@ -240,8 +240,8 @@ class FastGun extends Gun {
 }
 
 class Shield extends BaseItem {
-    constructor() {
-        super(500)
+    constructor(cooldown=500) {
+        super(cooldown)
         this.playerAttackSprite = 'shield';
         this.spriteKey = 'shield';
     }
@@ -256,16 +256,14 @@ class Shield extends BaseItem {
 
 class SlowShield extends Shield {
     constructor() {
-      super();
-      this.cooldown = 1000;
+        super(1000)
       this.playerAttackSprite = 'shield';
       this.spriteKey = 'shield';
     }
-
     getAttacks(fighter) {
         state.screen.scene.sound.play('shield_parry', { volume: 0.2 });
         return [
-            new Block({ fighter, item: this, pushback: 100, w: 30, h: 80, duration: this.cooldown })
+            new Block({ fighter, item: this, pushback: 100, w: 30, h: 80, duration: this.cooldown / 2 })
         ]
     }
 }
