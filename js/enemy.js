@@ -160,8 +160,12 @@ class ShooterEnemyAI extends EnemyAI {
     this.lastInputs = this._makeBaseInputs();
     this.currentFirePattern = null;
     this.currentFirePatternIndex = 0;
-    this.readyForFirePattern = 0;
+    this.nextFirePatternTime = 0;
     this.firePatternCooldown = 5000;
+    this.corneredEndTime = 0;
+    this.corneredCooldown = 1000;
+    this.lastMoveX = 0
+    this.lastMoveY = 0
 
     this.firePatternBottom = [
       { x: 0, y: HEIGHT, direction: 'up' },
@@ -223,34 +227,61 @@ class ShooterEnemyAI extends EnemyAI {
 
     // Get away from the player
     if (distance < 130) {
-      this.readyEscape(inputs, center, dX, dY);
-      this.readyBlocking(inputs, weapon, dX, dY);
+      this.readyEscape(inputs, center, dX, dY, now, enemy);
+      if (Math.random() > .5) {
+        this.readyBlocking(inputs, weapon, dX, dY);
+      }
     } else {
-      this.readyFiring(inputs, weapon, center, dX, dY, now);
+      this.readyFiring(inputs, weapon, center, dX, dY, now, player);
     }
 
-    if (!this.readyForFirePattern) {
-      this.readyForFirePattern = now + this.firePatternCooldown;
-    }
+
+    this.lastMoveX = inputs.move.x
+    this.lastMoveY = inputs.move.y
     return inputs;
   }
 
-  readyEscape(inputs, center, dX, dY) {
-    inputs.move.x = -Math.sign(Math.round(dX / 10));
-    inputs.move.y = -Math.sign(Math.round(dY / 10));
-    this.currentFirePattern = null;
-    this.currentFirePatternIndex = 0;
-
-    if (
-      center.x < 64 && center.y < 64 ||
+  readyEscape(inputs, center, dX, dY, now, enemy) {
+    let stepSize = 1;
+    let dXMove = -Math.sign(Math.round(dX)) * stepSize;
+    let dYMove = -Math.sign(Math.round(dY)) * stepSize;
+    let cornered = false;
+    if ( (this.corneredEndTime > now) ||
+        (center.x < 64 && center.y < 64 ||
       center.x > WIDTH - 64 && center.y < 64 ||
       center.x > WIDTH - 64 && center.y > HEIGHT - 64 ||
-      center.x < 64 && center.y > HEIGHT - 64
+      center.x < 64 && center.y > HEIGHT - 64)
     ) {
-      // Avoid getting cornered
-      inputs.move.x = Math.sign(WIDTH / 2 - center.x);
-      inputs.move.y = Math.sign(HEIGHT / 2 - center.y);
+      // avoid getting cornered
+      dXMove = Math.sign(Math.round(WIDTH / 2 - center.x)) * stepSize;
+      dYMove = Math.sign(Math.round(HEIGHT / 2 - center.y)) * stepSize;
+      cornered = true
+
+      if (this.corneredEndTime < now) {
+        this.currentFirePattern = null;
+        this.currentFirePatternIndex = 0;
+        this.corneredEndTime += this.corneredCooldown
+      }
+    } else {
+
+      // bounds check to prevent it from running into a wall
+      if (center.x + dXMove < enemy.sprite.width / 2 || center.x + dXMove > WIDTH - enemy.sprite.width / 2) {
+        dXMove = 0
+      }
+
+      if (center.y + dYMove < enemy.sprite.height / 2 || center.y + dYMove > HEIGHT - enemy.sprite.height / 2) {
+        dYMove = 0
+      }
     }
+
+    // oscillation check
+    if (this.lastMoveX === -dXMove && this.lastMoveY === -dYMove) {
+      dXMove = this.lastMoveX
+      dYMove = this.lastMoveY
+    }
+
+    inputs.move.x = dXMove;
+    inputs.move.y = dYMove;
   }
 
   readyBlocking(inputs, weapon, dX, dY) {
@@ -263,24 +294,36 @@ class ShooterEnemyAI extends EnemyAI {
     inputs.attacking = true;
   }
 
-  readyFiring(inputs, weapon, center, dX, dY, now) {
+  readyFiring(inputs, weapon, center, dX, dY, now, player) {
     // If we're far enough away, make sure we're in line
     const canAttack = weapon instanceof Gun;
     if (!canAttack) {
       inputs.switchItem = true;
       return;
     }
+
+    // already have a fire pattern, cycle through it
     if (this.currentFirePattern) {
-      this.readyFirePattern(inputs, center);
+      this.readyFirePattern(inputs, center, player);
       return;
     }
 
-    if (this.readyForFirePattern <= now) {
-      this.readyForFirePattern = false;
-      this.currentFirePattern = _.sample(this.firePatterns);
-      this.currentFirePatternIndex = 0;
+    // check fire pattern cooldown
+    if (this.nextFirePatternTime > now) {
+      return;
     }
 
+    // pick a new fire pattern that we will go through
+    this.currentFirePattern = _.sample(this.firePatterns);
+    this.currentFirePatternIndex = 0;
+
+    // add some noise to the firing pattern
+    this.currentFirePattern.forEach(pattern => {
+      pattern.x += Math.round((Math.random() - .5) * 30);
+      pattern.y += Math.round((Math.random() - .5) * 30);
+    })
+
+    /*
     // Try to get aligned with the player
     if (dX > dY) {
       inputs.move.y = Math.sign(Math.round(dY / 10));
@@ -289,24 +332,29 @@ class ShooterEnemyAI extends EnemyAI {
     }
 
     inputs.turnToOrientation = this.turnToPlayer(dX, dY);
-    inputs.attacking = true;
+    */
   }
 
-  readyFirePattern(inputs, center) {
+  readyFirePattern(inputs, center, player) {
     const target = this.currentFirePattern[this.currentFirePatternIndex];
     const dX = target.x - center.x;
     const dY = target.y - center.y;
 
-    inputs.move.x = Math.sign(Math.round(dX/64));
-    inputs.move.y = Math.sign(Math.round(dY/64));
-    inputs.turnToOrientation = target.direction;
-    inputs.attacking = true;
+    if (Math.abs(dX) < 64 && Math.abs(dY) < 64) {
+      // turn to player to attack
+      const dXPlayer = player.sprite.getCenter().x - center.x;
+      const dYPlayer = player.sprite.getCenter().y - center.y;
 
-    if (inputs.move.x + inputs.move.y === 0) {
+      inputs.turnToOrientation = this.turnToPlayer(dXPlayer, dYPlayer);
+      inputs.attacking = true;
       this.currentFirePatternIndex += 1;
+    } else {
+        inputs.move.x = Math.sign(Math.round(dX/64));
+        inputs.move.y = Math.sign(Math.round(dY/64));
     }
 
     if (this.currentFirePatternIndex >= this.currentFirePattern.length) {
+      // finished the fire pattern
       this.currentFirePattern = null;
       this.currentFirePatternIndex = 0;
     }
