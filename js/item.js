@@ -24,19 +24,29 @@ class ItemManager {
         const itemSprite = scene.add.sprite(0, 0, 'items');
         const box = scene.add.sprite(0, 0, 'box');
         const white = scene.add.sprite(0, 0, 'white');
-        white.scaleX = ITEM_BOX_SIZE;
-        white.scaleY = ITEM_BOX_SIZE;
-        white.alpha = 0.5;
-        white.x = ITEM_BOX_SIZE/2;
-        white.y = ITEM_BOX_SIZE/2;
+        const red  = scene.add.sprite(0, 0, 'white');
+
+        let backgroundOptions = { 
+          scaleX: ITEM_BOX_SIZE,
+          scaleY: ITEM_BOX_SIZE,
+          alpha: 0.5,
+          x: ITEM_BOX_SIZE/2,
+          y: ITEM_BOX_SIZE/2
+        };
+
+        Object.assign(white, backgroundOptions);
+        Object.assign(red, backgroundOptions);
+        red.tint = 0xff0000;
+        red.scaleY = 0;
 
         itemSprite.anims.play(itemKey);
 
         container.add(white);
+        container.add(red);
         container.add(box);
         container.add(itemSprite);
         container.box = box;
-        container.white = white;
+        container.red = red;
         return container;
     }
 
@@ -48,7 +58,7 @@ class ItemManager {
             container.x = (ITEM_BOX_SIZE + 5) * i + ITEM_BOX_SIZE;
             container.y = HEIGHT - ITEM_BOX_SIZE - 1;
             container.alpha = item === currentItem ? 1: 0.5;
-            container.white.tint = item.ready ? 0xffffff : 0xff0000;
+            container.red.scaleY = ITEM_BOX_SIZE*(Math.max(1 + (item.lastCooldown - Date.now())/item.cooldown, 0));
             container.box.frame = state.screen instanceof FightingScreen ?
                 container.box.texture.frames[1] :
                 container.box.texture.frames[0];
@@ -59,6 +69,7 @@ class ItemManager {
 class BaseItem {
     constructor(cooldown) {
         this.cooldown = cooldown
+        this.lastCooldown = 0;
         this.ready = true
     }
 
@@ -66,6 +77,7 @@ class BaseItem {
     getAttacks(fighter) { return []; }
     resetCooldown() {
         this.ready = false
+        this.lastCooldown = Date.now();
         setTimeout(() => { this.ready = true }, this.cooldown)
     }
 }
