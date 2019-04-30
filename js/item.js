@@ -214,9 +214,9 @@ class Gun extends BaseItem {
     }
 }
 
-class FastGun extends BaseItem {
+class FastGun extends Gun {
     constructor() {
-        super(500)
+        this.cooldown = 500;
         this.playerAttackSprite = 'gun';
         this.spriteKey = 'gun';
     }
@@ -253,9 +253,9 @@ class Shield extends BaseItem {
     }
 }
 
-class SlowShield extends BaseItem {
+class SlowShield extends Shield {
     constructor() {
-        super(1000)
+        this.cooldown = 1000;
         this.playerAttackSprite = 'shield';
         this.spriteKey = 'shield';
     }
