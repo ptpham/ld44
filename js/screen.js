@@ -264,7 +264,7 @@ class StagingScreen extends Screen {
         },
         {
           sprite: this.scene.add.sprite(-WIDTH, -HEIGHT, 'merchant', 5),
-          text: 'But after your take care of him, we\'ll be home free!',
+          text: 'But after you take care of him, we\'ll be home free!',
         }
       ],
       [
@@ -520,7 +520,7 @@ class FightingScreen extends Screen {
       },
       {
         sprite: this.scene.add.sprite(-WIDTH, -HEIGHT, 'finalboss', 2),
-        text: 'Not gonna hand \'em over, huh? Well, enjoy spending the eternity in Hell!'
+        text: 'Not gonna hand \'em over, huh? Well, enjoy spending eternity in Hell!'
       },
     ];
 
