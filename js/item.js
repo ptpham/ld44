@@ -132,6 +132,39 @@ class SuperSlowSword extends BaseItem {
     }
 }
 
+class DoubleSword extends BaseItem {
+
+    constructor() {
+        super(3500)
+    }
+
+    getAttacks(fighter) {
+        state.screen.scene.sound.play('boss_attack', { volume: 0.2 });
+        return [
+            new Slash({
+                fighter,
+                item: this,
+                damage: 1,
+                hitstun: this.cooldown / 6,
+                duration: 1000,
+                range: 10,
+                w: 30,
+                h: 60
+            }),
+            new Slash({
+                fighter,
+                item: this,
+                damage: 1,
+                hitstun: this.cooldown / 6,
+                duration: 1000,
+                range: 25,
+                w: 30,
+                h: 60
+            })
+        ]
+    }
+}
+
 class LongSword extends BaseItem {
     constructor() {
         super(1000)
