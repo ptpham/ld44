@@ -222,13 +222,17 @@ class StagingScreen extends Screen {
       },
       {
         sprite: this.scene.add.sprite(-WIDTH, -HEIGHT, 'merchant'),
-        text: 'There are a bunch of really dangerous guys in the other room, ' +
-          'by the only exit. I wish I were strong enough to fight them...\n' +
+        text: 'I know you must have a lot questions, but right now we\'re in danger. ' +
+          'There are some really mean guys in the other room, and they\'re blocking the only exit.'
+      },
+      {
+        sprite: this.scene.add.sprite(-WIDTH, -HEIGHT, 'merchant'),
+        text: 'I wish I were strong enough to fight them...\n' +
           'but as you can see, I am very small, and very weak.'
       },
       {
         sprite: this.scene.add.sprite(-WIDTH, -HEIGHT, 'merchant', 4),
-        text: 'I\'ve been trying to escape, but all I have are all these ' +
+        text: 'I\'ve been trying to escape, but all I have are these ' +
           'weapons that are too big for my small hands.',
       },
       {
@@ -245,19 +249,23 @@ class StagingScreen extends Screen {
     this.beforeBosses = [
       [
         {
-          sprite: this.scene.add.sprite(-WIDTH, -HEIGHT, 'merchant', 3),
+          sprite: this.scene.add.sprite(-WIDTH, -HEIGHT, 'merchant', 5),
           text: 'Way to take that oaf out! You’re a natural at this.',
         },
         {
-          sprite: this.scene.add.sprite(-WIDTH, -HEIGHT, 'merchant', 5),
-          text: 'There\'s one more to go. Careful now, this one looks stronger than the last.',
+          sprite: this.scene.add.sprite(-WIDTH, -HEIGHT, 'merchant'),
+          text: 'Shhh...here comes another one. Careful now, this one looks stronger than the last.',
         },
       ],
       [
         {
-          sprite: this.scene.add.sprite(-WIDTH, -HEIGHT, 'merchant', 5),
-          text: 'I can\'t believe we made it this far! There\'s only one more left, who happens to be the strongest of all. But after your take care of him we\'ll be home free!'
+          sprite: this.scene.add.sprite(-WIDTH, -HEIGHT, 'merchant'),
+          text: 'I can\'t believe we made it this far! There\'s only one more left, who happens to be the strongest one of them all.'
         },
+        {
+          sprite: this.scene.add.sprite(-WIDTH, -HEIGHT, 'merchant', 5),
+          text: 'But after your take care of him, we\'ll be home free!',
+        }
       ],
       [
         {
@@ -451,38 +459,54 @@ class FightingScreen extends Screen {
         text: 'Oh, you’re here...'
       },
       {
+        sprite: this.scene.add.sprite(-WIDTH, -HEIGHT, 'merchant', 1),
+        text: 'The exit is right over there.',
+      },
+      {
         sprite: this.scene.add.sprite(-WIDTH, -HEIGHT, 'merchant', 3),
-        text: 'I really must thank you for helping me dispose of those guards. ' +
-        'They were really quite a nuisance, weren’t they?'
+        text: 'Before you go, I really must thank you for helping me dispose of those guards. ' +
+        'They were quite a nuisance, weren’t they?'
       },
       {
         sprite: this.scene.add.sprite(-WIDTH, -HEIGHT, 'player'),
-        text: '...?'
+        text: '...\n\n\n...?'
       },
       {
-        sprite: this.scene.add.sprite(-WIDTH, -HEIGHT, 'merchant', 5),
-        text: 'Do you know about those hearts you’ve been paying me with? ' + 
-        'They\'re the virtues from your life.'
+        sprite: this.scene.add.sprite(-WIDTH, -HEIGHT, 'merchant', 1),
+        text: 'What are those hearts you’ve been paying me with? ' +
+              'Well, I suppose it doesn\'t matter if I tell you now...'
+      },
+      {
+        sprite: this.scene.add.sprite(-WIDTH, -HEIGHT, 'merchant', 4),
+        text: 'Those hearts...\n\n\nThey\'re the virtues from your life.'
       },
       {
         sprite: this.scene.add.sprite(-WIDTH, -HEIGHT, 'player_hit', 'unarmed_right_1'),
         text: '... !!'
       },
       {
-        sprite: this.scene.add.sprite(-WIDTH, -HEIGHT, 'merchant', 5),
-        text: 'That\'s right, you\'re dead. We\'re in Purgatory, awaiting judgement. ' +
-        'Those with many virtues will get into Heaven, and the rest are doomed to eternal ' +
-        'suffering in Hell.'
+        sprite: this.scene.add.sprite(-WIDTH, -HEIGHT, 'merchant'),
+        text: 'That\'s right, you\'re dead. We\'re in Purgatory, and when you cross that exit, you face judgement. ' +
+            'Those with many virtues will get into Heaven, and the rest are doomed to eternal ' +
+            'suffering in Hell. '
+      },
+      {
+        sprite: this.scene.add.sprite(-WIDTH, -HEIGHT, 'merchant'),
+        text: 'Those big oafs you defeated take you and toss you through when it\'s your turn. But I wasn\'t ready yet...'
       },
       {
         sprite: this.scene.add.sprite(-WIDTH, -HEIGHT, 'player_hit', 'unarmed_right_1'),
         text: '!!'
       },
       {
-        sprite: this.scene.add.sprite(-WIDTH, -HEIGHT, 'merchant', 5),
+        sprite: this.scene.add.sprite(-WIDTH, -HEIGHT, 'merchant'),
         text: 'I committed quite a few sins in my life so I had a pretty ' +
-        'big hole to dig myself out of. I had to lead a lot of suckers like ' +
-        'you to eternal damnation to get to where am I now.'
+        'big hole to dig myself out of.'
+      },
+      {
+        sprite: this.scene.add.sprite(-WIDTH, -HEIGHT, 'merchant', 5),
+        text: 'I had to trick a lot of suckers like ' +
+        'you into taking my place in eternal damnation to get to where am I now.'
       },
       {
         sprite: this.scene.add.sprite(-WIDTH, -HEIGHT, 'merchant', 5),
