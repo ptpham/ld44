@@ -65,6 +65,7 @@ let state = {
       items: [
         new FastGun(),
         new SlowShield(),
+        new DoubleSword(),
       ],
       getAI: () => new ShooterEnemyAI(),
     },

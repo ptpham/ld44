@@ -227,9 +227,11 @@ class ShooterEnemyAI extends EnemyAI {
 
     // Get away from the player
     if (distance < 60) {
-      this.readyEscape(inputs, center, dX, dY, now, enemy);
-      if (Math.random() > .5) {
-        this.readyBlocking(inputs, weapon, dX, dY);
+      let cornered = this.readyEscape(inputs, center, dX, dY, now, enemy);
+      if (cornered) {
+        this.readyAttack(inputs, weapon, dX, dY, DoubleSword);
+      } else {
+        this.readyAttack(inputs, weapon, dX, dY, Shield);
       }
     } else {
       this.readyFiring(inputs, weapon, center, dX, dY, now, player);
@@ -263,6 +265,7 @@ class ShooterEnemyAI extends EnemyAI {
     let stepSize = 1;
     let dXMove = -Math.sign(Math.round(dX)) * stepSize;
     let dYMove = -Math.sign(Math.round(dY)) * stepSize;
+    let cornered = false
     if ( (this.corneredEndTime > now) ||
         (center.x < 64 && center.y < 64 ||
       center.x > WIDTH - 64 && center.y < 64 ||
@@ -272,6 +275,7 @@ class ShooterEnemyAI extends EnemyAI {
       // avoid getting cornered
       dXMove = Math.sign(Math.round(WIDTH / 2 - center.x)) * stepSize;
       dYMove = Math.sign(Math.round(HEIGHT / 2 - center.y)) * stepSize;
+      cornered = true
 
       if (this.corneredEndTime < now) {
         this.currentFirePattern = null;
@@ -282,11 +286,11 @@ class ShooterEnemyAI extends EnemyAI {
 
     inputs.move.x = dXMove;
     inputs.move.y = dYMove;
+    return cornered
   }
 
-  readyBlocking(inputs, weapon, dX, dY) {
-    const canBlock = weapon instanceof Shield;
-    if (!canBlock) {
+  readyAttack(inputs, weapon, dX, dY, weaponClass) {
+    if (weaponClass && !(weapon instanceof weaponClass)) {
       inputs.switchItem = true;
       return;
     }
