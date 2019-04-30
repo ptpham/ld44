@@ -240,7 +240,22 @@ class FastGun extends BaseItem {
 
 class Shield extends BaseItem {
     constructor() {
-        super(750)
+        super(500)
+        this.playerAttackSprite = 'shield';
+        this.spriteKey = 'shield';
+    }
+
+    getAttacks(fighter) {
+        state.screen.scene.sound.play('shield_parry', { volume: 0.2 });
+        return [
+            new Block({ fighter, item: this, pushback: 100, w: 30, h: 80, duration: this.cooldown })
+        ]
+    }
+}
+
+class SlowShield extends BaseItem {
+    constructor() {
+        super(1000)
         this.playerAttackSprite = 'shield';
         this.spriteKey = 'shield';
     }

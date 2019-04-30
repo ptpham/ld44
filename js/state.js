@@ -41,7 +41,7 @@ let state = {
       tint: 0x00ff00,
       items: [
         new SuperSlowSword(),
-        new Shield(),
+        new SlowShield(),
       ],
       getAI: () => new HitAndRunAI(),
     },
@@ -53,7 +53,7 @@ let state = {
       tint: 0xff0000,
       items: [
         new DoubleSword(),
-        new Shield(),
+        new SlowShield(),
       ],
       getAI: () => new HitAndRunAI(),
     },
@@ -64,7 +64,7 @@ let state = {
       speed: 180,
       items: [
         new FastGun(),
-        new Shield(),
+        new SlowShield(),
       ],
       getAI: () => new ShooterEnemyAI(),
     },
