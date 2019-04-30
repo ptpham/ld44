@@ -192,7 +192,7 @@ class LongSword extends BaseItem {
 
 class Gun extends BaseItem {
     constructor() {
-        super(1500)
+        super(1000)
         this.playerAttackSprite = 'gun';
         this.spriteKey = 'gun';
     }
