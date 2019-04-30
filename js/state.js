@@ -13,12 +13,12 @@ let state = {
     }, {
       name: 'Item 2',
       spriteName: 'sword',
-      cost: 2,
+      cost: 1,
       item: new LongSword(),
     }, {
       name: 'Item 3',
       spriteName: 'gun',
-      cost: 1,
+      cost: 2,
       item: new Gun(),
     }
   ],
@@ -63,7 +63,7 @@ let state = {
       health: 10,
       speed: 180,
       items: [
-        new Gun(),
+        new FastGun(),
         new Shield(),
       ],
       getAI: () => new ShooterEnemyAI(),

@@ -179,7 +179,7 @@ class LongSword extends BaseItem {
             new Slash({
                 fighter,
                 item: this,
-                damage: 2,
+                damage: 3,
                 hitstun: this.cooldown / 4,
                 duration: this.cooldown,
                 range: this.range,
@@ -191,6 +191,30 @@ class LongSword extends BaseItem {
 }
 
 class Gun extends BaseItem {
+    constructor() {
+        super(1500)
+        this.playerAttackSprite = 'gun';
+        this.spriteKey = 'gun';
+    }
+
+    getAttacks(fighter) {
+        state.screen.scene.sound.play('bullet_firing', { volume: 0.2 });
+        return [
+            new Bullet({
+                fighter,
+                item: this,
+                damage: 1,
+                hitstun: 50,
+                w: 10,
+                h: 10,
+                duration: 1000,
+                speed: 500
+            })
+        ]
+    }
+}
+
+class FastGun extends BaseItem {
     constructor() {
         super(500)
         this.playerAttackSprite = 'gun';
@@ -216,7 +240,7 @@ class Gun extends BaseItem {
 
 class Shield extends BaseItem {
     constructor() {
-        super(1000)
+        super(500)
         this.playerAttackSprite = 'shield';
         this.spriteKey = 'shield';
     }
