@@ -60,7 +60,7 @@ let state = {
     {
       name: 'Boss',
       sprite: 'finalboss',
-      health: 10,
+      health: 12,
       speed: 180,
       items: [
         new FastGun(),
